@@ -24,7 +24,7 @@ class Server {
     broadcast(from, message) {
         this.clients.forEach(function (socket, index, array) {
             if (socket === from) return;
-            socket.write(message);
+            socket.write(JSON.stringify(message));
         });
     };
 

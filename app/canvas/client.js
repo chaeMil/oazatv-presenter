@@ -2,7 +2,7 @@ const net = require('net');
 const ip = require('ip');
 
 class Client {
-    constructor(port, connectionRetries, delayBetweenRetriesInSeconds, autoReconnect) {
+    constructor(port, onDataReceivedCallback, connectionRetries, delayBetweenRetriesInSeconds, autoReconnect) {
         this.port = port;
         this.connectionRetries = connectionRetries;
         this.retries = connectionRetries;
@@ -11,6 +11,7 @@ class Client {
         this.connected = false;
         this.client = new net.Socket();
         this.autoReconnect = autoReconnect;
+        this.onDataReceivedCallback = onDataReceivedCallback;
     }
 
     _checkPort(port, host, callback) {
@@ -50,7 +51,7 @@ class Client {
         }
     }
 
-    _onConnected(host, port) {
+    _onConnected(host, port, onDataReceivedCallback) {
         this.connected = true;
 
         this.client.connect(port, host, function () {
@@ -60,6 +61,7 @@ class Client {
         this.client.on('data', function (data) {
             let content = String.fromCharCode.apply(null, data);
             console.log("Received: " + content);
+            onDataReceivedCallback(content);
         });
 
         this.client.on('close', () => {
@@ -73,12 +75,12 @@ class Client {
         });
     }
 
-    _connect() {
+    _connect(onDataReceivedCallback) {
         setInterval(() => {
             if (!this.connected && this.retries > 0) {
                 this._scanForServerInLocalNetwork(
                     (host, port) => {
-                        this._onConnected(host, port);
+                        this._onConnected(host, port, onDataReceivedCallback);
                     }
                 )
             } else if (this.retries == 0 && !this.connected) {
@@ -89,7 +91,7 @@ class Client {
     }
 
     create() {
-        this._connect();
+        this._connect(this.onDataReceivedCallback);
     }
 }
 

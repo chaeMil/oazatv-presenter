@@ -1,6 +1,5 @@
 const electron = require('electron');
-const app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
+const {app, BrowserWindow, ipcRenderer, ipcMain} = electron;
 
 const path = require('path');
 const url = require('url');
@@ -19,15 +18,20 @@ function createWindow() {
         slashes: true
     }));
 
-    mainWindow.webContents.openDevTools();
+    //mainWindow.webContents.openDevTools();
 
     mainWindow.on('closed', function () {
         mainWindow = null
     })
 }
 
+ipcMain.on('sync', (event, arg) => {
+    console.log(arg);
+    server.broadcast(this, arg);
+});
+
 app.on('ready', function () {
-    //createWindow();
+    createWindow();
 });
 
 app.on('window-all-closed', function () {
@@ -37,7 +41,7 @@ app.on('window-all-closed', function () {
 });
 
 app.on('activate', function () {
-    /*if (mainWindow === null) {
+    if (mainWindow === null) {
         createWindow()
-    }*/
+    }
 });

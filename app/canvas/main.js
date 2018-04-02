@@ -1,11 +1,18 @@
 const electron = require('electron');
 const {app, BrowserWindow, ipcRenderer, ipcMain} = electron;
-
 const path = require('path');
 const url = require('url');
-require('./canvas.js');
+const config = require('../shared/config');
+const Client = require('./client');
 
 let mainWindow;
+
+let onDataReceivedCallback = function(data) {
+    mainWindow.webContents.send('data', data);
+};
+
+let client = new Client(config.port, onDataReceivedCallback, 5, 3, true);
+client.create();
 
 function createWindow () {
     mainWindow = new BrowserWindow({width: 800, height: 600});
@@ -15,7 +22,7 @@ function createWindow () {
         slashes: true
     }));
 
-    mainWindow.webContents.openDevTools();
+    //mainWindow.webContents.openDevTools();
 
     mainWindow.on('closed', function () {
         app.quit();
