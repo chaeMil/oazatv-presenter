@@ -4,7 +4,10 @@ const BrowserWindow = electron.BrowserWindow;
 
 const path = require('path');
 const url = require('url');
-require('./server.js');
+const config = require('../shared/config');
+const Server = require('./server.js');
+let server = new Server(config.port);
+server.run();
 
 let mainWindow;
 

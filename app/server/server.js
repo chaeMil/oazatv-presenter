@@ -1,21 +1,33 @@
 const net = require('net');
-let clients = [];
-let clientId = 0;
+const ip = require('ip');
 
-const server = net.createServer(function (socket) {
-    clientId++;
-    clients.push(socket);
-    console.log('Client #' + clientId + ' joined server');
-    socket.pipe(socket);
-    broadcast(socket, clientId + ' joined server.\n')
-});
+class Server {
+    constructor(port) {
+        this.port = port;
+        this.ipAddress = ip.address();
+        this.clients = [];
+        this.clientId = 0;
 
-server.listen(1337, '127.0.0.1');
+        this.server = net.createServer(socket => {
+            this.clientId++;
+            this.clients.push(socket);
+            console.log('Client #' + this.clientId + ' joined server');
+            socket.pipe(socket);
+            this.broadcast(socket, this.clientId + ' joined server.\n');
+        });
+    }
 
-// Broadcast to others, excluding the sender
-function broadcast(from, message) {
-    clients.forEach(function (socket, index, array) {
-        if (socket === from) return;
-        socket.write(message);
-    });
+    broadcast(from, message) {
+        this.clients.forEach(function (socket, index, array) {
+            if (socket === from) return;
+            socket.write(message);
+        });
+    };
+
+    run() {
+        this.server.listen(this.port, this.ipAddress);
+        console.log("Server running on " + this.ipAddress + ":" + this.port);
+    }
 }
+
+module.exports = Server;
