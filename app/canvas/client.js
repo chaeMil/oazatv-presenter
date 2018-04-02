@@ -62,10 +62,11 @@ class Client {
             console.log("Received: " + content);
         });
 
-        this.client.on('close', function () {
+        this.client.on('close', () => {
             console.log('Connection closed');
             this.connected = false;
             if (this.autoReconnect) {
+                console.log("Trying to reconnect");
                 this.retries = this.connectionRetries;
                 this._connect();
             }
