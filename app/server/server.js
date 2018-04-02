@@ -13,6 +13,10 @@ class Server {
             this.clients.push(socket);
             console.log('Client #' + this.clientId + ' joined server');
             socket.pipe(socket);
+            socket.on("error", (err) => {
+                console.error(err);
+            });
+
             this.broadcast(socket, this.clientId + ' joined server.\n');
         });
     }

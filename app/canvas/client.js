@@ -80,7 +80,7 @@ class Client {
                         this._onConnected(host, port);
                     }
                 )
-            } else if (this.retries == 0) {
+            } else if (this.retries == 0 && !this.connected) {
                 console.log("Server not found");
             }
             this.retries--;
