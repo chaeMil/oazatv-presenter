@@ -70,14 +70,14 @@ class Client {
             if (this.autoReconnect) {
                 console.log("Trying to reconnect");
                 this.retries = this.connectionRetries;
-                this._connect();
+                this._connect(this.onDataReceivedCallback);
             }
         });
     }
 
     _connect(onDataReceivedCallback) {
         setInterval(() => {
-            if (!this.connected && this.retries > 0) {
+            if (!this.connected && (this.connectionRetries == 0 || this.retries > 0)) {
                 this._scanForServerInLocalNetwork(
                     (host, port) => {
                         this._onConnected(host, port, onDataReceivedCallback);

@@ -14,7 +14,9 @@ class Server {
             console.log('Client #' + this.clientId + ' joined server');
             socket.pipe(socket);
             socket.on("error", (err) => {
-                console.error(err);
+                if (err.code != 'EPIPE') {
+                    console.error(err);
+                }
             });
 
             this.broadcast(socket, this.clientId + ' joined server.\n');
