@@ -11,7 +11,7 @@ server.run();
 let mainWindow;
 
 function createWindow() {
-    mainWindow = new BrowserWindow({width: 800, height: 600});
+    mainWindow = new BrowserWindow({width: 350, height: 200});
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'ui/server.html'),
         protocol: 'file:',

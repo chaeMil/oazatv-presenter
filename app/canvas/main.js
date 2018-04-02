@@ -15,7 +15,7 @@ let client = new Client(config.port, onDataReceivedCallback, 5, 3, true);
 client.create();
 
 function createWindow () {
-    mainWindow = new BrowserWindow({width: 800, height: 600});
+    mainWindow = new BrowserWindow({width: 350, height: 200});
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'ui/canvas.html'),
         protocol: 'file:',
