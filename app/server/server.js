@@ -23,15 +23,21 @@ class Server {
 
     broadcast(message, clientHashIdFilter) {
         if (clientHashIdFilter != null) {
-            let socket = this.clients[clientHashIdFilter].socket;
-            if (socket != null) {
-                this._sendMessageToClient(socket, message);
+            let client = this.clients[clientHashIdFilter];
+            if (client != null) {
+                let socket = client.socket;
+                if (socket != null) {
+                    this._sendMessageToClient(socket, message);
+                }
             }
         } else {
             Object.keys(this.clients).forEach(clientHashId => {
-                let socket = this.clients[clientHashId].socket;
-                if (socket != null) {
-                    this._sendMessageToClient(socket, message);
+                let client = this.clients[clientHashId];
+                if (client != null) {
+                    let socket = client.socket;
+                    if (socket != null) {
+                        this._sendMessageToClient(socket, message);
+                    }
                 }
             });
         }
@@ -53,7 +59,7 @@ class Server {
     _onNewClientConnection(message) {
         let clientHashId = message.clientHashId;
         let client = message;
-        let socket =  new JsonSocket(new net.Socket());
+        let socket = new JsonSocket(new net.Socket());
         socket.connect(client.port, client.host);
         client.socket = socket;
         if (!this.clients.hasOwnProperty(clientHashId)) {
