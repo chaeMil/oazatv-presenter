@@ -14,7 +14,7 @@ class Client {
         this.retriesDelay = delayBetweenRetriesInSeconds * 1000;
         this.ipAddress = ip.address();
         this.connected = false;
-        this.client = net.createServer();
+        this.client = null;
         this.server = null;
         this.autoReconnect = autoReconnect;
         this.onDataReceivedCallback = onDataReceivedCallback;
@@ -69,7 +69,22 @@ class Client {
             this._sendMessageToServer(connectionMessage);
         });
 
+        this.client = net.createServer();
         this.client.listen(this.port);
+
+        process.on('uncaughtException', (err) => {
+            this.connected = false;
+            this.client.close();
+            if (err.code == 'EADDRINUSE') {
+                console.warn('Port ' + this.port + ' already used! Increasing port number by 1 and trying again');
+                this.port += 1;
+                this._onConnected(host, port, this.onDataReceivedCallback);
+            } else {
+                console.error(err);
+            }
+            return;
+        });
+
         this.client.on('connection', (socket) => {
             socket = new JsonSocket(socket);
             socket.on('message', (message) => {
@@ -86,8 +101,7 @@ class Client {
     _connect(onDataReceivedCallback) {
         setInterval(() => {
             if (!this.connected && (this.connectionRetries == 0 || this.retries > 0)) {
-                this._scanForServerInLocalNetwork(
-                    (host, port) => {
+                this._scanForServerInLocalNetwork((host, port) => {
                         this._onConnected(host, port, onDataReceivedCallback);
                     }
                 )
@@ -122,7 +136,7 @@ class Client {
     }
 
     _checkIfServerIsAlive() {
-       this._sendMessageToServer({}, (error) => {
+        this._sendMessageToServer({}, (error) => {
             if (error) { // server is probably not running
                 this.connected = false;
                 console.log('Disconnected from server, trying to reconnect');

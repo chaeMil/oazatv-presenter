@@ -1,4 +1,4 @@
 module.exports = {
-    serverPort: 1335,
-    clientPort: 1336
+    serverPort: 50200,
+    clientPort: 50201
 };
