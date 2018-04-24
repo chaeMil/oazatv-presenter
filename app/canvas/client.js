@@ -2,7 +2,7 @@ const net = require('net');
 const ip = require('ip');
 const JsonSocket = require('json-socket');
 const StringUtils = require('../shared/util/string_utils');
-const ConnnectionMessage = require('../shared/model/connection_actions/connection_message');
+const ConnectionMessage = require('../shared/model/connection_actions/connection_message');
 
 class Client {
     constructor(port, serverPort, onDataReceivedCallback, connectionRetries, delayBetweenRetriesInSeconds, autoReconnect, displayName) {
@@ -64,7 +64,7 @@ class Client {
         this.server = new JsonSocket(new net.Socket());
         this.server.connect(port, host);
         this.server.on('connect', () => {
-            let connectionMessage = new ConnnectionMessage(this.ipAddress, this.port, this.clientHashId, this.displayName);
+            let connectionMessage = new ConnectionMessage(this.ipAddress, this.port, this.clientHashId, this.displayName);
             this._sendMessageToServer(connectionMessage);
         });
 
@@ -74,30 +74,12 @@ class Client {
             socket.on('message', (message) => {
                 onDataReceivedCallback(message);
             });
+            setInterval(() => {
+                if (this.connected) {
+                    this._checkIfServerIsAlive();
+                }
+            }, 5000);
         });
-
-        /*this.client.connect(port, host, () => {
-            console.log("Server found on " + host + ":" + port + ", connecting!");
-
-
-        });
-
-        this.client.on('connection', (socket) => {
-            socket = new JsonSocket(socket); //Now we've decorated the net.Socket to be a JsonSocket
-            socket.on('message', message => {
-                console.log(message);
-            });
-        });
-
-        this.client.on('close', () => {
-            console.log('Connection closed');
-            this.connected = false;
-            if (this.autoReconnect) {
-                console.log("Trying to reconnect");
-                this.retries = this.connectionRetries;
-                this._connect(this.onDataReceivedCallback);
-            }
-        });*/
     }
 
     _connect(onDataReceivedCallback) {
@@ -115,12 +97,22 @@ class Client {
         }, this.retriesDelay)
     }
 
-    _sendMessageToServer(message) {
+    _sendMessageToServer(message, callback) {
         if (this.server != null) {
-            this.server.sendMessage(message);
+            this.server.sendMessage(message, callback);
         } else {
             console.error('server is null!')
         }
+    }
+
+    _checkIfServerIsAlive() {
+       this._sendMessageToServer({}, (error) => {
+            if (error) { // server is probably not running
+                this.connected = false;
+                console.log('Disconnected from server, trying to reconnect');
+                this._connect(this.onDataReceivedCallback);
+            }
+        });
     }
 
     create() {

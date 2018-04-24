@@ -46,6 +46,10 @@ class Server {
         }
     }
 
+    _getClientByHashId(hashClientId) {
+        return this.clients[hashClientId];
+    }
+
     getConnectedClients() {
         return this.clients;
     }
