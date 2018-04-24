@@ -14,6 +14,8 @@ class Server {
             socket.on('message', message => {
                 if (message.action == 'CLIENT_CONNECT') {
                     this._onNewClientConnection(message);
+                } else if (message.action == 'CLIENT_DISCONNECT') {
+                    this._onClientDisconnection(message);
                 }
             });
         });
@@ -56,14 +58,21 @@ class Server {
         client.socket = socket;
         if (!this.clients.hasOwnProperty(clientHashId)) {
             this.clients[clientHashId] = client;
-            console.log('Client ' + clientHashId + '@' + message.host + ':' + message.port + ' connected!')
+            console.log('Client ' + clientHashId + '@' + message.host + ':' + message.port + ' connected')
         } else {
             console.error('Client ' + clientHashId + '@' + message.host + ':' + message.port + ' already connected!');
         }
     }
 
-    getConnectedClients() {
-        return this.clients;
+    _onClientDisconnection(message) {
+        let clientHashId = message.clientHashId;
+        if (this.clients.hasOwnProperty(clientHashId)) {
+            let client = this.clients[clientHashId];
+            let socket = client.socket;
+            socket.end();
+            this.clients[clientHashId] = undefined;
+            console.log('Client ' + clientHashId + '@' + message.host + ':' + message.port + ' disconnected')
+        }
     }
 }
 

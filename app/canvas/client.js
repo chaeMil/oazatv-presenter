@@ -3,6 +3,7 @@ const ip = require('ip');
 const JsonSocket = require('json-socket');
 const StringUtils = require('../shared/util/string_utils');
 const ConnectionMessage = require('../shared/model/connection_actions/connection_message');
+const DisconnectionMessage = require('../shared/model/connection_actions/disconnection_message');
 
 class Client {
     constructor(port, serverPort, onDataReceivedCallback, connectionRetries, delayBetweenRetriesInSeconds, autoReconnect, displayName) {
@@ -95,6 +96,21 @@ class Client {
             }
             this.retries--;
         }, this.retriesDelay)
+    }
+
+    disconnect(callback) {
+        if (this.server != null) {
+            let disconnectionMessage = new DisconnectionMessage(this.ipAddress, this.port, this.clientHashId, this.displayName);
+            this.server.sendMessage(disconnectionMessage, (error) => {
+                if (error) {
+                    console.log('Cannot disconnect from server: ' + error);
+                } else {
+                    console.log('Client disconnected');
+                    this.connected = false;
+                }
+                callback();
+            });
+        }
     }
 
     _sendMessageToServer(message, callback) {

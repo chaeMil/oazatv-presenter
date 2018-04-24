@@ -25,7 +25,9 @@ function createWindow () {
     //mainWindow.webContents.openDevTools();
 
     mainWindow.on('closed', function () {
-        app.quit();
+        client.disconnect(() => {
+            app.quit();
+        });
     })
 }
 
