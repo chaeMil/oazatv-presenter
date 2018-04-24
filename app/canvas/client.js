@@ -1,17 +1,23 @@
 const net = require('net');
 const ip = require('ip');
+const JsonSocket = require('json-socket');
+const StringUtils = require('../shared/util/string_utils');
+const ConnnectionMessage = require('../shared/model/connection_actions/connection_message');
 
 class Client {
-    constructor(port, onDataReceivedCallback, connectionRetries, delayBetweenRetriesInSeconds, autoReconnect) {
+    constructor(port, onDataReceivedCallback, connectionRetries, delayBetweenRetriesInSeconds, autoReconnect, displayName) {
         this.port = port;
         this.connectionRetries = connectionRetries;
         this.retries = connectionRetries;
         this.retriesDelay = delayBetweenRetriesInSeconds * 1000;
         this.ipAddress = ip.address();
         this.connected = false;
-        this.client = new net.Socket();
+        this.client = new JsonSocket(new net.Socket());
+        this.server = null;
         this.autoReconnect = autoReconnect;
         this.onDataReceivedCallback = onDataReceivedCallback;
+        this.clientHashId = StringUtils.makeId();
+        this.displayName = displayName;
     }
 
     _checkPort(port, host, callback) {
@@ -53,9 +59,13 @@ class Client {
 
     _onConnected(host, port, onDataReceivedCallback) {
         this.connected = true;
+        this.server = new JsonSocket(new net.Socket());
+        this.server.connect(port, host);
 
-        this.client.connect(port, host, function () {
+        this.client.connect(port, host, () => {
             console.log("Server found on " + host + ":" + port + ", connecting!");
+            let connectionMessage = new ConnnectionMessage(this.ipAddress, this.port, this.clientHashId, this.displayName);
+            this._sendMessageToServer(connectionMessage);
         });
 
         this.client.on('data', function (data) {
@@ -88,6 +98,14 @@ class Client {
             }
             this.retries--;
         }, this.retriesDelay)
+    }
+
+    _sendMessageToServer(message) {
+        if (this.server != null) {
+            this.server.sendMessage(message);
+        } else {
+            console.error('server is null!')
+        }
     }
 
     create() {

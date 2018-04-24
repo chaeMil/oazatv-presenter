@@ -1,25 +1,24 @@
 const net = require('net');
 const ip = require('ip');
+const JsonSocket = require('json-socket');
 
 class Server {
     constructor(port) {
         this.port = port;
         this.ipAddress = ip.address();
         this.clients = [];
-        this.clientId = 0;
+        this.server = net.createServer();
 
-        this.server = net.createServer(socket => {
-            this.clientId++;
-            this.clients.push(socket);
-            console.log('Client #' + this.clientId + ' joined server');
-            socket.pipe(socket);
-            socket.on("error", (err) => {
-                if (err.code != 'EPIPE') {
-                    console.error(err);
+        this.server.on('connection', function(socket) {
+            socket = new JsonSocket(socket); //Now we've decorated the net.Socket to be a JsonSocket
+            socket.on('message', message => {
+                console.log(message);
+                switch (message.action) {
+                    case 'CLIENT_CONNECT':
+                        this._onNewClientConnection(message);
+                        break;
                 }
             });
-
-            this.broadcast(socket, this.clientId + ' joined server.\n');
         });
     }
 
@@ -33,6 +32,10 @@ class Server {
     run() {
         this.server.listen(this.port, this.ipAddress);
         console.log("Server running on " + this.ipAddress + ":" + this.port);
+    }
+
+    _onNewClientConnection(message) {
+        let hashClientId = message.hashClientId;
     }
 }
 
