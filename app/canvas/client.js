@@ -20,6 +20,18 @@ class Client {
         this.onDataReceivedCallback = onDataReceivedCallback;
         this.clientHashId = StringUtils.makeId();
         this.displayName = displayName;
+
+        process.on('uncaughtException', (err) => {
+            this.connected = false;
+            this.client.close();
+            if (err.code == 'EADDRINUSE') {
+                console.warn('Port ' + this.port + ' already used! Increasing port number by 1 and trying again');
+                this.port += 1;
+                this._onConnected(this.serverAddress, this.serverPort, this.onDataReceivedCallback);
+            } else {
+                console.error(err);
+            }
+        });
     }
 
     _checkPort(port, host, callback) {
@@ -60,7 +72,8 @@ class Client {
     }
 
     _onConnected(host, port, onDataReceivedCallback) {
-        this.connected = true;
+        this.serverPort = port;
+        this.serverAddress = host;
 
         this.server = new JsonSocket(new net.Socket());
         this.server.connect(port, host);
@@ -71,21 +84,9 @@ class Client {
 
         this.client = net.createServer();
         this.client.listen(this.port);
-
-        process.on('uncaughtException', (err) => {
-            this.connected = false;
-            this.client.close();
-            if (err.code == 'EADDRINUSE') {
-                console.warn('Port ' + this.port + ' already used! Increasing port number by 1 and trying again');
-                this.port += 1;
-                this._onConnected(host, port, this.onDataReceivedCallback);
-            } else {
-                console.error(err);
-            }
-            return;
-        });
-
         this.client.on('connection', (socket) => {
+            this.connected = true;
+
             socket = new JsonSocket(socket);
             socket.on('message', (message) => {
                 onDataReceivedCallback(message);
