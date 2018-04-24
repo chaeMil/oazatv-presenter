@@ -5,14 +5,15 @@ const StringUtils = require('../shared/util/string_utils');
 const ConnnectionMessage = require('../shared/model/connection_actions/connection_message');
 
 class Client {
-    constructor(port, onDataReceivedCallback, connectionRetries, delayBetweenRetriesInSeconds, autoReconnect, displayName) {
+    constructor(port, serverPort, onDataReceivedCallback, connectionRetries, delayBetweenRetriesInSeconds, autoReconnect, displayName) {
         this.port = port;
+        this.serverPort = serverPort;
         this.connectionRetries = connectionRetries;
         this.retries = connectionRetries;
         this.retriesDelay = delayBetweenRetriesInSeconds * 1000;
         this.ipAddress = ip.address();
         this.connected = false;
-        this.client = new JsonSocket(new net.Socket());
+        this.client = net.createServer();
         this.server = null;
         this.autoReconnect = autoReconnect;
         this.onDataReceivedCallback = onDataReceivedCallback;
@@ -46,8 +47,8 @@ class Client {
     _scanForServerInLocalNetwork(onServerFound) {
         let LAN = this.ipAddress.substr(0, this.ipAddress.lastIndexOf("."));
         for (let i = 1; i <= 255; i++) {
-            console.log("checking " + LAN + '.' + i + ":" + this.port);
-            this._checkPort(this.port, LAN + '.' + i, function (error, status, host, port) {
+            console.log("checking " + LAN + '.' + i + ":" + this.serverPort);
+            this._checkPort(this.serverPort, LAN + '.' + i, function (error, status, host, port) {
                 if (status == "open") {
                     console.log("Server found: ", host, port, status);
                     onServerFound(host, port);
@@ -59,19 +60,33 @@ class Client {
 
     _onConnected(host, port, onDataReceivedCallback) {
         this.connected = true;
+
         this.server = new JsonSocket(new net.Socket());
         this.server.connect(port, host);
-
-        this.client.connect(port, host, () => {
-            console.log("Server found on " + host + ":" + port + ", connecting!");
+        this.server.on('connect', () => {
             let connectionMessage = new ConnnectionMessage(this.ipAddress, this.port, this.clientHashId, this.displayName);
             this._sendMessageToServer(connectionMessage);
         });
 
-        this.client.on('data', function (data) {
-            let content = String.fromCharCode.apply(null, data);
-            console.log("Received: " + content);
-            onDataReceivedCallback(content);
+        this.client.listen(this.port);
+        this.client.on('connection', (socket) => {
+            socket = new JsonSocket(socket);
+            socket.on('message', (message) => {
+                onDataReceivedCallback(message);
+            });
+        });
+
+        /*this.client.connect(port, host, () => {
+            console.log("Server found on " + host + ":" + port + ", connecting!");
+
+
+        });
+
+        this.client.on('connection', (socket) => {
+            socket = new JsonSocket(socket); //Now we've decorated the net.Socket to be a JsonSocket
+            socket.on('message', message => {
+                console.log(message);
+            });
         });
 
         this.client.on('close', () => {
@@ -82,7 +97,7 @@ class Client {
                 this.retries = this.connectionRetries;
                 this._connect(this.onDataReceivedCallback);
             }
-        });
+        });*/
     }
 
     _connect(onDataReceivedCallback) {

@@ -5,7 +5,7 @@ const path = require('path');
 const url = require('url');
 const config = require('../shared/config');
 const Server = require('./server.js');
-let server = new Server(config.port);
+let server = new Server(config.serverPort);
 server.run();
 
 let mainWindow;
@@ -27,7 +27,7 @@ function createWindow() {
 
 ipcMain.on('sync', (event, arg) => {
     console.log(arg);
-    server.broadcast(this, arg);
+    server.broadcast(arg);
 });
 
 app.on('ready', function () {

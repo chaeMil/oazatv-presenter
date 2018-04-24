@@ -6,7 +6,7 @@ class Server {
     constructor(port) {
         this.port = port;
         this.ipAddress = ip.address();
-        this.clients = [];
+        this.clients = {};
         this.server = net.createServer();
 
         this.server.on('connection', socket => {
@@ -19,10 +19,11 @@ class Server {
         });
     }
 
-    broadcast(from, message) {
-        this.clients.forEach(function (socket, index, array) {
-            if (socket === from) return;
-            socket.write(JSON.stringify(message));
+    broadcast(message) {
+        Object.keys(this.clients).forEach(clientHashId => {
+            let client = this.clients[clientHashId];
+            let socket = client.socket;
+            socket.sendMessage(message);
         });
     };
 
@@ -33,9 +34,12 @@ class Server {
 
     _onNewClientConnection(message) {
         let hashClientId = message.hashClientId;
-        console.log(message);
+        let client = message;
+        let socket =  new JsonSocket(new net.Socket());
+        socket.connect(client.port, client.host);
+        client.socket = socket;
         if (!this.clients.hasOwnProperty(hashClientId)) {
-            this.clients[hashClientId] = message;
+            this.clients[hashClientId] = client;
             console.log('Client ' + hashClientId + '@' + message.host + ':' + message.port + ' connected!')
         } else {
             console.error('Client ' + hashClientId + '@' + message.host + ':' + message.port + ' already connected!');
