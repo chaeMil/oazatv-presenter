@@ -1,5 +1,5 @@
 {
-  "name": "oazatv-presenter",
+  "name": "oh-presenter",
   "version": "0.0.1",
   "description": "",
   "main": "app/server/main.js",
@@ -12,7 +12,7 @@
     "dist": "build"
   },
   "build": {
-    "appId": "tv.oaza.presenter",
+    "appId": "cz.chaemil.oh-presenter",
     "dmg": {
       "contents": [
         {
