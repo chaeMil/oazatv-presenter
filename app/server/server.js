@@ -14,7 +14,7 @@ class Server {
         this.statusCallback = statusCallback;
 
         this.server.on('connection', socket => {
-            socket = new JsonSocket(socket); //Now we've decorated the net.Socket to be a JsonSocket
+            socket = new JsonSocket(socket);
             socket.on('message', message => {
                 if (message.action == 'CLIENT_CONNECT') {
                     this._onNewClientConnection(message);
@@ -23,6 +23,10 @@ class Server {
                 }
             });
         });
+
+        setInterval(() => {
+            this._checkForClientConnections();
+        }, 5000);
     }
 
     broadcast(message, clientHashIdFilter) {
@@ -47,10 +51,13 @@ class Server {
         }
     };
 
-    _sendMessageToClient(socket, message) {
+    _sendMessageToClient(socket, message, errorCallback) {
         socket.sendMessage(message, (error) => {
             if (error) {
                 console.log(error);
+                if (errorCallback != null) {
+                    errorCallback(error);
+                }
             }
         });
     }
@@ -89,6 +96,19 @@ class Server {
 
     getClientsList() {
         return this.clients;
+    }
+
+    _checkForClientConnections() {
+        Object.keys(this.clients).forEach(clientHashId => {
+            let client = this.clients[clientHashId];
+            if (client != null) {
+                //console.log('sending ping to client: ' + client.clientHashId + '@' + client.host + ':' + client.port);
+                this._sendMessageToClient(client.socket, {ping: true}, (error) => {
+                    console.log('client ' + client.clientHashId + '@' + client.host + ':' + client.port
+                        + ' not responsing, ' + error);
+                });
+            }
+        });
     }
 }
 
