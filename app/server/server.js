@@ -1,3 +1,6 @@
+const electron = require('electron');
+const {ipcMain} = electron;
+
 const net = require('net');
 const ip = require('ip');
 const JsonSocket = require('json-socket');
@@ -79,6 +82,10 @@ class Server {
             this.clients[clientHashId] = undefined;
             console.log('Client ' + clientHashId + '@' + message.host + ':' + message.port + ' disconnected')
         }
+    }
+
+    getClientsList() {
+        return this.clients;
     }
 }
 

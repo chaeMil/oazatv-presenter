@@ -18,7 +18,7 @@ function createWindow() {
         slashes: true
     }));
 
-    //mainWindow.webContents.openDevTools();
+    mainWindow.webContents.openDevTools();
 
     mainWindow.on('closed', function () {
         mainWindow = null
@@ -26,8 +26,26 @@ function createWindow() {
 }
 
 ipcMain.on('broadcast', (event, arg) => {
-    server.broadcast(arg);
+    if (arg.hasOwnProperty('clientHashIdFilter')) {
+        server.broadcast(arg, arg.clientHashIdFilter)
+    } else {
+        server.broadcast(arg);
+    }
 });
+
+function sendMessageToRenderThread(type, action, data) {
+    mainWindow.webContents.send(type, {
+        action: action,
+        data: data
+    });
+}
+
+ipcMain.on('server_status', (event, arg) => {
+        if (arg == 'get_clients_list') {
+            sendMessageToRenderThread('server_status', 'get_clients_list', server.getClientsList());
+        }
+    }
+);
 
 app.on('ready', function () {
     createWindow();
