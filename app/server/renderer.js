@@ -29,8 +29,7 @@ function onGetClientsList(data) {
     container.empty();
     Object.keys(data).forEach(clientHashId => {
         let client = data[clientHashId];
-        console.log(client);
-        container.append('<span>' + clientHashId + '@' + client.host + ':' + client.port
-            + ' - ' + client.clientDisplayName + '</span>');
+        container.append('<p>' + clientHashId + '@' + client.host + ':' + client.port
+            + ' - ' + client.clientDisplayName + '</p>');
     });
 }
