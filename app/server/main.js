@@ -25,8 +25,7 @@ function createWindow() {
     })
 }
 
-ipcMain.on('sync', (event, arg) => {
-    console.log(arg);
+ipcMain.on('broadcast', (event, arg) => {
     server.broadcast(arg);
 });
 
