@@ -20,6 +20,15 @@ $('#blue').click(function () {
     }
 });
 
+$('#green').click(function () {
+    if (!clientIdInput.val()) {
+        ipcRenderer.send('broadcast', {action: 'bg', value: 'green'});
+    } else {
+        ipcRenderer.send('broadcast', {clientHashIdFilter: clientIdInput.val(), action: 'bg', value: 'green'});
+    }
+});
+
+
 $('#get-clients-list').click(function () {
     ipcRenderer.send('server_status', 'get_clients_list');
 });
