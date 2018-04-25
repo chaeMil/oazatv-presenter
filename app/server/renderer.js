@@ -2,12 +2,22 @@ let {ipcRenderer, remote} = require('electron');
 let main = remote.require("./main.js");
 let $ = require('jquery');
 
+let clientIdInput = $('#client-id');
+
 $('#red').click(function () {
-    ipcRenderer.send('broadcast', {action: 'bg', value: 'red'});
+    if (!clientIdInput.val()) {
+        ipcRenderer.send('broadcast', {action: 'bg', value: 'red'});
+    } else {
+        ipcRenderer.send('broadcast', {clientHashIdFilter: clientIdInput.val(), action: 'bg', value: 'red'});
+    }
 });
 
 $('#blue').click(function () {
-    ipcRenderer.send('broadcast', {action: 'bg', value: 'blue'});
+    if (!clientIdInput.val()) {
+        ipcRenderer.send('broadcast', {action: 'bg', value: 'blue'});
+    } else {
+        ipcRenderer.send('broadcast', {clientHashIdFilter: clientIdInput.val(), action: 'bg', value: 'blue'});
+    }
 });
 
 $('#get-clients-list').click(function () {
