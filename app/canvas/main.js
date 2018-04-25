@@ -11,7 +11,7 @@ let onDataReceivedCallback = function(data) {
     mainWindow.webContents.send('data', data);
 };
 
-let client = new Client(config.clientPort, config.serverPort, onDataReceivedCallback, 0, 3, true, 'Testovací plátno');
+let client = new Client(config.clientPort, config.serverPort, onDataReceivedCallback, 0, 3, true, 'Test canvas');
 client.create();
 
 function createWindow () {
