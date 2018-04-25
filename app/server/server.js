@@ -6,11 +6,12 @@ const ip = require('ip');
 const JsonSocket = require('json-socket');
 
 class Server {
-    constructor(port) {
+    constructor(port, statusCallback) {
         this.port = port;
         this.ipAddress = ip.address();
         this.clients = {};
         this.server = net.createServer();
+        this.statusCallback = statusCallback;
 
         this.server.on('connection', socket => {
             socket = new JsonSocket(socket); //Now we've decorated the net.Socket to be a JsonSocket
@@ -67,6 +68,7 @@ class Server {
         client.socket = socket;
         if (!this.clients.hasOwnProperty(clientHashId)) {
             this.clients[clientHashId] = client;
+            this.statusCallback('server_status', 'get_clients_list', this.getClientsList());
             console.log('Client ' + clientHashId + '@' + message.host + ':' + message.port + ' connected')
         } else {
             console.error('Client ' + clientHashId + '@' + message.host + ':' + message.port + ' already connected!');
@@ -80,6 +82,7 @@ class Server {
             let socket = client.socket;
             socket.end();
             this.clients[clientHashId] = undefined;
+            this.statusCallback('server_status', 'get_clients_list', this.getClientsList());
             console.log('Client ' + clientHashId + '@' + message.host + ':' + message.port + ' disconnected')
         }
     }

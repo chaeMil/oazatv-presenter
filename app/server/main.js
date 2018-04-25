@@ -5,7 +5,12 @@ const path = require('path');
 const url = require('url');
 const config = require('../shared/config');
 const Server = require('./server.js');
-let server = new Server(config.serverPort);
+
+function serverStatusCallback(type, action, data) {
+    sendMessageToRenderThread(type, action, data);
+}
+
+let server = new Server(config.serverPort, serverStatusCallback);
 server.run();
 
 let mainWindow;
