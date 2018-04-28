@@ -3,6 +3,10 @@ let main = remote.require("./main.js");
 let Photon = require("electron-photon");
 let $ = require('jquery');
 
+let webFrame = require('electron').webFrame;
+webFrame.setVisualZoomLevelLimits(1, 1);
+webFrame.setLayoutZoomLevelLimits(0, 0);
+
 let clientIdInput = $('#client-id');
 
 $('#red').click(function () {
@@ -49,7 +53,11 @@ function onGetClientsList(data) {
     container.empty();
     Object.keys(data).forEach(clientHashId => {
         let client = data[clientHashId];
-        container.append('<p>' + clientHashId + '@' + client.host + ':' + client.port
-            + ' - ' + client.clientDisplayName + '</p>');
+        container.append(`<tr>
+            <td>${client.clientDisplayName}</td>
+            <td>${clientHashId}</td>
+            <td>${client.host}</td>
+            <td>${client.port}</td>
+        </tr>`);
     });
 }
