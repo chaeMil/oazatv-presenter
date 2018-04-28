@@ -16,7 +16,14 @@ server.run();
 let mainWindow;
 
 function createWindow() {
-    mainWindow = new BrowserWindow({width: 350, height: 350});
+    mainWindow = new BrowserWindow({
+        width: 700,
+        height: 600,
+        titleBarStyle: "hidden",
+        webPreferences: {
+            experimentalFeatures: true
+        }
+    });
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'ui/server.html'),
         protocol: 'file:',

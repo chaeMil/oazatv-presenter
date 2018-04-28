@@ -2,17 +2,37 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Server</title>
+    <title>oh! Presenter</title>
+    <link rel="stylesheet" href="../../../node_modules/electron-photon/dist/photon.css">
+    <link rel="stylesheet" href="../../../app/assets/css/main.scss">
 </head>
 <body>
-<h1>Server Window</h1>
-<!-- All of the Node.js APIs are available in this renderer process. -->
-We are using Node.js <script>document.write(process.versions.node)</script>,
-Chromium <script>document.write(process.versions.chrome)</script>,
-and Electron <script>document.write(process.versions.electron)</script>.
+<ph-window>
+    <tool-bar type="header">
+        <h1 class="title" style="-webkit-app-region: drag;">oh! Presenter</h1>
+        <div class="toolbar-actions" style="text-align: center;">
+            <btn-group class="component-groups" type="absolute">
+                <button class="btn btn-default active" data-view="#swipe">Components</button>
+                <button class="btn btn-default" data-view="#frames">Frames & Panes</button>
+                <button class="btn btn-default" data-view="#table">Table</button>
+                <button class="btn btn-default" data-view="#messages">Messages</button>
+            </btn-group>
+            <button class="btn btn-default pull-left btn-show-popup">Pop Up</button>
+            <button class="btn btn-default pull-left btn-show-menu">Drop Down Menu</button>
+            <input type="search" class="pull-right" style="margin-right: 6px;" placeholder="Search">
+        </div>
+    </tool-bar>
+    <window-content>
+        <button class="btn btn-default" id="red">Red</button>
+        <button class="btn btn-default" id="green">Green</button>
+        <button class="btn btn-default" id="blue">Blue</button>
+    </window-content>
+    <tool-bar type="footer">
+        <p id="connected-clients-count"></p>
+    </tool-bar>
+</ph-window>
 
-<hr>
-<input id="client-id" type="text">
+<!--<input id="client-id" type="text">
 <button id="red">Red</button>
 <button id="green">Green</button>
 <button id="blue">Blue</button>
@@ -21,8 +41,11 @@ and Electron <script>document.write(process.versions.electron)</script>.
 <p>connected clients:</p>
 <div id="clients-list"></div>
 
+<footer class="toolbar toolbar-footer">
+    <h1 class="title">Footer</h1>
+</footer>-->
+
 <script>
-    // You can also require other files to run in this process
     require('../renderer.js');
 </script>
 </body>

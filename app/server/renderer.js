@@ -1,5 +1,6 @@
 let {ipcRenderer, remote} = require('electron');
 let main = remote.require("./main.js");
+let Photon = require("electron-photon");
 let $ = require('jquery');
 
 let clientIdInput = $('#client-id');
