@@ -6,7 +6,6 @@
   "license": "ISC",
   "scripts": {
     "postinstall": "install-app-deps",
-    "install": "npm install",
     "server": "./node_modules/.bin/electron ./app/server/main",
     "canvas": "./node_modules/.bin/electron ./app/canvas/main",
     "pack": "build --dir",
