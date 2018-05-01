@@ -1,9 +1,8 @@
-let {ipcRenderer, remote} = require('electron');
+let {ipcRenderer, remote, webFrame} = require('electron');
 let main = remote.require("./main.js");
 let Photon = require("electron-photon");
 let $ = require('jquery');
 
-let webFrame = require('electron').webFrame;
 webFrame.setVisualZoomLevelLimits(1, 1);
 webFrame.setLayoutZoomLevelLimits(0, 0);
 

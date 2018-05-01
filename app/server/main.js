@@ -22,13 +22,15 @@ function createWindow() {
         titleBarStyle: "hidden",
         webPreferences: {
             experimentalFeatures: true
-        }
+        },
+        frame: false
     });
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'ui/server.html'),
         protocol: 'file:',
         slashes: true
     }));
+    mainWindow.setMenu(null);
 
     //mainWindow.webContents.openDevTools();
 
