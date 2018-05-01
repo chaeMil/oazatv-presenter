@@ -19,8 +19,7 @@ function createWindow () {
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'ui/canvas.html'),
         protocol: 'file:',
-        slashes: true,
-        frame: false
+        slashes: true
     }));
     mainWindow.setMenu(null);
 
