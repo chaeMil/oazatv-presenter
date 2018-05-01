@@ -6,38 +6,38 @@ let $ = require('jquery');
 webFrame.setVisualZoomLevelLimits(1, 1);
 webFrame.setLayoutZoomLevelLimits(0, 0);
 
-let clientIdInput = $('#client-id');
-
+//testing variables
+let selectedClientId = null;
 
 //test methods
 $('#red').click(function () {
-    if (!clientIdInput.val()) {
+    if (!selectedClientId) {
         ipcRenderer.send('broadcast', {action: 'bg', value: 'red'});
     } else {
-        ipcRenderer.send('broadcast', {clientHashIdFilter: clientIdInput.val(), action: 'bg', value: 'red'});
+        ipcRenderer.send('broadcast', {clientHashIdFilter: selectedClientId, action: 'bg', value: 'red'});
     }
 });
 
 $('#blue').click(function () {
-    if (!clientIdInput.val()) {
+    if (!selectedClientId) {
         ipcRenderer.send('broadcast', {action: 'bg', value: 'blue'});
     } else {
-        ipcRenderer.send('broadcast', {clientHashIdFilter: clientIdInput.val(), action: 'bg', value: 'blue'});
+        ipcRenderer.send('broadcast', {clientHashIdFilter: selectedClientId, action: 'bg', value: 'blue'});
     }
 });
 
 $('#green').click(function () {
-    if (!clientIdInput.val()) {
+    if (!selectedClientId) {
         ipcRenderer.send('broadcast', {action: 'bg', value: 'green'});
     } else {
-        ipcRenderer.send('broadcast', {clientHashIdFilter: clientIdInput.val(), action: 'bg', value: 'green'});
+        ipcRenderer.send('broadcast', {clientHashIdFilter: selectedClientId, action: 'bg', value: 'green'});
     }
 });
 
 $('#json').click(function () {
     ipcRenderer.send('broadcast', {
         action: 'canvas_json',
-        value: '{"version":"2.2.3","objects":[{"type":"rect","version":"2.2.3","originX":"left","originY":"top","left":100,"top":100,"width":60,"height":70,"fill":"red","stroke":null,"strokeWidth":1,"strokeDashArray":null,"strokeLineCap":"butt","strokeLineJoin":"miter","strokeMiterLimit":10,"scaleX":1,"scaleY":1,"angle":0,"flipX":false,"flipY":false,"opacity":1,"shadow":null,"visible":true,"clipTo":null,"backgroundColor":"","fillRule":"nonzero","paintFirst":"fill","globalCompositeOperation":"source-over","transformMatrix":null,"skewX":0,"skewY":0,"rx":0,"ry":0},{"type":"rect","version":"2.2.3","originX":"left","originY":"top","left":750,"top":550,"width":200,"height":180,"fill":"blue","stroke":null,"strokeWidth":1,"strokeDashArray":null,"strokeLineCap":"butt","strokeLineJoin":"miter","strokeMiterLimit":10,"scaleX":1,"scaleY":1,"angle":0,"flipX":false,"flipY":false,"opacity":1,"shadow":null,"visible":true,"clipTo":null,"backgroundColor":"","fillRule":"nonzero","paintFirst":"fill","globalCompositeOperation":"source-over","transformMatrix":null,"skewX":0,"skewY":0,"rx":0,"ry":0},{"type":"rect","version":"2.2.3","originX":"left","originY":"top","left":250,"top":300,"width":60,"height":120,"fill":"green","stroke":null,"strokeWidth":1,"strokeDashArray":null,"strokeLineCap":"butt","strokeLineJoin":"miter","strokeMiterLimit":10,"scaleX":1,"scaleY":1,"angle":0,"flipX":false,"flipY":false,"opacity":1,"shadow":null,"visible":true,"clipTo":null,"backgroundColor":"","fillRule":"nonzero","paintFirst":"fill","globalCompositeOperation":"source-over","transformMatrix":null,"skewX":0,"skewY":0,"rx":0,"ry":0}]}'
+        value: $('#canvas-json-input').val()
     });
 });
 //test methods end
@@ -56,12 +56,19 @@ ipcRenderer.on('server_status', function (event, message) {
     }
 });
 
+$(document).ready(function () {
+    $('.table-selectable').on('click', $('tr[data-client-id]'), function (event) {
+        let clientRow = $(event.target).closest('tr[data-client-id]');
+        selectedClientId = $(clientRow).attr('data-client-id');
+    });
+});
+
 function onGetClientsList(data) {
     let container = $('#clients-list');
     container.empty();
     Object.keys(data).forEach(clientHashId => {
         let client = data[clientHashId];
-        container.append(`<tr>
+        container.append(`<tr data-client-id="${clientHashId}">
             <td>${client.clientDisplayName}</td>
             <td>${clientHashId}</td>
             <td>${client.host}</td>

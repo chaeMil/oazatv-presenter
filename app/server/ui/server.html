@@ -5,6 +5,7 @@
     <title>oh! Presenter</title>
     <link rel="stylesheet" href="../../../node_modules/electron-photon/dist/photon.css">
     <link rel="stylesheet" href="../../../app/assets/css/main.scss">
+    <link rel="stylesheet" href="server.scss">
 </head>
 <body>
 <ph-window>
@@ -19,37 +20,31 @@
         </div>
     </tool-bar>
     <window-content>
-        <table class="table-striped">
-            <thead>
-            <tr>
-                <th>display name</th>
-                <th>id</th>
-                <th>ip</th>
-                <th>port</th>
-            </tr>
-            </thead>
-            <tbody id="clients-list">
+        <div class="pane-group">
+            <div class="pane">
+                <table class="table-striped table-selectable">
+                    <thead>
+                    <tr>
+                        <th>display name</th>
+                        <th>id</th>
+                        <th>ip</th>
+                        <th>port</th>
+                    </tr>
+                    </thead>
+                    <tbody id="clients-list">
 
-            </tbody>
-        </table>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pane pane-sm sidebar">
+                <textarea id="canvas-json-input" style="width: 100%; height: 100%"></textarea>
+            </div>
+        </div>
     </window-content>
     <tool-bar type="footer">
 
     </tool-bar>
 </ph-window>
-
-<!--<input id="client-id" type="text">
-<button id="red">Red</button>
-<button id="green">Green</button>
-<button id="blue">Blue</button>
-<button id="get-clients-list">Refresh clients list</button>
-<hr>
-<p>connected clients:</p>
-<div id="clients-list"></div>
-
-<footer class="toolbar toolbar-footer">
-    <h1 class="title">Footer</h1>
-</footer>-->
 
 <script>
     require('../renderer.js');
