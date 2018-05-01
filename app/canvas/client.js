@@ -6,7 +6,8 @@ const ConnectionMessage = require('../shared/model/connection_actions/connection
 const DisconnectionMessage = require('../shared/model/connection_actions/disconnection_message');
 
 class Client {
-    constructor(port, serverPort, onDataReceivedCallback, connectionRetries, delayBetweenRetriesInSeconds, autoReconnect, displayName) {
+    constructor(port, serverPort, onDataReceivedCallback, onConnectionChangedCallback,
+                connectionRetries, delayBetweenRetriesInSeconds, autoReconnect, displayName) {
         this.port = port;
         this.serverPort = serverPort;
         this.connectionRetries = connectionRetries;
@@ -18,6 +19,7 @@ class Client {
         this.server = null;
         this.autoReconnect = autoReconnect;
         this.onDataReceivedCallback = onDataReceivedCallback;
+        this.onConnectionChangedCallback = onConnectionChangedCallback;
         this.clientHashId = StringUtils.makeId();
         this.displayName = displayName;
 
@@ -88,12 +90,14 @@ class Client {
         this.client.listen(this.port);
         this.client.on('connection', (socket) => {
             this.connected = true;
+            this.onConnectionChangedCallback(this.connected);
 
             socket = new JsonSocket(socket);
             socket.on('message', (message) => {
                 onDataReceivedCallback(message);
             });
             setInterval(() => {
+                this.onConnectionChangedCallback(this.connected);
                 if (this.connected) {
                     this._checkIfServerIsAlive();
                 }
@@ -125,6 +129,7 @@ class Client {
                     console.log('Client disconnected');
                     this.connected = false;
                 }
+                this.onConnectionChangedCallback(this.connected);
                 callback();
             });
         }

@@ -3,11 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Canvas</title>
+    <link rel="stylesheet" href="../../../node_modules/electron-photon/dist/photon.css">
+    <link rel="stylesheet" href="../../../node_modules/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="../../../app/assets/css/main.scss">
+    <link rel="stylesheet" href="canvas.scss">
 </head>
 <body>
 <div id="canvas-wrapper">
     <canvas id="canvas" width="800" height="600"></canvas>
+    <div id="connection-status">
+        <i class="fa fa-close"></i>
+    </div>
 </div>
 <script>
     require('../renderer.js');

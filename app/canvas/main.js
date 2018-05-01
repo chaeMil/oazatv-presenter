@@ -2,6 +2,7 @@ const electron = require('electron');
 const {app, BrowserWindow, ipcRenderer, ipcMain} = electron;
 const path = require('path');
 const url = require('url');
+
 const config = require('../shared/config');
 const Client = require('./client');
 
@@ -11,7 +12,13 @@ let onDataReceivedCallback = function (data) {
     mainWindow.webContents.send('data', data);
 };
 
-let client = new Client(config.clientPort, config.serverPort, onDataReceivedCallback, 0, 3, true, 'Test canvas');
+let onConnectionChangedCallback = function (value) {
+    mainWindow.webContents.send('connection', value);
+};
+
+let client = new Client(config.clientPort, config.serverPort,
+    onDataReceivedCallback, onConnectionChangedCallback,
+    0, 3, true, 'Test canvas');
 client.create();
 
 function createWindow() {

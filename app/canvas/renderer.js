@@ -1,5 +1,5 @@
 let {ipcRenderer, remote, webFrame} = require('electron');
-import {fabric} from 'fabric';
+let fabric = require('fabric').fabric;
 
 let main = remote.require("./main.js");
 let $ = require('jquery');
@@ -12,6 +12,14 @@ ipcRenderer.on('data', function (event, data) {
     if (data.action == 'bg') {
         canvas.backgroundColor = data.value;
         canvas.renderAll();
+    }
+});
+
+ipcRenderer.on('connection', function (event, value) {
+    if (value) {
+        $('#connection-status').addClass('connected');
+    } else {
+        $('#connection-status').removeClass('connected');
     }
 });
 

@@ -2,12 +2,13 @@
   "name": "oh-presenter",
   "version": "0.0.1",
   "description": "",
-  "main": "app/server/main.js",
   "author": "chäeMil",
   "license": "ISC",
   "scripts": {
     "postinstall": "install-app-deps",
-    "start": "npm install && electron ./app",
+    "install": "npm install",
+    "server": "./node_modules/.bin/electron ./app/server/main",
+    "canvas": "./node_modules/.bin/electron ./app/canvas/main",
     "pack": "build --dir",
     "dist": "build"
   },
@@ -41,6 +42,7 @@
   "dependencies": {
     "electron-photon": "^0.1.0",
     "fabric": "^2.2.3",
+    "font-awesome": "^4.7.0",
     "ip": "^1.1.5",
     "jquery": "^3.3.1",
     "json-socket": "^0.3.0",

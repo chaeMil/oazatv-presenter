@@ -1,8 +1,8 @@
 const electron = require('electron');
 const {app, BrowserWindow, ipcRenderer, ipcMain} = electron;
-
 const path = require('path');
 const url = require('url');
+
 const config = require('../shared/config');
 const Server = require('./server.js');
 
