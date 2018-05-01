@@ -27,6 +27,10 @@ class Server {
         setInterval(() => {
             this._checkForClientConnections();
         }, 5000);
+
+        process.on('uncaughtException', (err) => {
+            console.error(err);
+        });
     }
 
     broadcast(message, clientHashIdFilter) {
