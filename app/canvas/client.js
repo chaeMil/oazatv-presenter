@@ -58,16 +58,18 @@ class Client {
     };
 
     _scanForServerInLocalNetwork(onServerFound) {
-        let LAN = this.ipAddress.substr(0, this.ipAddress.lastIndexOf("."));
-        for (let i = 1; i <= 255; i++) {
-            console.log("checking " + LAN + '.' + i + ":" + this.serverPort);
-            this._checkPort(this.serverPort, LAN + '.' + i, function (error, status, host, port) {
-                if (status == "open") {
-                    console.log("Server found: ", host, port, status);
-                    onServerFound(host, port);
-                    return;
-                }
-            });
+        if (!this.connected) {
+            let LAN = this.ipAddress.substr(0, this.ipAddress.lastIndexOf("."));
+            for (let i = 1; i <= 255; i++) {
+                console.log("checking " + LAN + '.' + i + ":" + this.serverPort);
+                this._checkPort(this.serverPort, LAN + '.' + i, function (error, status, host, port) {
+                    if (status == "open") {
+                        console.log("Server found: ", host, port, status);
+                        onServerFound(host, port);
+                        return;
+                    }
+                });
+            }
         }
     }
 

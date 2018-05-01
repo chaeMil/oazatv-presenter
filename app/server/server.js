@@ -73,13 +73,9 @@ class Server {
         let socket = new JsonSocket(new net.Socket());
         socket.connect(client.port, client.host);
         client.socket = socket;
-        if (!this.clients.hasOwnProperty(clientHashId)) {
-            this.clients[clientHashId] = client;
-            this.statusCallback('server_status', 'get_clients_list', this.getClientsList());
-            console.log('Client ' + clientHashId + '@' + message.host + ':' + message.port + ' connected')
-        } else {
-            console.error('Client ' + clientHashId + '@' + message.host + ':' + message.port + ' already connected!');
-        }
+        this.clients[clientHashId] = client;
+        this.statusCallback('server_status', 'get_clients_list', this.getClientsList());
+        console.log('Client ' + clientHashId + '@' + message.host + ':' + message.port + ' connected')
     }
 
     _onClientDisconnection(message) {
