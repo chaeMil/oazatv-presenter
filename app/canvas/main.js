@@ -7,15 +7,18 @@ const Client = require('./client');
 
 let mainWindow;
 
-let onDataReceivedCallback = function(data) {
+let onDataReceivedCallback = function (data) {
     mainWindow.webContents.send('data', data);
 };
 
 let client = new Client(config.clientPort, config.serverPort, onDataReceivedCallback, 0, 3, true, 'Test canvas');
 client.create();
 
-function createWindow () {
-    mainWindow = new BrowserWindow({width: 350, height: 200});
+function createWindow() {
+    mainWindow = new BrowserWindow({
+        width: 800,
+        height: 600
+    });
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'ui/canvas.html'),
         protocol: 'file:',
@@ -32,6 +35,6 @@ function createWindow () {
     })
 }
 
-app.on('ready', function() {
+app.on('ready', function () {
     createWindow();
 });
