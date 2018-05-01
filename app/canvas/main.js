@@ -1,5 +1,6 @@
 const electron = require('electron');
 const {app, BrowserWindow, ipcRenderer, ipcMain} = electron;
+const windowStateKeeper = require('electron-window-state');
 const path = require('path');
 const url = require('url');
 
@@ -22,10 +23,17 @@ let client = new Client(config.clientPort, config.serverPort,
 client.create();
 
 function createWindow() {
-    mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600
+    let mainWindowState = windowStateKeeper({
+        defaultWidth: 800,
+        defaultHeight: 600
     });
+    mainWindow = new BrowserWindow({
+        'x': mainWindowState.x,
+        'y': mainWindowState.y,
+        'width': mainWindowState.width,
+        'height': mainWindowState.height
+    });
+    mainWindowState.manage(mainWindow);
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'ui/canvas.html'),
         protocol: 'file:',

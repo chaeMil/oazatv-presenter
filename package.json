@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "electron-photon": "^0.1.0",
+    "electron-window-state": "^4.1.1",
     "fabric": "^2.2.3",
     "font-awesome": "^4.7.0",
     "ip": "^1.1.5",
