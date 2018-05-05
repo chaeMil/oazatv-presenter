@@ -37,6 +37,9 @@ ipcMain.on('open_window', (event, arg) => {
         case 'canvas_designer':
             windowManager.openCanvasDesignerWindow();
             break;
+        case 'canvas':
+            windowManager.createCanvasWindow();
+            break;
     }
 });
 

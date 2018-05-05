@@ -79,6 +79,11 @@ class MainViewModel {
         });
     }
 
+    openCanvasWindow() {
+        this.ipcRenderer.send('open_window', {
+            windowType: 'canvas'
+        });
+    }
 }
 
 module.exports = MainViewModel;

@@ -1,6 +1,7 @@
+import {BrowserWindow} from 'electron';
 const path = require('path');
 const url = require('url');
-import {BrowserWindow} from 'electron';
+import NativeMethods from './native_methods';
 
 class WindowManager {
     constructor(ipcMain) {
@@ -19,9 +20,9 @@ class WindowManager {
         }
 
         this.windows['mainWindow'] = new BrowserWindow({
-            width: 700,
+            width: 800,
             height: 600,
-            minWidth: 640,
+            minWidth: 800,
             minHeight: 320,
             titleBarStyle: "hidden",
             webPreferences: {
@@ -72,7 +73,12 @@ class WindowManager {
             this.windows['canvasDesignerWindow'] = null;
         });
     }
+
+    createCanvasWindow() {
+        NativeMethods.execute('./node_modules/.bin/npm run canvas', (output) => {
+            console.log(output);
+        });
+    }
 }
 
 module.exports = WindowManager;
-
