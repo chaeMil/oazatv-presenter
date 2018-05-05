@@ -4,7 +4,7 @@ const path = require('path');
 const url = require('url');
 
 const config = require('../shared/config');
-const Server = require('./server.js');
+const Server = require('./service/server.js');
 
 function serverStatusCallback(type, action, data) {
     sendMessageToRenderThread(type, action, data);
