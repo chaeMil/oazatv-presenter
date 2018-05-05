@@ -85,6 +85,17 @@ class Client {
             let connectionMessage = new ConnectionMessage(this.ipAddress, this.port, this.clientHashId, this.displayName);
             this._sendMessageToServer(connectionMessage);
         });
+        this.server.on('timeout', () => {
+            this.connected = false;
+            this.server.destroy();
+        });
+        this.server.on('error', (exception) => {
+            console.error(exception);
+        });
+        this.server.on('close', (exception) => {
+            console.error(exception);
+            this.connected = false;
+        });
 
         this.client = net.createServer();
         this.client.listen(this.port);

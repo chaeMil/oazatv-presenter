@@ -43,7 +43,7 @@ $('#json').click(function () {
 //test methods end
 
 $('#get-clients-list').click(function () {
-    ipcRenderer.send('server_status', 'get_clients_list');
+    getClientsList();
 });
 
 ipcRenderer.on('server_status', function (event, message) {
@@ -61,7 +61,15 @@ $(document).ready(function () {
         let clientRow = $(event.target).closest('tr[data-client-id]');
         selectedClientId = $(clientRow).attr('data-client-id');
     });
+
+    setInterval(() => {
+        getClientsList();
+    }, 500);
 });
+
+function getClientsList() {
+    ipcRenderer.send('server_status', 'get_clients_list');
+}
 
 function onGetClientsList(data) {
     let container = $('#clients-list');
