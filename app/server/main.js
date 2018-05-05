@@ -19,6 +19,8 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         width: 700,
         height: 600,
+        minWidth: 640,
+        minHeight: 320,
         titleBarStyle: "hidden",
         webPreferences: {
             experimentalFeatures: true
