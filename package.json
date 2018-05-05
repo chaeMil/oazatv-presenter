@@ -41,12 +41,15 @@
   "dependencies": {
     "electron-photon": "^0.1.0",
     "electron-window-state": "^4.1.1",
+    "eventbusjs": "^0.2.0",
     "fabric": "^2.2.3",
     "font-awesome": "^4.7.0",
     "ip": "^1.1.5",
     "jquery": "^3.3.1",
     "json-socket": "^0.3.0",
-    "npm": "^6.0.0"
+    "npm": "^6.0.0",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2"
   },
   "devDependencies": {
     "electron": "^1.8.6",
