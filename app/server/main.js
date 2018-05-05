@@ -27,7 +27,7 @@ function createWindow() {
         }
     });
     mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'ui/server.html'),
+        pathname: path.join(__dirname, 'ui/main.html'),
         protocol: 'file:',
         slashes: true
     }));
