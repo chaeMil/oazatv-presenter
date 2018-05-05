@@ -95,7 +95,12 @@ class Server {
     }
 
     getClientsList() {
-        return this.clients;
+        let list = [];
+        Object.keys(this.clients).forEach((clientHashId) => {
+            let client = this.clients[clientHashId];
+            list.push(client);
+        });
+        return list;
     }
 
     _checkForClientConnections() {

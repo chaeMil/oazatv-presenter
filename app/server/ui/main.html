@@ -16,7 +16,8 @@
             <button class="btn btn-default" data-bind="click: mainViewModel.greenButtonClick">Green</button>
             <button class="btn btn-default" data-bind="click: mainViewModel.blueButtonClick">Blue</button>
             <button class="btn btn-default" data-bind="click: mainViewModel.jsonButtonClick">JSON canvas data</button>
-            <button class="btn btn-default" data-bind="click: mainViewModel.openCanvasDesignerWindow">Canvas designer</button>
+            <button class="btn btn-default" data-bind="click: mainViewModel.openCanvasDesignerWindow">Canvas designer
+            </button>
             <button class="btn btn-default" data-bind="click: mainViewModel.openCanvasWindow">New canvas window</button>
             <input type="search" class="pull-right" style="margin-right: 6px;" placeholder="Search">
         </div>
@@ -33,12 +34,12 @@
                         <th>port</th>
                     </tr>
                     </thead>
-                    <tbody id="clients-list">
-                    <tr data-bind="foreach: mainViewModel.clientsList">
-                        <td data-bind="text: $data[Object.keys($data)[0]].clientDisplayName"></td>
-                        <td data-bind="text: $data[Object.keys($data)[0]].clientHashId"></td>
-                        <td data-bind="text: $data[Object.keys($data)[0]].host"></td>
-                        <td data-bind="text: $data[Object.keys($data)[0]].port"></td>
+                    <tbody id="clients-list" data-bind="foreach: mainViewModel.clientsList">
+                    <tr>
+                        <td data-bind="text: $data.clientDisplayName"></td>
+                        <td data-bind="text: $data.clientHashId"></td>
+                        <td data-bind="text: $data.host"></td>
+                        <td data-bind="text: $data.port"></td>
                     </tr>
                     </tbody>
                 </table>
