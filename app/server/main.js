@@ -1,43 +1,27 @@
 const electron = require('electron');
-const {app, BrowserWindow, ipcRenderer, ipcMain} = electron;
-const path = require('path');
-const url = require('url');
+const {app, ipcMain} = electron;
 
 const config = require('../shared/config');
 const Server = require('./service/server.js');
+const WindowManager = require('./service/window_manager');
+let server = new Server(config.serverPort, serverStatusCallback);
+let windowManager = new WindowManager(ipcMain);
 
-function serverStatusCallback(type, action, data) {
-    sendMessageToRenderThread(type, action, data);
+app.on('ready', function () {
+    init();
+});
+
+function init() {
+    let onMainWindowClosed = () => {
+        app.quit();
+    };
+
+    server.run();
+    windowManager.createMainWindow(onMainWindowClosed);
 }
 
-let server = new Server(config.serverPort, serverStatusCallback);
-server.run();
-
-let mainWindow;
-
-function createWindow() {
-    mainWindow = new BrowserWindow({
-        width: 700,
-        height: 600,
-        minWidth: 640,
-        minHeight: 320,
-        titleBarStyle: "hidden",
-        webPreferences: {
-            experimentalFeatures: true
-        }
-    });
-    mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'ui/main.html'),
-        protocol: 'file:',
-        slashes: true
-    }));
-    mainWindow.setMenu(null);
-
-    mainWindow.webContents.openDevTools();
-
-    mainWindow.on('closed', function () {
-        mainWindow = null
-    })
+function serverStatusCallback(type, action, data) {
+    sendMessageToWindow(type, action, data);
 }
 
 ipcMain.on('broadcast', (event, arg) => {
@@ -48,8 +32,16 @@ ipcMain.on('broadcast', (event, arg) => {
     }
 });
 
-function sendMessageToRenderThread(type, action, data) {
-    mainWindow.webContents.send(type, {
+ipcMain.on('open_window', (event, arg) => {
+    switch (arg.windowType) {
+        case 'canvas_designer':
+            windowManager.openCanvasDesignerWindow();
+            break;
+    }
+});
+
+function sendMessageToWindow(window, type, action, data) {
+    windowManager.getWindow(window).webContents.send(type, {
         action: action,
         data: data
     });
@@ -57,23 +49,13 @@ function sendMessageToRenderThread(type, action, data) {
 
 ipcMain.on('server_status', (event, arg) => {
         if (arg == 'get_clients_list') {
-            sendMessageToRenderThread('server_status', 'get_clients_list', server.getClientsList());
+            sendMessageToWindow('mainWindow', 'server_status', 'get_clients_list', server.getClientsList());
         }
     }
 );
 
-app.on('ready', function () {
-    createWindow();
-});
-
 app.on('window-all-closed', function () {
     //if (process.platform !== 'darwin') {
-        app.quit()
+    app.quit();
     //}
-});
-
-app.on('activate', function () {
-    if (mainWindow === null) {
-        createWindow()
-    }
 });
