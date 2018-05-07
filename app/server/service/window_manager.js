@@ -16,7 +16,7 @@ class WindowManager {
 
     createMainWindow(onWindowCloseCallback) {
         if (this.getWindow('mainWindow') != null) {
-            this.getWindow('mainWindow').show();
+            this.getWindow('mainWindow').browserWindow.show();
             return;
         }
 
@@ -50,7 +50,7 @@ class WindowManager {
 
     openCanvasDesignerWindow() {
         if (this.getWindow('canvasDesignerWindow') != null) {
-            this.getWindow('canvasDesignerWindow').show();
+            this.getWindow('canvasDesignerWindow').browserWindow.show();
             return;
         }
 
