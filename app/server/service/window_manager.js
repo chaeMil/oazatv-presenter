@@ -2,6 +2,7 @@ import {BrowserWindow} from 'electron';
 const path = require('path');
 const url = require('url');
 import NativeMethods from './native_methods';
+import AppWindow from '../model/app_window';
 
 class WindowManager {
     constructor(ipcMain) {
@@ -19,7 +20,7 @@ class WindowManager {
             return;
         }
 
-        this.windows['mainWindow'] = new BrowserWindow({
+        let browserWindow = new BrowserWindow({
             width: 800,
             height: 600,
             minWidth: 800,
@@ -30,16 +31,18 @@ class WindowManager {
             }
         });
 
-        this.windows['mainWindow'].loadURL(url.format({
+        this.windows['mainWindow'] = new AppWindow(this.ipcMain, browserWindow);
+
+        this.windows['mainWindow'].browserWindow.loadURL(url.format({
             pathname: path.join(__dirname, '../ui/main.html'),
             protocol: 'file:',
             slashes: true
         }));
-        this.windows['mainWindow'].setMenu(null);
+        this.windows['mainWindow'].browserWindow.setMenu(null);
 
         //this.windows['mainWindow'].webContents.openDevTools();
 
-        this.windows['mainWindow'].on('closed', () => {
+        this.windows['mainWindow'].browserWindow.on('closed', () => {
             this.windows['mainWindow'] = null;
             onWindowCloseCallback();
         });
@@ -51,7 +54,7 @@ class WindowManager {
             return;
         }
 
-        this.windows['canvasDesignerWindow'] = new BrowserWindow({
+        let browserWindow = new BrowserWindow({
             width: 700,
             height: 600,
             minWidth: 640,
@@ -62,16 +65,18 @@ class WindowManager {
             }
         });
 
-        this.windows['canvasDesignerWindow'].loadURL(url.format({
+        this.windows['canvasDesignerWindow'] = new AppWindow(this.ipcMain, browserWindow);
+
+        this.windows['canvasDesignerWindow'].browserWindow.loadURL(url.format({
             pathname: path.join(__dirname, '../ui/canvas_designer.html'),
             protocol: 'file:',
             slashes: true
         }));
-        this.windows['canvasDesignerWindow'].setMenu(null);
+        this.windows['canvasDesignerWindow'].browserWindow.setMenu(null);
 
-        this.windows['canvasDesignerWindow'].webContents.openDevTools();
+        this.windows['canvasDesignerWindow'].browserWindow.webContents.openDevTools();
 
-        this.windows['canvasDesignerWindow'].on('closed', () => {
+        this.windows['canvasDesignerWindow'].browserWindow.on('closed', () => {
             this.windows['canvasDesignerWindow'] = null;
         });
     }

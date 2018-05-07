@@ -44,7 +44,7 @@ ipcMain.on('open_window', (event, arg) => {
 });
 
 function sendMessageToWindow(window, type, action, data) {
-    windowManager.getWindow(window).webContents.send(type, {
+    windowManager.getWindow(window).browserWindow.webContents.send(type, {
         action: action,
         data: data
     });
