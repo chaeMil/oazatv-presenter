@@ -52,6 +52,8 @@
 </ph-window>
 
 <script>
+    import MainViewModel from '../viewmodel/main_viewmodel.js';
+
     let ko = require('knockout');
     let {ipcRenderer, webFrame} = require('electron');
     let Photon = require("electron-photon");
@@ -59,10 +61,11 @@
     webFrame.setVisualZoomLevelLimits(1, 1);
     webFrame.setLayoutZoomLevelLimits(0, 0);
 
-    import MainViewModel from '../viewmodel/main_viewmodel.js';
-
     let mainViewModel = new MainViewModel(ko, ipcRenderer);
-    mainViewModel.init();
+
+    document.addEventListener('DOMContentLoaded', () => {
+        mainViewModel.init();
+    }, false);
 </script>
 </body>
 </html>

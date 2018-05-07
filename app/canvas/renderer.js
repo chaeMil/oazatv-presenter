@@ -9,7 +9,6 @@ webFrame.setVisualZoomLevelLimits(1, 1);
 webFrame.setLayoutZoomLevelLimits(0, 0);
 
 ipcRenderer.on('data', function (event, data) {
-    console.log(data);
     switch (data.action) {
         case 'bg':
             canvas.backgroundColor = data.value;

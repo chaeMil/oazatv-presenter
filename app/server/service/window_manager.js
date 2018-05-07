@@ -37,7 +37,7 @@ class WindowManager {
         }));
         this.windows['mainWindow'].setMenu(null);
 
-        this.windows['mainWindow'].webContents.openDevTools();
+        //this.windows['mainWindow'].webContents.openDevTools();
 
         this.windows['mainWindow'].on('closed', () => {
             this.windows['mainWindow'] = null;
@@ -68,6 +68,8 @@ class WindowManager {
             slashes: true
         }));
         this.windows['canvasDesignerWindow'].setMenu(null);
+
+        this.windows['canvasDesignerWindow'].webContents.openDevTools();
 
         this.windows['canvasDesignerWindow'].on('closed', () => {
             this.windows['canvasDesignerWindow'] = null;
