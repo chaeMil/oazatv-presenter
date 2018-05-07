@@ -1,13 +1,17 @@
-class MainViewModel {
+import BaseViewModel from './base_viewmodel';
+
+class MainViewModel extends BaseViewModel {
     clientsList;
 
     constructor(ko, ipcRenderer) {
-        this.ipcRenderer = ipcRenderer;
+        super(ko, ipcRenderer);
         this.selectedClientId = null;
         this.clientsList = ko.observable();
     }
 
     init() {
+        super.init();
+
         this.ipcRenderer.on('server_status', (event, message) => {
             if (message != null) {
                 switch (message.action) {
@@ -21,8 +25,6 @@ class MainViewModel {
         setInterval(() => {
             this.getClientsList();
         }, 500);
-
-        ko.applyBindings(this);
     }
 
     getClientsList() {
