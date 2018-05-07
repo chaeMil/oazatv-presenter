@@ -69,7 +69,7 @@ class WindowManager {
         }));
         this.windows['canvasDesignerWindow'].setMenu(null);
 
-        this.windows['canvasDesignerWindow'].on('closed', function () {
+        this.windows['canvasDesignerWindow'].on('closed', () => {
             this.windows['canvasDesignerWindow'] = null;
         });
     }
