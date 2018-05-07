@@ -24,18 +24,17 @@ class CanvasDesignerViewModel extends BaseViewModel {
     }
 
     addText() {
-        let newID = (new Date()).getTime().toString().substr(5);
         let text = new fabric.IText('text', {
             fontFamily: 'arial black',
             left: 100,
             top: 100,
-            myid: newID
         });
         text.set('selectable', true);
         this.canvas.add(text);
     }
 
     _initCanvas() {
+        this.windowContent = document.querySelector('window-content');
         this.canvas = new fabric.Canvas('canvas', {
             selection: true,
             uniScaleTransform: true
@@ -44,13 +43,11 @@ class CanvasDesignerViewModel extends BaseViewModel {
             this._resizeCanvas();
         }, false);
         this._resizeCanvas();
-        this.addText();
     }
 
     _resizeCanvas() {
-        let windowContent = document.querySelector('body');
-        this.canvas.setHeight(windowContent.offsetHeight);
-        this.canvas.setWidth(windowContent.offsetWidth);
+        this.canvas.setHeight(this.windowContent.offsetHeight);
+        this.canvas.setWidth(this.windowContent.offsetWidth);
         this.canvas.renderAll();
     }
 }
