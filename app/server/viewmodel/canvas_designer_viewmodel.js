@@ -33,6 +33,11 @@ class CanvasDesignerViewModel extends BaseViewModel {
         this.canvas.add(text);
     }
 
+    broadcastToCanvas() {
+        let jsonData = this.canvas.toJSON();
+        this.ipcRenderer.send('broadcast', {action: 'canvas_json', value: JSON.stringify(jsonData)});
+    }
+
     _initCanvas() {
         this.windowContent = document.querySelector('window-content');
         this.canvas = new fabric.Canvas('canvas', {
