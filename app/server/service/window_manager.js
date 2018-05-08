@@ -74,7 +74,7 @@ class WindowManager {
         }));
         this.windows['canvasDesignerWindow'].browserWindow.setMenu(null);
 
-        this.windows['canvasDesignerWindow'].browserWindow.webContents.openDevTools();
+        //this.windows['canvasDesignerWindow'].browserWindow.webContents.openDevTools();
 
         this.windows['canvasDesignerWindow'].browserWindow.on('closed', () => {
             this.windows['canvasDesignerWindow'] = null;
