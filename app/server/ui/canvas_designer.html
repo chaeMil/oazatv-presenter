@@ -44,11 +44,24 @@
                 <canvas id="canvas" width="800" height="600"></canvas>
             </div>
             <div class="pane pane-sm sidebar">
+                <div id="object-editor" class="editor hidden">
+                    <h5 class="nav-group-title">Object</h5>
+                    <div class="editor-inner">
+                        ScaleX: <input type="range" class="slider slider-square blue"
+                                       min="0.01" max="10" step="any"
+                                       data-bind="value: VM.objectEditorValues.scaleX" />
+                        ScaleX: <input type="range" class="slider slider-square blu"
+                                       min="0.01" max="10" step="any"
+                                       data-bind="value: VM.objectEditorValues.scaleY" />
+                    </div>
+                </div>
                 <div id="text-editor" class="editor hidden">
                     <h5 class="nav-group-title">Text editor</h5>
                     <div class="editor-inner">
-                        Font: <input type="text" value="" data-bind="value: VM.textEditorValues.fontFamily"/>
-                        Color: <input type="text" value="" data-bind="value: VM.textEditorValues.color"/>
+                        Font: <input type="text" value=""
+                                     data-bind="value: VM.textEditorValues.fontFamily"/>
+                        Color: <input type="text" value=""
+                                      data-bind="value: VM.textEditorValues.color"/>
                     </div>
                 </div>
             </div>

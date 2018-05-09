@@ -10,6 +10,10 @@ class CanvasDesignerViewModel extends BaseViewModel {
             fontFamily: ko.observable(""),
             color: ko.observable("")
         };
+        this.objectEditorValues = {
+            scaleX: ko.observable(""),
+            scaleY: ko.observable("")
+        }
     }
 
     init() {
@@ -67,6 +71,19 @@ class CanvasDesignerViewModel extends BaseViewModel {
         }
     }
 
+    _onObjectSelected() {
+        this.objectEditor.classList.remove("hidden");
+        this.objectEditorValues.scaleX(this.selectedObject.scaleX);
+        this.objectEditorValues.scaleY(this.selectedObject.scaleY);
+
+        this.objectEditorValues.scaleX.subscribe((newValue) => {
+            this._changeSelectedObjectAttribute('scaleX', newValue);
+        });
+        this.objectEditorValues.scaleY.subscribe((newValue) => {
+            this._changeSelectedObjectAttribute('scaleY', newValue);
+        });
+    }
+
     _onTextSelected() {
         this.textEditor.classList.remove("hidden");
         console.log("onTextSelected", this.selectedObject);
@@ -94,6 +111,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
             this._onSelectionCleared(null);
             this.selectedObject = event.target;
             let type = this.selectedObject.get('type');
+            this._onObjectSelected();
 
             switch (type) {
                 case "i-text":
@@ -113,7 +131,14 @@ class CanvasDesignerViewModel extends BaseViewModel {
 
     _onSelectionCleared(event) {
         this.selectedObject = null;
+        this.objectEditor.classList.add("hidden");
         this.textEditor.classList.add("hidden");
+    }
+
+    _onObjectModified(event) {
+        let object = event.target;
+        this.objectEditorValues.scaleX(object.scaleX);
+        this.objectEditorValues.scaleY(object.scaleY);
     }
 
     _initCanvas() {
@@ -129,7 +154,9 @@ class CanvasDesignerViewModel extends BaseViewModel {
         this.canvas.on('selection:updated', (event) => {
             this._onSelection(event);
         });
-
+        this.canvas.on('object:modified', (event) => {
+            this._onObjectModified(event);
+        });
         this.canvas.on('selection:cleared', (event) => {
             this._onSelectionCleared(event);
         });
@@ -148,6 +175,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
 
     _getUiElements() {
         this.textEditor = document.querySelector('#text-editor');
+        this.objectEditor = document.querySelector("#object-editor");
     }
 }
 
