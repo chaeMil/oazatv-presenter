@@ -51,12 +51,57 @@ class CanvasDesignerViewModel extends BaseViewModel {
         this.ipcRenderer.send('broadcast', {action: 'canvas_json', value: JSON.stringify(jsonData)});
     }
 
+    _onTextSelected() {
+
+    }
+
+    _onRectangleSelected() {
+
+    }
+
+    _onCircleSelected() {
+
+    }
+
+    _onSelection(event) {
+        if (event.selected && event.selected.length == 1) {
+            this.selectedObject = event.target;
+            console.log("onSelection", this.selectedObject);
+
+            if (this.selectedObject.isType('text')) {
+                this._onTextSelected();
+            } else if (this.selectedObject.isType('rect')) {
+                this._onRectangleSelected();
+            } else if (this.selectedObject.isType('circle')) {
+                this._onCircleSelected();
+            }
+        } else {
+            this._onSelectionCleared(event)
+        }
+    }
+
+    _onSelectionCleared(event) {
+        this.selectedObject = null;
+    }
+
     _initCanvas() {
         this.canvasWrapper = document.querySelector('#canvas-wrapper');
         this.canvas = new fabric.Canvas('canvas', {
             selection: true,
             uniScaleTransform: true
         });
+
+        this.canvas.on('selection:created', (event) => {
+            this._onSelection(event);
+        });
+        this.canvas.on('selection:updated', (event) => {
+            this._onSelection(event);
+        });
+
+        this.canvas.on('selection:cleared', (event) => {
+            this._onSelectionCleared(event);
+        });
+
         window.addEventListener('resize', () => {
             this._resizeCanvas();
         }, false);
