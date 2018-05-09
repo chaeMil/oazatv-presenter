@@ -17,8 +17,7 @@ function init() {
     };
 
     server.run();
-    //windowManager.createMainWindow(onMainWindowClosed);
-    windowManager.openCanvasDesignerWindow();
+    windowManager.createMainWindow(onMainWindowClosed);
 }
 
 function serverStatusCallback(type, action, data) {
