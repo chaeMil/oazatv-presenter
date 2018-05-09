@@ -4,8 +4,17 @@ let fabric = require('fabric').fabric;
 
 class CanvasDesignerViewModel extends BaseViewModel {
 
+    constructor(ko, ipcMain) {
+        super(ko, ipcMain);
+        this.textEditorValues = {
+            fontFamily: ko.observable(""),
+            color: ko.observable("")
+        };
+    }
+
     init() {
         super.init();
+        this._getUiElements();
         this._initCanvas();
     }
 
@@ -51,8 +60,25 @@ class CanvasDesignerViewModel extends BaseViewModel {
         this.ipcRenderer.send('broadcast', {action: 'canvas_json', value: JSON.stringify(jsonData)});
     }
 
-    _onTextSelected() {
+    _changeSelectedObjectAttribute(attributeName, value) {
+        if (this.selectedObject != null) {
+            this.selectedObject[attributeName] = value;
+            this.canvas.renderAll();
+        }
+    }
 
+    _onTextSelected() {
+        this.textEditor.classList.remove("hidden");
+        console.log("onTextSelected", this.selectedObject);
+        this.textEditorValues.fontFamily(this.selectedObject.fontFamily);
+        this.textEditorValues.color(this.selectedObject.color);
+
+        this.textEditorValues.fontFamily.subscribe((newValue) => {
+            this._changeSelectedObjectAttribute('fontFamily', newValue);
+        });
+        this.textEditorValues.color.subscribe((newValue) => {
+            this._changeSelectedObjectAttribute('color', newValue);
+        });
     }
 
     _onRectangleSelected() {
@@ -65,15 +91,20 @@ class CanvasDesignerViewModel extends BaseViewModel {
 
     _onSelection(event) {
         if (event.selected && event.selected.length == 1) {
+            this._onSelectionCleared(null);
             this.selectedObject = event.target;
-            console.log("onSelection", this.selectedObject);
+            let type = this.selectedObject.get('type');
 
-            if (this.selectedObject.isType('text')) {
-                this._onTextSelected();
-            } else if (this.selectedObject.isType('rect')) {
-                this._onRectangleSelected();
-            } else if (this.selectedObject.isType('circle')) {
-                this._onCircleSelected();
+            switch (type) {
+                case "i-text":
+                    this._onTextSelected();
+                    break;
+                case "rect":
+                    this._onRectangleSelected();
+                    break;
+                case "circle":
+                    this._onCircleSelected();
+                    break;
             }
         } else {
             this._onSelectionCleared(event)
@@ -82,6 +113,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
 
     _onSelectionCleared(event) {
         this.selectedObject = null;
+        this.textEditor.classList.add("hidden");
     }
 
     _initCanvas() {
@@ -112,6 +144,10 @@ class CanvasDesignerViewModel extends BaseViewModel {
         this.canvas.setHeight(this.canvasWrapper.offsetHeight);
         this.canvas.setWidth(this.canvasWrapper.offsetWidth);
         this.canvas.renderAll();
+    }
+
+    _getUiElements() {
+        this.textEditor = document.querySelector('#text-editor');
     }
 }
 
