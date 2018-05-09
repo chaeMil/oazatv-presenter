@@ -17,15 +17,28 @@ class CanvasDesignerViewModel extends BaseViewModel {
             width: 100,
             height: 100,
             stroke: 'red',
-            strokeWidth: 3,
+            strokeWidth: 3
         });
         rectangle.set('selectable', true);
         this.canvas.add(rectangle);
     }
 
+    addCircle() {
+        let circle = new fabric.Circle({
+            radius: 50,
+            left: 100,
+            top: 100,
+            fill: '',
+            stroke: 'red',
+            strokeWidth: 3
+        });
+        circle.set('selectable', true);
+        this.canvas.add(circle);
+    }
+
     addText() {
         let text = new fabric.IText('text', {
-            fontFamily: 'arial black',
+            fontFamily: 'helvetica',
             left: 100,
             top: 100,
         });

@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>oh! Presenter</title>
     <link rel="stylesheet" href="../../../node_modules/electron-photon/dist/photon.css">
+    <link rel="stylesheet" href="../../../node_modules/ionicons/dist/css/ionicons.min.css">
+    <link rel="stylesheet" href="../../../node_modules/open-iconic/font/css/open-iconic.min.css">
     <link rel="stylesheet" href="../../shared/assets/css/main.scss">
     <link rel="stylesheet" href="../assets/main.scss">
 </head>
@@ -17,9 +19,26 @@
     </tool-bar>
     <window-content>
         <div class="pane-group">
-            <div class="pane-sm sidebar">
-                <button class="btn btn-default" data-bind="click: VM.addRectangle">Square</button>
-                <button class="btn btn-default" data-bind="click: VM.addText">Text</button>
+            <div class="pane-sm sidebar canvas-elements">
+                <h5 class="nav-group-title">Basic Elements</h5>
+                <nav-item data-bind="click: VM.addText">
+                    <div class="icon">
+                        <span class="oi" data-glyph="text"></span>
+                    </div>
+                    Text
+                </nav-item>
+                <nav-item data-bind="click: VM.addRectangle">
+                    <div class="icon">
+                        <span class="oi" data-glyph="media-stop"></span>
+                    </div>
+                    Square
+                </nav-item>
+                <nav-item data-bind="click: VM.addCircle">
+                    <div class="icon">
+                        <span class="oi" data-glyph="media-record"></span>
+                    </div>
+                    Circle
+                </nav-item>
             </div>
             <div class="pane" id="canvas-wrapper">
                 <canvas id="canvas" width="800" height="600"></canvas>
