@@ -11,14 +11,23 @@
 <ph-window>
     <tool-bar type="header">
         <h1 class="title" style="-webkit-app-region: drag;">Canvas Designer</h1>
-        <div class="toolbar-actions" style="text-align: center;">
-            <button class="btn btn-default" data-bind="click: VM.addRectangle">Square</button>
-            <button class="btn btn-default" data-bind="click: VM.addText">Text</button>
+        <div class="toolbar-actions" style="text-align: right;">
             <button class="btn btn-default" data-bind="click: VM.broadcastToCanvas">Broadcast to canvas</button>
         </div>
     </tool-bar>
     <window-content>
-        <canvas id="canvas" width="800" height="600"></canvas>
+        <div class="pane-group">
+            <div class="pane-sm sidebar">
+                <button class="btn btn-default" data-bind="click: VM.addRectangle">Square</button>
+                <button class="btn btn-default" data-bind="click: VM.addText">Text</button>
+            </div>
+            <div class="pane" id="canvas-wrapper">
+                <canvas id="canvas" width="800" height="600"></canvas>
+            </div>
+            <div class="pane pane-sm sidebar">
+
+            </div>
+        </div>
     </window-content>
 </ph-window>
 

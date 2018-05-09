@@ -39,7 +39,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
     }
 
     _initCanvas() {
-        this.windowContent = document.querySelector('window-content');
+        this.canvasWrapper = document.querySelector('#canvas-wrapper');
         this.canvas = new fabric.Canvas('canvas', {
             selection: true,
             uniScaleTransform: true
@@ -51,8 +51,8 @@ class CanvasDesignerViewModel extends BaseViewModel {
     }
 
     _resizeCanvas() {
-        this.canvas.setHeight(this.windowContent.offsetHeight);
-        this.canvas.setWidth(this.windowContent.offsetWidth);
+        this.canvas.setHeight(this.canvasWrapper.offsetHeight);
+        this.canvas.setWidth(this.canvasWrapper.offsetWidth);
         this.canvas.renderAll();
     }
 }

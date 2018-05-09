@@ -55,10 +55,10 @@ class WindowManager {
         }
 
         let browserWindow = new BrowserWindow({
-            width: 700,
-            height: 600,
-            minWidth: 640,
-            minHeight: 480,
+            width: 1200,
+            height: 700,
+            minWidth: 700,
+            minHeight: 500,
             titleBarStyle: "hidden",
             webPreferences: {
                 experimentalFeatures: true
