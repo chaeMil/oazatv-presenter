@@ -90,9 +90,35 @@ class CanvasDesignerViewModel extends BaseViewModel {
         this.canvas.add(text);
     }
 
+    addVideo() {
+        let self = this;
+        let videoElement = document.createElement('video');
+        videoElement.src = 'https://oaza.tv/db/videos/1581/djnlYQ.mp4';
+        videoElement.autoplay = true;
+        videoElement.setAttribute("style", "display: none;");
+        document.body.appendChild(videoElement);
+
+        let video = new fabric.Image(videoElement, {
+            left: 200,
+            top: 300,
+            width: 320,
+            height: 240,
+            originX: 'center',
+            originY: 'center'
+        });
+        video.set('selectable', true);
+
+        self.canvas.add(video);
+        fabric.util.requestAnimFrame(function render() {
+            self.canvas.renderAll();
+            fabric.util.requestAnimFrame(render);
+        });
+    }
+
     broadcastToCanvas() {
         let jsonData = this.canvas.toJSON();
-        this.ipcRenderer.send('broadcast', {action: 'canvas_json', value: JSON.stringify(jsonData)});
+        this.ipcRenderer.send('broadcast', {action: 'canvas_json',
+            value: JSON.stringify(jsonData)});
     }
 
     _changeSelectedObjectAttribute(attributeName, value) {
