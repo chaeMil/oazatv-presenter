@@ -53,9 +53,40 @@ class CanvasDesignerViewModel extends BaseViewModel {
         let text = new fabric.IText('text', {
             fontFamily: 'helvetica',
             left: 100,
-            top: 100,
+            top: 100
         });
         text.set('selectable', true);
+        this.canvas.add(text);
+    }
+
+    addTextbox() {
+        let text = new fabric.Textbox('text', {
+            fontFamily: 'helvetica',
+            left: 100,
+            top: 100
+        });
+        text.set('selectable', true);
+
+        text.setControlsVisibility({
+            mt: false,
+            mb: false,
+            ml: true,
+            mr: true,
+            bl: false,
+            br: false,
+            tl: false,
+            tr: false,
+            mtr: false,
+        });
+
+        this.canvas.on('text:changed', function(opt) {
+            let text = opt.target;
+            if (text.width > text.fixedWidth) {
+                text.fontSize *= text.fixedWidth / (text.width + 1);
+                text.width = text.fixedWidth;
+            }
+        });
+
         this.canvas.add(text);
     }
 
