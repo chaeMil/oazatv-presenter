@@ -95,14 +95,16 @@ class CanvasDesignerViewModel extends BaseViewModel {
         let videoElement = document.createElement('video');
         videoElement.src = 'https://oaza.tv/db/videos/1581/djnlYQ.mp4';
         videoElement.autoplay = true;
-        videoElement.setAttribute("style", "display: none;");
+        videoElement.setAttribute("style", "pointer-events: none; width: 1920px; height: 1080px");
         document.body.appendChild(videoElement);
 
         let video = new fabric.Image(videoElement, {
             left: 200,
             top: 300,
-            width: 320,
-            height: 240,
+            width: 1920,
+            height: 1080,
+            scaleY: 0.3,
+            scaleX: 0.3,
             originX: 'center',
             originY: 'center'
         });
