@@ -1,4 +1,4 @@
-import BaseViewModel from './base_viewmodel';
+import BaseViewModel from '../../shared/viewmodel/base_viewmodel';
 
 class MainViewModel extends BaseViewModel {
     clientsList;

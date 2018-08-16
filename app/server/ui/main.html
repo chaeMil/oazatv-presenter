@@ -12,12 +12,13 @@
     <tool-bar type="header">
         <h1 class="title" style="-webkit-app-region: drag;">oh! Presenter</h1>
         <div class="toolbar-actions" style="text-align: center;">
-            <button class="btn btn-default" data-bind="click: mainViewModel.redButtonClick">Red</button>
-            <button class="btn btn-default" data-bind="click: mainViewModel.greenButtonClick">Green</button>
-            <button class="btn btn-default" data-bind="click: mainViewModel.blueButtonClick">Blue</button>
-            <button class="btn btn-default" data-bind="click: mainViewModel.jsonButtonClick">JSON canvas data</button>
-            <button class="btn btn-default" data-bind="click: mainViewModel.openCanvasDesignerWindow">Canvas designer</button>
-            <button class="btn btn-default" data-bind="click: mainViewModel.openCanvasWindow">New canvas</button>
+            <button class="btn btn-default" data-bind="click: VM.redButtonClick">Red</button>
+            <button class="btn btn-default" data-bind="click: VM.greenButtonClick">Green</button>
+            <button class="btn btn-default" data-bind="click: VM.blueButtonClick">Blue</button>
+            <button class="btn btn-default" data-bind="click: VM.jsonButtonClick">JSON canvas data</button>
+            <button class="btn btn-default" data-bind="click: VM.openCanvasDesignerWindow">Canvas designer
+            </button>
+            <button class="btn btn-default" data-bind="click: VM.openCanvasWindow">New canvas</button>
         </div>
     </tool-bar>
     <window-content>
@@ -32,7 +33,7 @@
                         <th>port</th>
                     </tr>
                     </thead>
-                    <tbody id="clients-list" data-bind="foreach: mainViewModel.clientsList">
+                    <tbody id="clients-list" data-bind="foreach: VM.clientsList">
                     <tr>
                         <td data-bind="text: $data.clientDisplayName"></td>
                         <td data-bind="text: $data.clientHashId"></td>
@@ -59,10 +60,9 @@
     webFrame.setVisualZoomLevelLimits(1, 1);
     webFrame.setLayoutZoomLevelLimits(0, 0);
 
-    let mainViewModel = new MainViewModel(ko, ipcRenderer);
-
+    let VM = new MainViewModel(ko, ipcRenderer);
     document.addEventListener('DOMContentLoaded', () => {
-        mainViewModel.init();
+        VM.init();
     }, false);
 </script>
 </body>

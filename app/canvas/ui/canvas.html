@@ -10,13 +10,24 @@
 </head>
 <body>
 <div id="canvas-wrapper">
-    <canvas id="canvas" width="800" height="600"></canvas>
+    <canvas id="canvas" width="1280" height="720"></canvas>
     <div id="connection-status">
         <i class="fa fa-close"></i>
     </div>
 </div>
 <script>
-    require('../renderer.js');
+    import CanvasViewModel from '../viewmodel/canvas_viewmodel.js';
+
+    let ko = require('knockout');
+    let {ipcRenderer, webFrame} = require('electron');
+
+    webFrame.setVisualZoomLevelLimits(1, 1);
+    webFrame.setLayoutZoomLevelLimits(0, 0);
+
+    let VM = new CanvasViewModel(ko, ipcRenderer);
+    document.addEventListener('DOMContentLoaded', () => {
+        VM.init();
+    });
 </script>
 </body>
 </html>

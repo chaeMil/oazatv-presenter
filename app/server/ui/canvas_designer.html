@@ -53,7 +53,7 @@
                 </nav-item>
             </div>
             <div class="pane" id="canvas-wrapper">
-                <canvas id="canvas" width="800" height="600"></canvas>
+                <canvas id="canvas" width="1280" height="720"></canvas>
             </div>
             <div class="pane pane-sm sidebar">
                 <div id="object-editor" class="editor hidden">
@@ -61,10 +61,10 @@
                     <div class="editor-inner">
                         ScaleX: <input type="range" class="slider slider-square blue"
                                        min="0.01" max="10" step="any"
-                                       data-bind="value: VM.objectEditorValues.scaleX" />
+                                       data-bind="value: VM.objectEditorValues.scaleX"/>
                         ScaleX: <input type="range" class="slider slider-square blu"
                                        min="0.01" max="10" step="any"
-                                       data-bind="value: VM.objectEditorValues.scaleY" />
+                                       data-bind="value: VM.objectEditorValues.scaleY"/>
                     </div>
                 </div>
                 <div id="text-editor" class="editor hidden">
@@ -91,7 +91,9 @@
     webFrame.setLayoutZoomLevelLimits(0, 0);
 
     let VM = new CanvasDesignerViewModel(ko, ipcRenderer);
-    VM.init();
+    document.addEventListener('DOMContentLoaded', () => {
+        VM.init();
+    });
 </script>
 </body>
 </html>

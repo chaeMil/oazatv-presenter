@@ -1,4 +1,4 @@
-import BaseViewModel from './base_viewmodel';
+import BaseViewModel from '../../shared/viewmodel/base_viewmodel';
 
 let fabric = require('fabric').fabric;
 
@@ -79,7 +79,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
             mtr: false,
         });
 
-        this.canvas.on('text:changed', function(opt) {
+        this.canvas.on('text:changed', (opt) => {
             let text = opt.target;
             if (text.width > text.fixedWidth) {
                 text.fontSize *= text.fixedWidth / (text.width + 1);
@@ -227,8 +227,10 @@ class CanvasDesignerViewModel extends BaseViewModel {
     }
 
     _resizeCanvas() {
-        this.canvas.setHeight(this.canvasWrapper.offsetHeight);
         this.canvas.setWidth(this.canvasWrapper.offsetWidth);
+        this.canvas.setHeight(this.canvasWrapper.offsetWidth / (16 / 9));
+        let scale = this.canvasWrapper.offsetWidth / 1280;
+        this.canvas.setZoom(scale);
         this.canvas.renderAll();
     }
 
