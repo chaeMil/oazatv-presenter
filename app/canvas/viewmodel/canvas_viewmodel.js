@@ -58,14 +58,19 @@ class CanvasViewModel extends BaseViewModel {
                     break;
                 case 'canvas_json':
                     let canvasJson = JSON.parse(data.value);
-                    console.log(canvasJson);
+                    console.log("canvas_json", canvasJson);
                     this._removeVideoElements();
+                    this._processVideoElements(canvasJson);
                     this.canvas.loadFromJSON(canvasJson, () => {
                         this.canvas.renderAll();
                     }, (o, object) => {
                         //console.log(o, object)
                     });
-                    this._processVideoElements(canvasJson);
+                    let self = this;
+                    fabric.util.requestAnimFrame(function render() {
+                        self.canvas.renderAll();
+                        fabric.util.requestAnimFrame(render);
+                    }).
                     break;
             }
         });
@@ -80,7 +85,6 @@ class CanvasViewModel extends BaseViewModel {
     }
 
     _addVideo(object) {
-        let self = this;
         let videoElement = document.createElement('video');
         videoElement.id = object.videoId;
         videoElement.src = object.src;
@@ -103,11 +107,7 @@ class CanvasViewModel extends BaseViewModel {
         });
         video.set('selectable', false);
 
-        self.canvas.add(video);
-        fabric.util.requestAnimFrame(function render() {
-            self.canvas.renderAll();
-            fabric.util.requestAnimFrame(render);
-        });
+        this.canvas.add(video);
     }
 
     _removeVideoElements() {

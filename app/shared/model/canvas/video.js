@@ -1,24 +1,24 @@
 let fabric = require('fabric').fabric;
 
 fabric.Video = fabric.util.createClass(fabric.Image, {
-    type : 'video',
+    type: 'video',
 
-    initialize : function(objects, options) {
-        options || ( options = { });
+    initialize: function (objects, options) {
+        options || (options = {});
 
         this.callSuper('initialize', objects, options);
         this.set('videoId', options.videoId || 'undefinedVideoId');
         this.set('videoTime', options.videoTime || 0);
     },
 
-    toObject : function() {
+    toObject: function () {
         return fabric.util.object.extend(this.callSuper('toObject'), {
-            videoId : this.get('videoId'),
-            videoTime : this.get('videoTime')
+            videoId: this.get('videoId'),
+            videoTime: this.get('videoTime')
         });
     },
 
-    _render : function(ctx) {
+    _render: function (ctx) {
         this.callSuper('_render', ctx);
     }
 });
