@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>oh! Presenter</title>
-    <link rel="stylesheet" href="../../../node_modules/electron-photon/dist/photon.css">
     <link rel="stylesheet" href="../../shared/assets/css/main.scss">
     <link rel="stylesheet" href="../assets/main.scss">
 </head>
 <body>
+<script>
+    let Photon = require("electron-photon");
+</script>
 <ph-window>
     <tool-bar type="header">
         <h1 class="title" style="-webkit-app-region: drag;">oh! Presenter</h1>
@@ -54,7 +56,6 @@
 
     let ko = require('knockout');
     let {ipcRenderer, webFrame} = require('electron');
-    let Photon = require("electron-photon");
 
     webFrame.setVisualZoomLevelLimits(1, 1);
     webFrame.setLayoutZoomLevelLimits(0, 0);
