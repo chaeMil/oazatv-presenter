@@ -39,24 +39,24 @@
     }
   },
   "dependencies": {
-    "electron-photon": "^1.1.6",
+    "electron-photon": "^0.1.0",
     "electron-window-state": "^4.1.1",
     "eventbusjs": "^0.2.0",
-    "fabric": "^2.3.5",
+    "fabric": "^2.2.3",
     "font-awesome": "^4.7.0",
-    "ionicons": "^4.3.0",
+    "ionicons": "^3.0.0",
     "ip": "^1.1.5",
     "jquery": "^3.3.1",
     "json-socket": "^0.3.0",
     "knockout": "^3.4.2",
-    "npm": "^6.4.0",
+    "npm": "^6.0.0",
     "open-iconic": "^1.1.1",
-    "react": "^16.4.2",
-    "react-dom": "^16.4.2"
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2"
   },
   "devDependencies": {
-    "electron": "^2.0.7",
-    "electron-builder": "^20.28.1",
-    "electron-prebuilt-compile": "^2.0.7"
+    "electron": "^1.8.6",
+    "electron-builder": "^20.11.1",
+    "electron-prebuilt-compile": "^1.8.4"
   }
 }
