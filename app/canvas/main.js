@@ -1,5 +1,5 @@
 const electron = require('electron');
-const {app, BrowserWindow, ipcRenderer, ipcMain} = electron;
+const {app, BrowserWindow} = electron;
 const windowStateKeeper = require('electron-window-state');
 const path = require('path');
 const url = require('url');

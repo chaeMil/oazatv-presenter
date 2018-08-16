@@ -1,4 +1,6 @@
 import BaseViewModel from '../../shared/viewmodel/base_viewmodel';
+import StringUtils from '../../shared/util/string_utils';
+require('../../shared/model/canvas/video');
 
 let fabric = require('fabric').fabric;
 
@@ -92,21 +94,26 @@ class CanvasDesignerViewModel extends BaseViewModel {
 
     addVideo() {
         let self = this;
+        let videoId = StringUtils.makeId();
         let videoElement = document.createElement('video');
+        videoElement.id = videoId;
         videoElement.src = 'https://oaza.tv/db/videos/1581/djnlYQ.mp4';
         videoElement.autoplay = true;
         videoElement.setAttribute("style", "pointer-events: none; width: 1920px; height: 1080px");
         document.body.appendChild(videoElement);
 
-        let video = new fabric.Image(videoElement, {
+        let video = new fabric.Video(videoElement, {
             left: 200,
             top: 300,
             width: 1920,
             height: 1080,
             scaleY: 0.3,
             scaleX: 0.3,
+            stroke: "#FF0000",
+            strokeWidth: 5,
             originX: 'center',
-            originY: 'center'
+            originY: 'center',
+            videoId: videoId
         });
         video.set('selectable', true);
 
@@ -119,8 +126,21 @@ class CanvasDesignerViewModel extends BaseViewModel {
 
     broadcastToCanvas() {
         let jsonData = this.canvas.toJSON();
-        this.ipcRenderer.send('broadcast', {action: 'canvas_json',
-            value: JSON.stringify(jsonData)});
+        this._processVideoElements(jsonData);
+        console.log("broadcastToCanvas", jsonData);
+        this.ipcRenderer.send('broadcast', {
+            action: 'canvas_json',
+            value: JSON.stringify(jsonData)
+        });
+    }
+
+    _processVideoElements(jsonData) {
+        jsonData.objects.forEach((object) => {
+            if (object.type === "video") {
+                let videoElement = document.getElementById(object.videoId);
+                object.videoTime = videoElement.currentTime
+            }
+        });
     }
 
     _changeSelectedObjectAttribute(attributeName, value) {

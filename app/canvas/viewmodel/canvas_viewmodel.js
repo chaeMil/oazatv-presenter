@@ -1,6 +1,7 @@
 import BaseViewModel from '../../shared/viewmodel/base_viewmodel';
 
 let fabric = require('fabric').fabric;
+require('../../shared/model/canvas/video');
 let {webFrame} = require('electron');
 let $ = require('jquery');
 
@@ -40,6 +41,14 @@ class CanvasViewModel extends BaseViewModel {
         this.canvas.renderAll();
     }
 
+    _processVideoElements(canvasJson) {
+        canvasJson.objects.forEach((item) => {
+            if (item.type === "video") {
+                this._addVideo(item);
+            }
+        });
+    }
+
     _initMessaging() {
         this.ipcRenderer.on('data', (event, data) => {
             switch (data.action) {
@@ -49,11 +58,14 @@ class CanvasViewModel extends BaseViewModel {
                     break;
                 case 'canvas_json':
                     let canvasJson = JSON.parse(data.value);
+                    console.log(canvasJson);
+                    this._removeVideoElements();
                     this.canvas.loadFromJSON(canvasJson, () => {
                         this.canvas.renderAll();
                     }, (o, object) => {
-                        console.log(o, object)
+                        //console.log(o, object)
                     });
+                    this._processVideoElements(canvasJson);
                     break;
             }
         });
@@ -64,6 +76,49 @@ class CanvasViewModel extends BaseViewModel {
             } else {
                 $('#connection-status').removeClass('connected');
             }
+        });
+    }
+
+    _addVideo(object) {
+        let self = this;
+        let videoElement = document.createElement('video');
+        videoElement.id = object.videoId;
+        videoElement.src = object.src;
+        videoElement.autoplay = true;
+        videoElement.currentTime = object.videoTime;
+        videoElement.setAttribute("style", "pointer-events: none; width: 1920px; height: 1080px; position: absolute; top: 1080px; left: 0px");
+        document.body.appendChild(videoElement);
+
+        let video = new fabric.Video(videoElement, {
+            videoId: object.videoId,
+            src: null,
+            left: object.left,
+            top: object.top,
+            width: object.width,
+            height: object.height,
+            scaleY: object.scaleY,
+            scaleX: object.scaleX,
+            originX: object.originX,
+            originY: object.originY
+        });
+        video.set('selectable', false);
+
+        self.canvas.add(video);
+        fabric.util.requestAnimFrame(function render() {
+            self.canvas.renderAll();
+            fabric.util.requestAnimFrame(render);
+        });
+    }
+
+    _removeVideoElements() {
+        let objects = this.canvas.getObjects();
+        objects.forEach((object) => {
+            if (object.type === "video") {
+                this.canvas.remove(object);
+            }
+        });
+        [].forEach.call(document.querySelectorAll('video'), (e) => {
+            e.parentNode.removeChild(e);
         });
     }
 }
