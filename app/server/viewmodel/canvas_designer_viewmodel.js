@@ -152,6 +152,16 @@ class CanvasDesignerViewModel extends BaseViewModel {
         });
     }
 
+    addImage() {
+        let image = fabric.Image.fromURL('https://oaza.tv/db/front_page/images/block_120_image_en.jpg', (img) => {
+            img.set({
+                width: this.canvas.width / 2,
+                height: this.canvas.height / 2
+            });
+            this.canvas.add(img).renderAll().setActiveObject(img);
+        });
+    }
+
     broadcastToCanvas() {
         let jsonData = this.canvas.toJSON();
         this._processVideoElements(jsonData);
