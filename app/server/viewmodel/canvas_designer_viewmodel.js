@@ -153,7 +153,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
     }
 
     addImage() {
-        let image = fabric.Image.fromURL('https://oaza.tv/db/front_page/images/block_120_image_en.jpg', (img) => {
+        fabric.Image.fromURL('https://oaza.tv/db/front_page/images/block_120_image_en.jpg', (img) => {
             img.set({
                 width: this.canvas.width / 2,
                 height: this.canvas.height / 2
@@ -262,7 +262,8 @@ class CanvasDesignerViewModel extends BaseViewModel {
         this.canvasWrapper = document.querySelector('#canvas-wrapper');
         this.canvas = new fabric.Canvas('canvas', {
             selection: true,
-            uniScaleTransform: true
+            uniScaleTransform: true,
+            backgroundColor: '#FFFFFF'
         });
 
         this.canvas.on('selection:created', (event) => {

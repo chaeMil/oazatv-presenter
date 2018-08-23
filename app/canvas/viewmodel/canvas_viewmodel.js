@@ -24,7 +24,8 @@ class CanvasViewModel extends BaseViewModel {
         this.canvasWrapper = document.querySelector('#canvas-wrapper');
         this.canvas = new fabric.Canvas('canvas', {
             selection: false,
-            uniScaleTransform: true
+            uniScaleTransform: true,
+            backgroundColor: '#FFFFFF'
         });
 
         window.addEventListener('resize', () => {
@@ -44,6 +45,7 @@ class CanvasViewModel extends BaseViewModel {
     _processVideoElements(canvasJson) {
         let basicCanvasJson = {};
         basicCanvasJson.objects = [];
+        basicCanvasJson.background = canvasJson.background;
         let videosCanvasJson = {};
         videosCanvasJson.objects = [];
         canvasJson.objects.forEach((item) => {
