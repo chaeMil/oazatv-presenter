@@ -42,11 +42,21 @@ class CanvasViewModel extends BaseViewModel {
     }
 
     _processVideoElements(canvasJson) {
+        let basicCanvasJson = {};
+        basicCanvasJson.objects = [];
+        let videosCanvasJson = {};
+        videosCanvasJson.objects = [];
         canvasJson.objects.forEach((item) => {
             if (item.type === "video") {
-                this._addVideo(item);
+                videosCanvasJson.objects.push(item);
+            } else {
+                basicCanvasJson.objects.push(item);
             }
         });
+        return {
+            basicCanvasJson: basicCanvasJson,
+            videosCanvasJson: videosCanvasJson
+        };
     }
 
     _initMessaging() {
@@ -57,20 +67,7 @@ class CanvasViewModel extends BaseViewModel {
                     this.canvas.renderAll();
                     break;
                 case 'canvas_json':
-                    let canvasJson = JSON.parse(data.value);
-                    console.log("canvas_json", canvasJson);
-                    this._removeVideoElements();
-                    this._processVideoElements(canvasJson);
-                    this.canvas.loadFromJSON(canvasJson, () => {
-                        this.canvas.renderAll();
-                    }, (o, object) => {
-                        //console.log(o, object)
-                    });
-                    let self = this;
-                    fabric.util.requestAnimFrame(function render() {
-                        self.canvas.renderAll();
-                        fabric.util.requestAnimFrame(render);
-                    }).
+                    this._processCanvasJson(data.value);
                     break;
             }
         });
@@ -81,6 +78,26 @@ class CanvasViewModel extends BaseViewModel {
             } else {
                 $('#connection-status').removeClass('connected');
             }
+        });
+    }
+
+    _processCanvasJson(data) {
+        let canvasJson = JSON.parse(data);
+        console.log("canvas_json", canvasJson);
+        this._removeVideoElements();
+        let processedCanvases = this._processVideoElements(canvasJson);
+        this.canvas.loadFromJSON(processedCanvases.basicCanvasJson, () => {
+            this.canvas.renderAll();
+        }, (o, object) => {
+            //console.log(o, object)
+        });
+        processedCanvases.videosCanvasJson.objects.forEach((video) => {
+            this._addVideo(video);
+        });
+        let self = this;
+        fabric.util.requestAnimFrame(function render() {
+            self.canvas.renderAll();
+            fabric.util.requestAnimFrame(render);
         });
     }
 
