@@ -1,5 +1,7 @@
 const fs = require('fs-extra');
 const FileUtils = require('../util/file_utils');
+const ip = require('ip');
+const Config = require('../config.js');
 
 class CacheService {
 
@@ -20,11 +22,11 @@ class CacheService {
                 if (err) {
                     return console.error(err);
                 } else {
-                    callback(CacheService.getCacheLocation() + safeFileName);
+                    callback(CacheService.getWebServerCacheLocation() + safeFileName);
                 }
             });
         } else {
-            callback(CacheService.getCacheLocation() + safeFileName);
+            callback(CacheService.getWebServerCacheLocation() + safeFileName);
         }
     }
 
@@ -47,6 +49,10 @@ class CacheService {
 
     static getCacheLocation() {
         return this._getUserHome() + "/.oh-presenter/cache/files/";
+    }
+
+    static getWebServerCacheLocation() {
+        return "http://" + ip.address() + ":" + Config.cacheServerPort + "/files/";
     }
 
     static _getUserHome() {
