@@ -1,5 +1,6 @@
 import BaseViewModel from '../../shared/viewmodel/base_viewmodel';
 import StringUtils from '../../shared/util/string_utils';
+
 require('../../shared/model/canvas/video');
 
 let fabric = require('fabric').fabric;
@@ -22,6 +23,21 @@ class CanvasDesignerViewModel extends BaseViewModel {
         super.init();
         this._getUiElements();
         this._initCanvas();
+    }
+
+    deleteSelectedObjects() {
+        let activeObject = this.canvas.getActiveObject();
+        let activeGroup = this.canvas.getActiveObjects();
+        if (activeGroup.length === 1) {
+            this.canvas.remove(activeObject);
+        }
+        else if (activeGroup) {
+            activeGroup.forEach((object) => {
+                this.canvas.remove(object);
+            });
+            this.canvas.discardActiveObject(null);
+            this.canvas.renderAll();
+        }
     }
 
     addRectangle() {
@@ -99,6 +115,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
         videoElement.id = videoId;
         videoElement.src = 'https://oaza.tv/db/videos/1581/djnlYQ.mp4';
         videoElement.autoplay = true;
+        videoElement.volume = 0;
         videoElement.setAttribute("style", "pointer-events: none; width: 1920px; height: 1080px");
         document.body.appendChild(videoElement);
 

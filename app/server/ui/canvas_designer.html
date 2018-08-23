@@ -13,7 +13,10 @@
 <ph-window>
     <tool-bar type="header">
         <h1 class="title" style="-webkit-app-region: drag;">Canvas Designer</h1>
-        <div class="toolbar-actions" style="text-align: right;">
+        <div class="toolbar-actions" style="text-align: left; float: left;">
+            <button class="btn btn-default" data-bind="click: VM.deleteSelectedObjects">Delete</button>
+        </div>
+        <div class="toolbar-actions" style="text-align: right; float: right;">
             <button class="btn btn-default" data-bind="click: VM.broadcastToCanvas">Broadcast to canvas</button>
         </div>
     </tool-bar>
