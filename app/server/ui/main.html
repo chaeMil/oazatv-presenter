@@ -34,7 +34,7 @@
                     </tr>
                     </thead>
                     <tbody id="clients-list" data-bind="foreach: VM.clientsList">
-                    <tr>
+                    <tr data-bind="if: $data != null">
                         <td data-bind="text: $data.clientDisplayName"></td>
                         <td data-bind="text: $data.clientHashId"></td>
                         <td data-bind="text: $data.host"></td>
