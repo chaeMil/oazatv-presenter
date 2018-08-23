@@ -275,7 +275,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
     }
 
     _resizeCanvas() {
-        this.canvas.setWidth(this.canvasWrapper.offsetWidth);
+        this.canvas.setWidth(this.canvasWrapper.offsetWidth - 2 * 25);
         this.canvas.setHeight(this.canvasWrapper.offsetWidth / (16 / 9));
         let scale = this.canvasWrapper.offsetWidth / 1280;
         this.canvas.setZoom(scale);

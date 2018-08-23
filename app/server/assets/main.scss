@@ -1,2 +1,43 @@
-@import "css/table";
-@import "css/canvas-designer";
+.table-striped {
+  &.table-selectable {
+    tr {
+      &.active {
+        background-color: #97DDFD;
+      }
+    }
+  }
+}
+
+window-content {
+  .pane-group {
+    .sidebar {
+      &.canvas-elements {
+        nav-item {
+
+        }
+      }
+
+      .editor {
+        .editor-inner {
+          padding: 0 10px 15px 25px;
+        }
+      }
+    }
+  }
+}
+
+#canvas-wrapper {
+  background: #6f6f6f;
+  padding: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .canvas-container {
+    box-shadow: 0 8px 10px 0 rgba(0, 0, 0, 0.5), 0 20px 40px 0 rgba(0, 0, 0, 0.2);
+
+    #canvas {
+      background: white;
+    }
+  }
+}
