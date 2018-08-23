@@ -1,9 +1,9 @@
-import {BrowserWindow} from 'electron';
-
+const electron = require('electron');
+const BrowserWindow = electron.BrowserWindow;
 const path = require('path');
 const url = require('url');
-import NativeMethods from './native_methods';
-import AppWindow from '../model/app_window';
+const NativeMethods = require('./native_methods');
+const AppWindow = require('../model/app_window');
 
 class WindowManager {
     constructor(ipcMain) {

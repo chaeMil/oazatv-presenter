@@ -1,7 +1,6 @@
-import BaseViewModel from '../../shared/viewmodel/base_viewmodel';
+const BaseViewModel = require('../../shared/viewmodel/base_viewmodel');
 
 class MainViewModel extends BaseViewModel {
-    clientsList;
 
     constructor(ko, ipcRenderer) {
         super(ko, ipcRenderer);

@@ -1,6 +1,6 @@
-import BaseViewModel from '../../shared/viewmodel/base_viewmodel';
-import StringUtils from '../../shared/util/string_utils';
-import hotkeys from 'hotkeys-js';
+const BaseViewModel = require('../../shared/viewmodel/base_viewmodel');
+const StringUtils = require('../../shared/util/string_utils');
+const hotkeys = require('hotkeys-js');
 
 require('../../shared/model/canvas/video');
 
@@ -293,7 +293,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
         });
         hotkeys('ctrl+a,command+a', (event, handler) => {
             this.selectAllObjects();
-        })
+        });
     }
 }
 

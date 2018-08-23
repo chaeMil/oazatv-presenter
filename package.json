@@ -50,14 +50,12 @@
     "jquery": "^3.3.1",
     "json-socket": "^0.3.0",
     "knockout": "^3.4.2",
-    "npm": "^6.0.0",
-    "open-iconic": "^1.1.1",
-    "react": "^16.3.2",
-    "react-dom": "^16.3.2"
+    "npm": "^6.4.0",
+    "open-iconic": "^1.1.1"
   },
   "devDependencies": {
     "electron": "^2.0.8",
     "electron-builder": "^20.28.2",
-    "electron-prebuilt-compile": "^2.0.4"
+    "electron-prebuilt-compile": "^2.0.7"
   }
 }

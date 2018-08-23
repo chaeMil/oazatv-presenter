@@ -19,7 +19,12 @@ window-content {
 #canvas-wrapper {
   background: black;
 
-  #canvas {
-    background: white;
+  .canvas-container {
+    margin: 25px;
+    border: 1px solid #454545;
+
+    #canvas {
+      background: white;
+    }
   }
 }
