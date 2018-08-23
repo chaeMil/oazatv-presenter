@@ -1,5 +1,6 @@
 import BaseViewModel from '../../shared/viewmodel/base_viewmodel';
 import StringUtils from '../../shared/util/string_utils';
+import hotkeys from 'hotkeys-js';
 
 require('../../shared/model/canvas/video');
 
@@ -23,6 +24,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
         super.init();
         this._getUiElements();
         this._initCanvas();
+        this._initHotKeys();
     }
 
     deleteSelectedObjects() {
@@ -38,6 +40,15 @@ class CanvasDesignerViewModel extends BaseViewModel {
             this.canvas.discardActiveObject(null);
             this.canvas.renderAll();
         }
+    }
+
+    selectAllObjects() {
+        this.canvas.discardActiveObject(null);
+        let sel = new fabric.ActiveSelection(this.canvas.getObjects(), {
+            canvas: this.canvas,
+        });
+        this.canvas.setActiveObject(sel);
+        this.canvas.requestRenderAll();
     }
 
     addRectangle() {
@@ -274,6 +285,15 @@ class CanvasDesignerViewModel extends BaseViewModel {
     _getUiElements() {
         this.textEditor = document.querySelector('#text-editor');
         this.objectEditor = document.querySelector("#object-editor");
+    }
+
+    _initHotKeys() {
+        hotkeys('backspace,delete', (event, handler) => {
+            this.deleteSelectedObjects();
+        });
+        hotkeys('ctrl+a,command+a', (event, handler) => {
+            this.selectAllObjects();
+        })
     }
 }
 
