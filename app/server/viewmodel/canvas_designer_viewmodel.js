@@ -2,6 +2,7 @@ const BaseViewModel = require('../../shared/viewmodel/base_viewmodel');
 const StringUtils = require('../../shared/util/string_utils');
 const hotkeys = require('hotkeys-js');
 const {dialog} = require('electron').remote;
+const CacheService = require('../../shared/service/cache_service');
 
 require('../../shared/model/canvas/video');
 
@@ -11,6 +12,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
 
     constructor(ko, ipcMain) {
         super(ko, ipcMain);
+        this.cacheService = new CacheService();
         this.textEditorValues = {
             fontFamily: ko.observable(""),
             color: ko.observable("")
@@ -161,9 +163,12 @@ class CanvasDesignerViewModel extends BaseViewModel {
                 ]
             },
             (files) => {
-                if (files !== undefined) {
-                    fabric.Image.fromURL(files[0], (img) => {
-                        this.canvas.add(img).renderAll().setActiveObject(img);
+                if (files !== undefined && files[0] != null) {
+                    let file = files[0];
+                    this.cacheService.addFileToCache(file, (cachedFile) => {
+                        fabric.Image.fromURL(cachedFile, (img) => {
+                            this.canvas.add(img).renderAll().setActiveObject(img);
+                        });
                     });
                 }
             }

@@ -13,21 +13,32 @@ class CacheService {
         }
     }
 
-    addFileToCache(sourceFile) {
+    addFileToCache(sourceFile, callback) {
         let safeFileName = this._generateSafeFileName(sourceFile);
-        fs.copy(sourceFile, this._getCacheLocation() + safeFileName, (err) => {
-            if (err) return console.error(err);
-            console.log('success!')
-        })
+        if (this._shouldCacheTheFile(sourceFile)) {
+            fs.copy(sourceFile, this._getCacheLocation() + safeFileName, (err) => {
+                if (err) {
+                    return console.error(err);
+                } else {
+                    callback(this._getCacheLocation() + safeFileName);
+                    console.log("caching file: " + safeFileName);
+                }
+            });
+        } else {
+            callback(this._getCacheLocation() + safeFileName);
+            console.log("file already cached, returning: " + safeFileName);
+        }
     }
 
     _shouldCacheTheFile(sourceFile) {
         let safeFileName = this._generateSafeFileName(sourceFile);
-        fs.exists(safeFileName, (exists) => {
-
-        });
-
-        let sourceFileStats = fs.statSync(sourceFile);
+        if (fs.existsSync(this._getCacheLocation() + safeFileName)) {
+            let sourceFileStats = fs.statSync(sourceFile);
+            let cachedFileStats = fs.statSync(this._getCacheLocation() + safeFileName);
+            return (sourceFileStats.mtimeMs != cachedFileStats.mtimeMs);
+        } else {
+            return true;
+        }
     }
 
     _getCacheLocation() {
