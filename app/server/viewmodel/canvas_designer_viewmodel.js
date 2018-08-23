@@ -1,6 +1,7 @@
 const BaseViewModel = require('../../shared/viewmodel/base_viewmodel');
 const StringUtils = require('../../shared/util/string_utils');
 const hotkeys = require('hotkeys-js');
+const {dialog} = require('electron').remote;
 
 require('../../shared/model/canvas/video');
 
@@ -153,13 +154,21 @@ class CanvasDesignerViewModel extends BaseViewModel {
     }
 
     addImage() {
-        fabric.Image.fromURL('https://oaza.tv/db/front_page/images/block_120_image_en.jpg', (img) => {
-            img.set({
-                width: this.canvas.width / 2,
-                height: this.canvas.height / 2
-            });
-            this.canvas.add(img).renderAll().setActiveObject(img);
-        });
+        dialog.showOpenDialog({
+                properties: ['openFile'],
+                filters: [
+                    {name: 'Images', extensions: ['jpg', 'png']},
+                ]
+            },
+            (files) => {
+                if (files !== undefined) {
+                    fabric.Image.fromURL(files[0], (img) => {
+                        this.canvas.add(img).renderAll().setActiveObject(img);
+                    });
+                }
+            }
+        )
+        ;
     }
 
     broadcastToCanvas() {
