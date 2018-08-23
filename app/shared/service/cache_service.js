@@ -8,44 +8,48 @@ class CacheService {
     }
 
     init() {
-        if (!fs.existsSync(this._getCacheLocation())) {
-            FileUtils.mkDirByPathSync(this._getCacheLocation());
+        if (!fs.existsSync(CacheService.getCacheLocation())) {
+            FileUtils.mkDirByPathSync(CacheService.getCacheLocation());
         }
     }
 
     addFileToCache(sourceFile, callback) {
         let safeFileName = this._generateSafeFileName(sourceFile);
-        if (this._shouldCacheTheFile(sourceFile)) {
-            fs.copy(sourceFile, this._getCacheLocation() + safeFileName, (err) => {
+        if (this._shouldCacheFile(sourceFile)) {
+            fs.copy(sourceFile, CacheService.getCacheLocation() + safeFileName, (err) => {
                 if (err) {
                     return console.error(err);
                 } else {
-                    callback(this._getCacheLocation() + safeFileName);
-                    console.log("caching file: " + safeFileName);
+                    callback(CacheService.getCacheLocation() + safeFileName);
                 }
             });
         } else {
-            callback(this._getCacheLocation() + safeFileName);
-            console.log("file already cached, returning: " + safeFileName);
+            callback(CacheService.getCacheLocation() + safeFileName);
         }
     }
 
-    _shouldCacheTheFile(sourceFile) {
+    _shouldCacheFile(sourceFile) {
         let safeFileName = this._generateSafeFileName(sourceFile);
-        if (fs.existsSync(this._getCacheLocation() + safeFileName)) {
+        if (fs.existsSync(CacheService.getCacheLocation() + safeFileName)) {
             let sourceFileStats = fs.statSync(sourceFile);
-            let cachedFileStats = fs.statSync(this._getCacheLocation() + safeFileName);
+            let cachedFileStats = fs.statSync(CacheService.getCacheLocation() + safeFileName);
             return (sourceFileStats.mtimeMs != cachedFileStats.mtimeMs);
         } else {
             return true;
         }
     }
 
-    _getCacheLocation() {
+    static returnCachedFileContent(cachedFilename, callback) {
+        fs.readFile(this.getCacheLocation() + cachedFilename, (err, contents) => {
+            callback(contents);
+        });
+    }
+
+    static getCacheLocation() {
         return this._getUserHome() + "/.oh-presenter/cache/files/";
     }
 
-    _getUserHome() {
+    static _getUserHome() {
         return process.env.HOME || process.env.USERPROFILE;
     }
 

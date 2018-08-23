@@ -4,8 +4,10 @@ const {app, ipcMain} = electron;
 const config = require('../shared/config');
 const Server = require('./service/server.js');
 const CacheService = require('../shared/service/cache_service.js');
+const CacheWebServer = require('../shared/service/cache_web_server');
 const WindowManager = require('./service/window_manager');
 let server = new Server(config.serverPort, serverStatusCallback);
+let cacheWebServer = new CacheWebServer();
 let cacheService = new CacheService();
 let windowManager = new WindowManager(ipcMain);
 
@@ -20,6 +22,7 @@ function init() {
 
     server.run();
     cacheService.init();
+    cacheWebServer.init();
     windowManager.createMainWindow(onMainWindowClosed);
 }
 
