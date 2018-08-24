@@ -123,36 +123,50 @@ class CanvasDesignerViewModel extends BaseViewModel {
     }
 
     addVideo() {
-        let self = this;
-        let videoId = StringUtils.makeId();
-        let videoElement = document.createElement('video');
-        videoElement.id = videoId;
-        videoElement.src = 'https://oaza.tv/db/videos/1581/djnlYQ.mp4';
-        videoElement.autoplay = true;
-        videoElement.volume = 0;
-        videoElement.setAttribute("style", "pointer-events: none; width: 1920px; height: 1080px");
-        document.body.appendChild(videoElement);
+        dialog.showOpenDialog({
+                properties: ['openFile'],
+                filters: [
+                    {name: 'Videos', extensions: ['mp4', 'mov', 'webm']},
+                ]
+            },
+            (files) => {
+                if (files !== undefined && files[0] != null) {
+                    let file = files[0];
+                    this.cacheService.addFileToCache(file, (cachedFile) => {
+                        let self = this;
+                        let videoId = StringUtils.makeId();
+                        let videoElement = document.createElement('video');
+                        videoElement.id = videoId;
+                        videoElement.src = cachedFile;
+                        videoElement.autoplay = true;
+                        videoElement.volume = 0;
+                        videoElement.setAttribute("style", "pointer-events: none; width: 1920px; height: 1080px");
+                        document.body.appendChild(videoElement);
 
-        let video = new fabric.Video(videoElement, {
-            left: 200,
-            top: 300,
-            width: 1920,
-            height: 1080,
-            scaleY: 0.3,
-            scaleX: 0.3,
-            stroke: "#FF0000",
-            strokeWidth: 5,
-            originX: 'center',
-            originY: 'center',
-            videoId: videoId
-        });
-        video.set('selectable', true);
+                        let video = new fabric.Video(videoElement, {
+                            left: 200,
+                            top: 300,
+                            width: 1920,
+                            height: 1080,
+                            scaleY: 0.3,
+                            scaleX: 0.3,
+                            stroke: "#FF0000",
+                            strokeWidth: 5,
+                            originX: 'center',
+                            originY: 'center',
+                            videoId: videoId
+                        });
+                        video.set('selectable', true);
 
-        self.canvas.add(video);
-        fabric.util.requestAnimFrame(function render() {
-            self.canvas.renderAll();
-            fabric.util.requestAnimFrame(render);
-        });
+                        self.canvas.add(video);
+                        fabric.util.requestAnimFrame(function render() {
+                            self.canvas.renderAll();
+                            fabric.util.requestAnimFrame(render);
+                        });
+                    });
+                }
+            }
+        );
     }
 
     addImage() {
@@ -172,8 +186,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
                     });
                 }
             }
-        )
-        ;
+        );
     }
 
     broadcastToCanvas() {
@@ -191,6 +204,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
             if (object.type === "video") {
                 let videoElement = document.getElementById(object.videoId);
                 object.videoTime = videoElement.currentTime
+                console.log(videoElement.currentTime);
             }
         });
     }
