@@ -4,6 +4,7 @@
   "description": "",
   "author": "chäeMil",
   "license": "ISC",
+  "main": "./app/server/main.js",
   "scripts": {
     "postinstall": "install-app-deps",
     "server": "./node_modules/.bin/electron ./app/server/main",

@@ -1,6 +1,8 @@
 const fs = require('fs-extra');
 const FileUtils = require('../util/file_utils');
 const ip = require('ip');
+const os = require('os');
+const {app} = require('electron');
 const Config = require('../config.js');
 
 class CacheService {
@@ -56,7 +58,15 @@ class CacheService {
     }
 
     static _getUserHome() {
-        return process.env.HOME || process.env.USERPROFILE;
+        switch (os.platform()) {
+            case 'linux':
+            case 'darwin':
+                return process.env.HOME;
+            case 'win32':
+                return app.getPath('appData');
+            default:
+                return process.env.HOME;
+        }
     }
 
     _generateSafeFileName(input) {
