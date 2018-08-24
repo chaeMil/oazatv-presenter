@@ -109,7 +109,7 @@ class CanvasViewModel extends BaseViewModel {
         videoElement.src = object.src;
         videoElement.autoplay = true;
         videoElement.currentTime = object.videoTime;
-        videoElement.setAttribute("style", "pointer-events: none; width: 1920px; height: 1080px; position: absolute; top: 1080px; left: 0px");
+        videoElement.setAttribute("style", "pointer-events: none; width: 1920px; height: 1080px; position: absolute; top: -1080px; left: 0px");
         document.body.appendChild(videoElement);
 
         let video = new fabric.Video(videoElement, {
