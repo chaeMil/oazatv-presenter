@@ -76,6 +76,14 @@
                                        data-bind="value: VM.objectEditorValues.scaleY"/>
                     </div>
                 </div>
+                <div id="video-controls" class="editor hidden">
+                    <h5 class="nav-group-title">Video controls</h5>
+                    <div class="editor-inner">
+                        Progress: <input type="range" class="slider slider-round gray"
+                                         min="0.0" max="" step="any"
+                                         data-bind="attr: {value: VM.videoControlValues.videoTime, max: VM.videoControlValues.videoDuration}"/>
+                    </div>
+                </div>
                 <div id="text-editor" class="editor hidden">
                     <h5 class="nav-group-title">Text editor</h5>
                     <div class="editor-inner">

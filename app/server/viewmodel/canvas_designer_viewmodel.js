@@ -20,6 +20,10 @@ class CanvasDesignerViewModel extends BaseViewModel {
         this.objectEditorValues = {
             scaleX: ko.observable(""),
             scaleY: ko.observable("")
+        };
+        this.videoControlValues = {
+            videoTime: ko.observable(0),
+            videoDuration: ko.observable(0)
         }
     }
 
@@ -211,6 +215,11 @@ class CanvasDesignerViewModel extends BaseViewModel {
 
     _changeSelectedObjectAttribute(attributeName, value) {
         if (this.selectedObject != null) {
+            if (this.selectedObject.type === "video" && attributeName === "videoTime") {
+                let videoId = this.selectedObject.videoId;
+                let videoElement = document.getElementById(videoId);
+                videoElement.currentTime = value;
+            }
             this.selectedObject[attributeName] = value;
             this.canvas.renderAll();
         }
@@ -231,7 +240,6 @@ class CanvasDesignerViewModel extends BaseViewModel {
 
     _onTextSelected() {
         this.textEditor.classList.remove("hidden");
-        console.log("onTextSelected", this.selectedObject);
         this.textEditorValues.fontFamily(this.selectedObject.fontFamily);
         this.textEditorValues.color(this.selectedObject.color);
 
@@ -241,6 +249,18 @@ class CanvasDesignerViewModel extends BaseViewModel {
         this.textEditorValues.color.subscribe((newValue) => {
             this._changeSelectedObjectAttribute('color', newValue);
         });
+    }
+
+    _onVideoSelected() {
+        this.videoControls.classList.remove("hidden");
+        let videoId = this.selectedObject.videoId;
+        let videoElement = document.getElementById(videoId);
+
+        videoElement.ontimeupdate = () => {
+            console.log(videoElement.currentTime);
+            this.videoControlValues.videoTime(videoElement.currentTime);
+            this.videoControlValues.videoDuration(videoElement.duration);
+        };
     }
 
     _onRectangleSelected() {
@@ -268,6 +288,9 @@ class CanvasDesignerViewModel extends BaseViewModel {
                 case "circle":
                     this._onCircleSelected();
                     break;
+                case "video":
+                    this._onVideoSelected();
+                    break;
             }
         } else {
             this._onSelectionCleared(event)
@@ -278,6 +301,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
         this.selectedObject = null;
         this.objectEditor.classList.add("hidden");
         this.textEditor.classList.add("hidden");
+        this.videoControls.classList.add("hidden");
     }
 
     _onObjectModified(event) {
@@ -325,6 +349,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
     _getUiElements() {
         this.textEditor = document.querySelector('#text-editor');
         this.objectEditor = document.querySelector("#object-editor");
+        this.videoControls = document.querySelector("#video-controls");
     }
 
     _initHotKeys() {
