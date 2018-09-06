@@ -6,7 +6,7 @@
   "license": "ISC",
   "main": "./app/server/main.js",
   "scripts": {
-    "prepare": "npm i fabric --no-optional",
+    "prepare": "npm i fabric --no-optional --no-save",
     "start": "cross-os exec ./app/server/main",
     "canvas": "cross-os exec ./app/canvas/main",
     "pack": "build --dir",
