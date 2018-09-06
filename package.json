@@ -52,6 +52,7 @@
     "electron-window-state": "^4.1.1",
     "eventbusjs": "^0.2.0",
     "font-awesome": "^4.7.0",
+    "font-list": "^1.1.0",
     "fs-extra": "^7.0.0",
     "hotkeys-js": "^3.3.5",
     "ionicons": "^3.0.0",

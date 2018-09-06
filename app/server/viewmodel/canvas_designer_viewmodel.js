@@ -4,6 +4,7 @@ const hotkeys = require('hotkeys-js');
 const {dialog} = require('electron').remote;
 const CacheService = require('../../shared/service/cache_service');
 const fs = require('fs-extra');
+const fontList = require('font-list');
 
 require('../../shared/model/canvas/video');
 
@@ -27,6 +28,17 @@ class CanvasDesignerViewModel extends BaseViewModel {
             videoDuration: ko.observable(0)
         };
         this.canvasFile = null;
+        this.availableFonts = ko.observableArray();
+        fontList.getFonts()
+            .then(fonts => {
+                fonts.forEach((font) => {
+                    this.availableFonts.push(font);
+                });
+                this.availableFonts.sort();
+            })
+            .catch(err => {
+                console.log(err)
+            });
     }
 
     init() {
@@ -139,7 +151,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
     }
 
     addTextbox() {
-        let text = new fabric.Textbox('text', {
+        let text = new fabric.Textbox('textbox', {
             fontFamily: 'helvetica',
             left: 100,
             top: 100

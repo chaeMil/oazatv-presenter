@@ -50,12 +50,12 @@
                     </div>
                     Circle
                 </nav-item>
-                <nav-item data-bind="click: VM.addVideo">
+                <!--<nav-item data-bind="click: VM.addVideo">
                     <div class="icon">
                         <span class="oi" data-glyph="video"></span>
                     </div>
                     Video
-                </nav-item>
+                </nav-item>-->
                 <nav-item data-bind="click: VM.addImage">
                     <div class="icon">
                         <span class="oi" data-glyph="image"></span>
@@ -89,8 +89,8 @@
                 <div id="text-editor" class="editor hidden">
                     <h5 class="nav-group-title">Text editor</h5>
                     <div class="editor-inner">
-                        Font: <input type="text" value=""
-                                     data-bind="value: VM.textEditorValues.fontFamily"/>
+                        Font: <select data-bind="options: VM.availableFonts, value: VM.textEditorValues.fontFamily"></select>
+                        <br>
                         Color: <input type="text" value=""
                                       data-bind="value: VM.textEditorValues.color"/>
                     </div>
