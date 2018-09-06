@@ -6,6 +6,7 @@
   "license": "ISC",
   "main": "./app/server/main.js",
   "scripts": {
+    "postinstall": "npm install fabric --no-optional",
     "start": "cross-os exec ./app/server/main",
     "canvas": "cross-os exec ./app/canvas/main",
     "pack": "build --dir",
@@ -52,6 +53,7 @@
     "electron-photon": "^0.1.0",
     "electron-window-state": "^4.1.1",
     "eventbusjs": "^0.2.0",
+    "fabric": "^2.3.6",
     "font-awesome": "^4.7.0",
     "font-list": "^1.1.0",
     "fs-extra": "^7.0.0",
