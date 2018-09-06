@@ -3,6 +3,7 @@ const StringUtils = require('../../shared/util/string_utils');
 const hotkeys = require('hotkeys-js');
 const {dialog} = require('electron').remote;
 const CacheService = require('../../shared/service/cache_service');
+const fs = require('fs-extra');
 
 require('../../shared/model/canvas/video');
 
@@ -24,7 +25,8 @@ class CanvasDesignerViewModel extends BaseViewModel {
         this.videoControlValues = {
             videoTime: ko.observable(0),
             videoDuration: ko.observable(0)
-        }
+        };
+        this.canvasFile = null;
     }
 
     init() {
@@ -32,6 +34,47 @@ class CanvasDesignerViewModel extends BaseViewModel {
         this._getUiElements();
         this._initCanvas();
         this._initHotKeys();
+    }
+
+    saveCanvas() {
+        let jsonCanvasData = this.canvas.toJSON();
+        if (this.canvasFile != null) {
+
+        } else {
+            dialog.showSaveDialog({
+                filters: [
+                    {name: 'text', extensions: ['ohcanvas']}
+                ]
+            }, (fileName) => {
+                if (fileName === undefined) return;
+                fs.writeFile(fileName, JSON.stringify(jsonCanvasData), (error) => {
+                    console.error("saveCanvas", error);
+                });
+            });
+        }
+    }
+
+    loadCanvas() {
+        dialog.showOpenDialog({
+                properties: ['openFile'],
+                filters: [
+                    {name: 'Canvas File', extensions: ['ohcanvas']},
+                ]
+            }, (files) => {
+                if (files !== undefined && files[0] != null) {
+                    let file = files[0];
+                    fs.readFile(file, 'utf-8', (err, data) => {
+                        if (err != null) {
+                            console.error("loadCanvas", err);
+                        } else {
+                            this.canvas.loadFromJSON(data, () => {
+                                this.canvas.renderAll();
+                            });
+                        }
+                    });
+                }
+            }
+        );
     }
 
     deleteSelectedObjects() {

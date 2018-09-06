@@ -22,7 +22,7 @@ class WindowManager {
         }
 
         let browserWindow = new BrowserWindow({
-            width: 800,
+            width: 950,
             height: 600,
             minWidth: 800,
             minHeight: 320,

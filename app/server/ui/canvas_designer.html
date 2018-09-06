@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>oh! Presenter</title>
+    <title>oh! Presenter [alpha]</title>
     <link rel="stylesheet" href="../../../node_modules/electron-photon/dist/photon.css">
     <link rel="stylesheet" href="../../../node_modules/ionicons/dist/css/ionicons.min.css">
     <link rel="stylesheet" href="../../../node_modules/open-iconic/font/css/open-iconic.min.css">
@@ -14,6 +14,8 @@
     <tool-bar type="header">
         <h1 class="title" style="-webkit-app-region: drag;">Canvas Designer</h1>
         <div class="toolbar-actions" style="text-align: left; float: left;">
+            <button class="btn btn-default" data-bind="click: VM.saveCanvas">Save</button>
+            <button class="btn btn-default" data-bind="click: VM.loadCanvas">Load</button>
             <button class="btn btn-default" data-bind="click: VM.deleteSelectedObjects">Delete</button>
         </div>
         <div class="toolbar-actions" style="text-align: right; float: right;">
