@@ -4,6 +4,7 @@ const ip = require('ip');
 const os = require('os');
 const {app} = require('electron');
 const Config = require('../config.js');
+const mkdirp = require('mkdirp');
 
 class CacheService {
 
@@ -13,7 +14,10 @@ class CacheService {
 
     init() {
         if (!fs.existsSync(CacheService.getCacheLocation())) {
-            FileUtils.mkDirByPathSync(CacheService.getCacheLocation());
+            mkdirp(CacheService.getCacheLocation(), (err) => {
+                if (err) console.error(err);
+            });
+            //FileUtils.mkDirByPathSync(CacheService.getCacheLocation());
         }
     }
 
