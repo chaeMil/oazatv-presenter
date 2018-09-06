@@ -312,6 +312,12 @@ class CanvasDesignerViewModel extends BaseViewModel {
     }
 
     openTextEditorColorPicker() {
+        this.openColorPicker((color) => {
+            this.textEditorValues.color(color);
+        })
+    }
+
+    openColorPicker(callback) {
         let pickerWindow = document.getElementById('color-picker');
         let windowDrag = document.getElementById('color-picker-header');
         let windowLimit = document.getElementById('window-content');
@@ -322,13 +328,12 @@ class CanvasDesignerViewModel extends BaseViewModel {
             handle: windowDrag,
             limit: windowLimit
         });
-        console.log(this.textEditorValues.color());
         AColorPicker.createPicker({
             attachTo: '#color-picker window-content',
             color: this.textEditorValues.color(),
             showAlpha: true
         }).onchange = (picker) => {
-            this.textEditorValues.color(picker.color);
+            callback(picker.color)
         }
     }
 
