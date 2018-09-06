@@ -29,6 +29,13 @@ class CanvasDesignerViewModel extends BaseViewModel {
             videoTime: ko.observable(0),
             videoDuration: ko.observable(0)
         };
+        this.canvasPropertiesValues = {
+            color: ko.observable("#FFFFFF"),
+        };
+        this.canvasPropertiesValues.color.subscribe((newValue) => {
+            this.canvas.backgroundColor = newValue;
+            this.canvas.renderAll();
+        });
         this.canvasFile = null;
         this.availableFonts = ko.observableArray();
         fontList.getFonts()
@@ -83,6 +90,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
                         } else {
                             this.canvas.loadFromJSON(data, () => {
                                 this.canvas.renderAll();
+                                this.canvasPropertiesValues.color = this.canvas.backgroundColor
                             });
                         }
                     });
@@ -311,13 +319,19 @@ class CanvasDesignerViewModel extends BaseViewModel {
         });
     }
 
+    openCanvasColorPicker() {
+        this.openColorPicker((color) => {
+            this.canvasPropertiesValues.color(color)
+        }, this.canvas.backgroundColor, false)
+    }
+
     openTextEditorColorPicker() {
         this.openColorPicker((color) => {
             this.textEditorValues.color(color);
-        })
+        }, this.textEditorValues.color())
     }
 
-    openColorPicker(callback) {
+    openColorPicker(callback, color, showAlpha = true) {
         let pickerWindow = document.getElementById('color-picker');
         let windowDrag = document.getElementById('color-picker-header');
         let windowLimit = document.getElementById('window-content');
@@ -330,8 +344,8 @@ class CanvasDesignerViewModel extends BaseViewModel {
         });
         AColorPicker.createPicker({
             attachTo: '#color-picker window-content',
-            color: this.textEditorValues.color(),
-            showAlpha: true
+            color: color,
+            showAlpha: showAlpha
         }).onchange = (picker) => {
             callback(picker.color)
         }
@@ -363,6 +377,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
             this.selectedObject = event.target;
             let type = this.selectedObject.get('type');
             this._onObjectSelected();
+            this.canvasPropertiesEditor.classList.add("hidden");
 
             switch (type) {
                 case "i-text":
@@ -388,7 +403,8 @@ class CanvasDesignerViewModel extends BaseViewModel {
         this.objectEditor.classList.add("hidden");
         this.textEditor.classList.add("hidden");
         this.videoControls.classList.add("hidden");
-        this.hideColorPicker()
+        this.hideColorPicker();
+        this.canvasPropertiesEditor.classList.remove("hidden");
     }
 
     _onObjectModified(event) {
@@ -437,6 +453,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
         this.textEditor = document.querySelector('#text-editor');
         this.objectEditor = document.querySelector("#object-editor");
         this.videoControls = document.querySelector("#video-controls");
+        this.canvasPropertiesEditor = document.querySelector("#canvas-properties-editor");
     }
 
     _initHotKeys() {

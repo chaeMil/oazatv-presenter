@@ -67,6 +67,14 @@
                 <canvas id="canvas" width="1280" height="720"></canvas>
             </div>
             <div class="pane pane-sm sidebar">
+                <div id="canvas-properties-editor" class="editor">
+                    <h5 class="nav-group-title">Canvas properties</h5>
+                    <div class="editor-inner">
+                        Color:
+                        <div class="color-picker"
+                             data-bind="click: VM.openCanvasColorPicker, style: { background: VM.canvasPropertiesValues.color}"></div>
+                    </div>
+                </div>
                 <div id="object-editor" class="editor hidden">
                     <h5 class="nav-group-title">Object editor</h5>
                     <div class="editor-inner">
@@ -89,16 +97,19 @@
                 <div id="text-editor" class="editor hidden">
                     <h5 class="nav-group-title">Text editor</h5>
                     <div class="editor-inner">
-                        Font: <select data-bind="options: VM.availableFonts, value: VM.textEditorValues.fontFamily"></select>
+                        Font: <select
+                            data-bind="options: VM.availableFonts, value: VM.textEditorValues.fontFamily"></select>
                         <br>
-                        Color: <div class="color-picker"
-                                    data-bind="click: VM.openTextEditorColorPicker, style: { background: VM.textEditorValues.color }"></div>
+                        Color:
+                        <div class="color-picker"
+                             data-bind="click: VM.openTextEditorColorPicker, style: { background: VM.textEditorValues.color }"></div>
                     </div>
                 </div>
             </div>
         </div>
         <ph-window class="hidden" id="color-picker">
             <tool-bar type="header" id="color-picker-header">
+                <button class="btn btn-default" style="float: left" data-bind="click: VM.hideColorPicker">x</button>
                 <h1 class="title">Color picker</h1>
             </tool-bar>
             <window-content></window-content>
