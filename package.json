@@ -47,7 +47,9 @@
     }
   },
   "dependencies": {
+    "a-color-picker": "^1.0.6",
     "ajv": "^6.5.3",
+    "draggable": "^4.2.0",
     "electron-photon": "^0.1.0",
     "electron-window-state": "^4.1.1",
     "eventbusjs": "^0.2.0",

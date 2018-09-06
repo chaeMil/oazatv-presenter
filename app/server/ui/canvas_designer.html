@@ -22,7 +22,7 @@
             <button class="btn btn-default" data-bind="click: VM.broadcastToCanvas">Broadcast to canvas</button>
         </div>
     </tool-bar>
-    <window-content>
+    <window-content id="window-content">
         <div class="pane-group">
             <div class="pane-sm sidebar canvas-elements">
                 <h5 class="nav-group-title">Basic Elements</h5>
@@ -91,12 +91,18 @@
                     <div class="editor-inner">
                         Font: <select data-bind="options: VM.availableFonts, value: VM.textEditorValues.fontFamily"></select>
                         <br>
-                        Color: <input type="text" value=""
-                                      data-bind="value: VM.textEditorValues.color"/>
+                        Color: <div class="color-picker"
+                                    data-bind="click: VM.openTextEditorColorPicker, style: { background: VM.textEditorValues.color }"></div>
                     </div>
                 </div>
             </div>
         </div>
+        <ph-window class="hidden" id="color-picker">
+            <tool-bar type="header" id="color-picker-header">
+                <h1 class="title">Color picker</h1>
+            </tool-bar>
+            <window-content></window-content>
+        </ph-window>
     </window-content>
 </ph-window>
 

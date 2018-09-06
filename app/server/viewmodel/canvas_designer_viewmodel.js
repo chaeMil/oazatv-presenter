@@ -5,6 +5,8 @@ const {dialog} = require('electron').remote;
 const CacheService = require('../../shared/service/cache_service');
 const fs = require('fs-extra');
 const fontList = require('font-list');
+const AColorPicker = require('a-color-picker');
+const Draggable = require('Draggable');
 
 require('../../shared/model/canvas/video');
 
@@ -144,7 +146,9 @@ class CanvasDesignerViewModel extends BaseViewModel {
         let text = new fabric.IText('text', {
             fontFamily: 'helvetica',
             left: 100,
-            top: 100
+            top: 100,
+            fill: "#FF0000",
+            statefullCache: true
         });
         text.set('selectable', true);
         this.canvas.add(text);
@@ -154,7 +158,8 @@ class CanvasDesignerViewModel extends BaseViewModel {
         let text = new fabric.Textbox('textbox', {
             fontFamily: 'helvetica',
             left: 100,
-            top: 100
+            top: 100,
+            statefullCache: true
         });
         text.set('selectable', true);
 
@@ -262,7 +267,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
         jsonData.objects.forEach((object) => {
             if (object.type === "video") {
                 let videoElement = document.getElementById(object.videoId);
-                object.videoTime = videoElement.currentTime
+                object.videoTime = videoElement.currentTime;
                 console.log(videoElement.currentTime);
             }
         });
@@ -296,14 +301,35 @@ class CanvasDesignerViewModel extends BaseViewModel {
     _onTextSelected() {
         this.textEditor.classList.remove("hidden");
         this.textEditorValues.fontFamily(this.selectedObject.fontFamily);
-        this.textEditorValues.color(this.selectedObject.color);
+        this.textEditorValues.color(this.selectedObject.fill);
 
         this.textEditorValues.fontFamily.subscribe((newValue) => {
             this._changeSelectedObjectAttribute('fontFamily', newValue);
         });
         this.textEditorValues.color.subscribe((newValue) => {
-            this._changeSelectedObjectAttribute('color', newValue);
+            this._changeSelectedObjectAttribute('fill', newValue);
         });
+    }
+
+    openTextEditorColorPicker() {
+        let pickerWindow = document.getElementById('color-picker');
+        let windowDrag = document.getElementById('color-picker-header');
+        let windowLimit = document.getElementById('window-content');
+        let windowContent = document.querySelector('#color-picker window-content');
+        windowContent.innerHTML = '';
+        pickerWindow.classList.remove('hidden');
+        let colorPickerDraggable = new Draggable(pickerWindow, {
+            handle: windowDrag,
+            limit: windowLimit
+        });
+        console.log(this.textEditorValues.color());
+        AColorPicker.createPicker({
+            attachTo: '#color-picker window-content',
+            color: this.textEditorValues.color(),
+            showAlpha: true
+        }).onchange = (picker) => {
+            this.textEditorValues.color(picker.color);
+        }
     }
 
     _onVideoSelected() {
@@ -357,6 +383,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
         this.objectEditor.classList.add("hidden");
         this.textEditor.classList.add("hidden");
         this.videoControls.classList.add("hidden");
+        this.hideColorPicker()
     }
 
     _onObjectModified(event) {
@@ -414,6 +441,11 @@ class CanvasDesignerViewModel extends BaseViewModel {
         hotkeys('ctrl+a,command+a', (event, handler) => {
             this.selectAllObjects();
         });
+    }
+
+    hideColorPicker() {
+        let colorPickerWindow = document.getElementById('color-picker');
+        colorPickerWindow.classList.add('hidden');
     }
 }
 
