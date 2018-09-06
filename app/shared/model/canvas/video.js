@@ -1,4 +1,4 @@
-let fabric = require('fabric').fabric;
+const fabric = require('fabric').fabric;
 
 fabric.Video = fabric.util.createClass(fabric.Image, {
     type: 'video',

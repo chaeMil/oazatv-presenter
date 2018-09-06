@@ -1,6 +1,5 @@
 const BaseViewModel = require('../../shared/viewmodel/base_viewmodel');
-
-let fabric = require('fabric').fabric;
+const fabric = require('fabric').fabric;
 require('../../shared/model/canvas/video');
 let {webFrame} = require('electron');
 let $ = require('jquery');

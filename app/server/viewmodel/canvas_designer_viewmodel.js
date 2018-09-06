@@ -7,6 +7,7 @@ const fs = require('fs-extra');
 const fontList = require('font-list');
 const AColorPicker = require('a-color-picker');
 const Draggable = require('Draggable');
+const fabric = require('fabric').fabric;
 
 require('../../shared/model/canvas/video');
 

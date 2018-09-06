@@ -6,7 +6,7 @@
   "license": "ISC",
   "main": "./app/server/main.js",
   "scripts": {
-    "postinstall": "npm install fabric --no-optional",
+    "prepare": "npm i fabric --no-optional",
     "start": "cross-os exec ./app/server/main",
     "canvas": "cross-os exec ./app/canvas/main",
     "pack": "build --dir",
