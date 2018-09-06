@@ -6,7 +6,7 @@ const CacheService = require('../../shared/service/cache_service');
 const fs = require('fs-extra');
 const fontList = require('font-list');
 const AColorPicker = require('a-color-picker');
-const Draggable = require('Draggable');
+const Draggable = require('draggable');
 const fabric = require('fabric').fabric;
 
 require('../../shared/model/canvas/video');
