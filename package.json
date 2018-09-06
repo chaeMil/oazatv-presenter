@@ -48,12 +48,10 @@
   "dependencies": {
     "a-color-picker": "^1.0.6",
     "ajv": "^6.5.3",
-    "canvas-prebuilt": "^1.6.5-prerelease.1",
     "draggable": "^4.2.0",
     "electron-photon": "^0.1.0",
     "electron-window-state": "^4.1.1",
     "eventbusjs": "^0.2.0",
-    "fabric": "^2.3.6",
     "font-awesome": "^4.7.0",
     "font-list": "^1.1.0",
     "fs-extra": "^7.0.0",

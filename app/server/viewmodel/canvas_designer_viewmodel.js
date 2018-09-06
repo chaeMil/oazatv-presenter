@@ -10,8 +10,6 @@ const Draggable = require('Draggable');
 
 require('../../shared/model/canvas/video');
 
-let fabric = require('fabric').fabric;
-
 class CanvasDesignerViewModel extends BaseViewModel {
 
     constructor(ko, ipcMain) {
