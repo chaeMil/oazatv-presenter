@@ -42,7 +42,7 @@
       ]
     },
     "win": {
-      "target": "squirrel",
+      "target": "portable",
       "icon": "build/icon.ico"
     }
   },
