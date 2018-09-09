@@ -6,17 +6,10 @@
   "license": "ISC",
   "main": "./app/server/main.js",
   "scripts": {
-    "start": "cross-os exec ./app/server/main",
-    "canvas": "cross-os exec ./app/canvas/main",
+    "start": "electron ./app/server/main",
+    "canvas": "electron ./app/canvas/main",
     "pack": "build --dir",
     "dist": "build"
-  },
-  "cross-os": {
-    "exec": {
-      "linux": "/usr/local/bin/electron",
-      "darwin": "electron",
-      "win32": "electron"
-    }
   },
   "build": {
     "appId": "cz.chaemil.oh-presenter",
