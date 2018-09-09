@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "author": "chäeMil",
+  "email": "chaemil72@gmail.com",
   "license": "ISC",
   "main": "./app/server/main.js",
   "scripts": {
