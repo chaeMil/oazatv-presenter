@@ -95,13 +95,13 @@
                 <div class="editor-inner">
                     <div class="editor-input">
                         <span class="label">ScaleX: </span>
-                        <input type="range" class="slider slider-square blue"
+                        <input type="range" class="topcoat-range"
                                min="0.01" max="10" step="any"
                                data-bind="value: VM.objectEditorValues.scaleX"/>
                     </div>
                     <div class="editor-input">
                         <span class="label">ScaleX: </span>
-                        <input type="range" class="slider slider-square blu"
+                        <input type="range" class="topcoat-range"
                                min="0.01" max="10" step="any"
                                data-bind="value: VM.objectEditorValues.scaleY"/>
                     </div>
@@ -112,7 +112,7 @@
                 <div class="editor-inner">
                     <div class="editor-input">
                         <span class="label">Progress: </span>
-                        <input type="range" class="slider slider-round gray"
+                        <input type="range" class="topcoat-range"
                                min="0.0" max="" step="any"
                                data-bind="attr: {value: VM.videoControlValues.videoTime, max: VM.videoControlValues.videoDuration}"/>
                     </div>
@@ -123,7 +123,8 @@
                 <div class="editor-inner">
                     <div class="editor-input">
                         <span class="label">Font: </span>
-                        <select data-bind="options: VM.availableFonts, value: VM.textEditorValues.fontFamily"></select>
+                        <select class="topcoat-text-input"
+                                data-bind="options: VM.availableFonts, value: VM.textEditorValues.fontFamily"></select>
                     </div>
                     <div class="editor-input">
                         <span class="label">Color: </span>
