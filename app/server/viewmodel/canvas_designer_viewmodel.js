@@ -4,7 +4,7 @@ const hotkeys = require('hotkeys-js');
 const {dialog} = require('electron').remote;
 const CacheService = require('../../shared/service/cache_service');
 const fs = require('fs-extra');
-const fontList = require('font-list');
+const SystemFonts = require('system-font-families').default;
 const AColorPicker = require('a-color-picker');
 const Draggable = require('draggable');
 const fabric = require('fabric').fabric;
@@ -37,16 +37,15 @@ class CanvasDesignerViewModel extends BaseViewModel {
         });
         this.canvasFile = null;
         this.availableFonts = ko.observableArray();
-        fontList.getFonts()
-            .then(fonts => {
-                fonts.forEach((font) => {
+        new SystemFonts().getFonts().then((fonts) => {
+            fonts.forEach((font) => {
+                if (!font.startsWith("."))
                     this.availableFonts.push(font);
-                });
-                this.availableFonts.sort();
-            })
-            .catch(err => {
-                console.log(err)
             });
+            this.availableFonts.sort();
+        }, (error) => {
+            console.log(error)
+        });
     }
 
     init() {
