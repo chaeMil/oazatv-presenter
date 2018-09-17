@@ -129,7 +129,8 @@ class CanvasDesignerViewModel extends BaseViewModel {
             width: 100,
             height: 100,
             stroke: 'red',
-            strokeWidth: 3
+            strokeWidth: 3,
+            lockUniScaling: true
         });
         rectangle.set('selectable', true);
         this.canvas.add(rectangle);
@@ -142,7 +143,8 @@ class CanvasDesignerViewModel extends BaseViewModel {
             top: 100,
             fill: '',
             stroke: 'red',
-            strokeWidth: 3
+            strokeWidth: 3,
+            lockUniScaling: true
         });
         circle.set('selectable', true);
         this.canvas.add(circle);
@@ -154,7 +156,8 @@ class CanvasDesignerViewModel extends BaseViewModel {
             left: 100,
             top: 100,
             fill: "#FF0000",
-            statefullCache: true
+            statefullCache: true,
+            lockUniScaling: true
         });
         text.set('selectable', true);
         this.canvas.add(text);
@@ -165,7 +168,8 @@ class CanvasDesignerViewModel extends BaseViewModel {
             fontFamily: 'helvetica',
             left: 100,
             top: 100,
-            statefullCache: true
+            statefullCache: true,
+            lockUniScaling: true
         });
         text.set('selectable', true);
 
@@ -179,6 +183,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
             tl: false,
             tr: false,
             mtr: false,
+            lockUniScaling: true
         });
 
         this.canvas.on('text:changed', (opt) => {
@@ -250,9 +255,13 @@ class CanvasDesignerViewModel extends BaseViewModel {
                 if (files !== undefined && files[0] != null) {
                     let file = files[0];
                     this.cacheService.addFileToCache(file, (cachedFile) => {
-                        fabric.Image.fromURL(cachedFile, (img) => {
-                            this.canvas.add(img).renderAll().setActiveObject(img);
-                        });
+                        fabric.Image.fromURL(cachedFile,
+                            (img) => {
+                                this.canvas.add(img).renderAll().setActiveObject(img);
+                            },
+                            {
+                                lockUniScaling: true
+                            });
                     });
                 }
             }
