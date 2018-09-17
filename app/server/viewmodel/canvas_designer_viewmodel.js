@@ -347,7 +347,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
         pickerWindow.classList.remove('hidden');
         let colorPickerDraggable = new Draggable(pickerWindow, {
             handle: windowDrag,
-            limit: windowLimit
+            //limit: windowLimit //TODO fix
         });
         AColorPicker.createPicker({
             attachTo: '#color-picker window-content',

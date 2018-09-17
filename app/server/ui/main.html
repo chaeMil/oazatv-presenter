@@ -3,29 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <title>oh! Presenter</title>
-    <link rel="stylesheet" href="../../../node_modules/electron-photon/dist/photon.css">
-    <link rel="stylesheet" href="../../shared/assets/css/main.scss">
-    <link rel="stylesheet" href="../css/canvas.scss">
+    <link rel="stylesheet" href="../../../node_modules/reset-css/reset.css">
+    <link rel="stylesheet" href="../../../node_modules/flexboxgrid/dist/flexboxgrid.min.css">
+    <link rel="stylesheet" href="../../../node_modules/topcoat/css/topcoat-desktop-dark.min.css">
+    <link rel="stylesheet" href="../assets/base.scss">
+    <link rel="stylesheet" href="../assets/style.scss">
 </head>
 <body>
-<ph-window>
-    <tool-bar type="header">
-        <h1 class="title" style="-webkit-app-region: drag;">oh! Presenter</h1>
-        <div class="toolbar-actions" style="text-align: center;">
-            <button class="btn btn-default" data-bind="click: VM.redButtonClick">Red</button>
-            <button class="btn btn-default" data-bind="click: VM.greenButtonClick">Green</button>
-            <button class="btn btn-default" data-bind="click: VM.blueButtonClick">Blue</button>
-            <button class="btn btn-default" data-bind="click: VM.jsonButtonClick">JSON canvas data</button>
-            <button class="btn btn-default" data-bind="click: VM.openCanvasDesignerWindow">Canvas designer
-            </button>
-            <button class="btn btn-default" data-bind="click: VM.openCanvasWindow">New canvas</button>
+<app-window>
+    <tool-bar window-drag>
+        <h1>oh! Presenter</h1>
+        <div class="topcoat-button-bar" disable-window-drag>
+            <div class="topcoat-button-bar__item">
+                <button class="topcoat-button-bar__button--large" data-bind="click: VM.redButtonClick">Red</button>
+            </div>
+            <div class="topcoat-button-bar__item">
+                <button class="topcoat-button-bar__button--large" data-bind="click: VM.greenButtonClick">Green</button>
+            </div>
+            <div class="topcoat-button-bar__item">
+                <button class="topcoat-button-bar__button--large" data-bind="click: VM.blueButtonClick">Blue</button>
+            </div>
+            <div class="topcoat-button-bar__item">
+                <button class="topcoat-button-bar__button--large" data-bind="click: VM.jsonButtonClick">
+                    JSON canvas data
+                </button>
+            </div>
+        </div>
+        <div class="topcoat-button-bar" disable-window-drag>
+            <div class="topcoat-button-bar__item">
+                <button class="topcoat-button-bar__button--large" data-bind="click: VM.openCanvasDesignerWindow">
+                    Canvas designer
+                </button>
+            </div>
+        </div>
+        <div class="topcoat-button-bar" disable-window-drag>
+            <div class="topcoat-button-bar__item">
+                <button class="topcoat-button-bar__button--large" data-bind="click: VM.openCanvasWindow">New canvas
+                </button>
+            </div>
         </div>
     </tool-bar>
     <window-content>
-        <div class="pane-group">
-            <div class="pane">
-                <span class="pane-label">Recent presentations</span>
-                <table class="table-striped table-selectable">
+        <div class="row">
+            <div class="col-xs-4">
+                <span>Recent presentations</span>
+                <table class="table-striped">
                     <thead>
                     <tr>
                         <th></th>
@@ -38,9 +60,9 @@
                     </tbody>
                 </table>
             </div>
-            <div class="pane">
-                <span class="pane-label">Canvas designs</span>
-                <table class="table-striped table-selectable">
+            <div class="col-xs-4">
+                <span>Canvas designs</span>
+                <table class="table-striped">
                     <thead>
                     <tr>
                         <th></th>
@@ -53,9 +75,9 @@
                     </tbody>
                 </table>
             </div>
-            <div class="pane">
-                <span class="pane-label">Canvas windows</span>
-                <table class="table-striped table-selectable">
+            <div class="col-xs-4">
+                <span>Canvas windows</span>
+                <table class="table-striped">
                     <thead>
                     <tr>
                         <th>display name</th>
@@ -76,17 +98,13 @@
             </div>
         </div>
     </window-content>
-    <tool-bar type="footer">
-
-    </tool-bar>
-</ph-window>
+</app-window>
 
 <script>
     const MainViewModel = require('../viewmodel/main_viewmodel.js');
 
     let ko = require('knockout');
     let {ipcRenderer, webFrame} = require('electron');
-    let Photon = require("electron-photon");
 
     webFrame.setVisualZoomLevelLimits(1, 1);
     webFrame.setLayoutZoomLevelLimits(0, 0);

@@ -2,29 +2,41 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>oh! Presenter [alpha]</title>
-    <link rel="stylesheet" href="../../../node_modules/electron-photon/dist/photon.css">
-    <link rel="stylesheet" href="../../../node_modules/ionicons/dist/css/ionicons.min.css">
-    <link rel="stylesheet" href="../../../node_modules/open-iconic/font/css/open-iconic.min.css">
-    <link rel="stylesheet" href="../../shared/assets/css/main.scss">
-    <link rel="stylesheet" href="../assets/main.scss">
+    <title>oh! Presenter</title>
+    <link rel="stylesheet" href="../../../node_modules/reset-css/reset.css">
+    <link rel="stylesheet" href="../../../node_modules/flexboxgrid/dist/flexboxgrid.min.css">
+    <link rel="stylesheet" href="../../../node_modules/topcoat/css/topcoat-desktop-dark.min.css">
+    <link rel="stylesheet" href="../assets/base.scss">
+    <link rel="stylesheet" href="../assets/style.scss">
+    <link rel="stylesheet" href="../assets/ui/canvas_designer.scss">
 </head>
 <body>
-<ph-window>
-    <tool-bar type="header">
-        <h1 class="title" style="-webkit-app-region: drag;">Canvas Designer</h1>
-        <div class="toolbar-actions" style="text-align: left; float: left;">
-            <button class="btn btn-default" data-bind="click: VM.saveCanvas">Save</button>
-            <button class="btn btn-default" data-bind="click: VM.loadCanvas">Load</button>
-            <button class="btn btn-default" data-bind="click: VM.deleteSelectedObjects">Delete</button>
+<app-window id="app-window">
+    <tool-bar window-drag>
+        <h1>Canvas Designer</h1>
+        <div class="topcoat-button-bar" disable-window-drag>
+            <div class="topcoat-button-bar__item">
+                <button class="topcoat-button-bar__button--large" data-bind="click: VM.saveCanvas">Save</button>
+            </div>
+            <div class="topcoat-button-bar__item">
+                <button class="topcoat-button-bar__button--large" data-bind="click: VM.loadCanvas">Load</button>
+            </div>
+            <div class="topcoat-button-bar__item">
+                <button class="topcoat-button-bar__button--large" data-bind="click: VM.deleteSelectedObjects">Delete
+                </button>
+            </div>
         </div>
-        <div class="toolbar-actions" style="text-align: right; float: right;">
-            <button class="btn btn-default" data-bind="click: VM.broadcastToCanvas">Broadcast to canvas</button>
+        <div class="topcoat-button-bar" disable-window-drag>
+            <div class="topcoat-button-bar__item">
+                <button class="topcoat-button-bar__button--large" data-bind="click: VM.broadcastToCanvas">Broadcast to
+                    canvas
+                </button>
+            </div>
         </div>
     </tool-bar>
     <window-content id="window-content">
-        <div class="pane-group">
-            <div class="pane-sm sidebar canvas-elements">
+        <div class="sidebar canvas-elements">
+            <nav-group>
                 <h5 class="nav-group-title">Basic Elements</h5>
                 <nav-item data-bind="click: VM.addTextbox">
                     <div class="icon">
@@ -62,60 +74,74 @@
                     </div>
                     Image
                 </nav-item>
-            </div>
-            <div class="pane" id="canvas-wrapper">
-                <canvas id="canvas" width="1280" height="720"></canvas>
-            </div>
-            <div class="pane pane-sm sidebar">
-                <div id="canvas-properties-editor" class="editor">
-                    <h5 class="nav-group-title">Canvas properties</h5>
-                    <div class="editor-inner">
-                        Color:
+            </nav-group>
+        </div>
+        <div id="canvas-wrapper">
+            <canvas id="canvas" width="1280" height="720"></canvas>
+        </div>
+        <div class="sidebar">
+            <div id="canvas-properties-editor" class="editor">
+                <h5 class="nav-group-title">Canvas properties</h5>
+                <div class="editor-inner">
+                    <div class="editor-input">
+                        <span class="label">Color: </span>
                         <div class="color-picker"
                              data-bind="click: VM.openCanvasColorPicker, style: { background: VM.canvasPropertiesValues.color}"></div>
                     </div>
                 </div>
-                <div id="object-editor" class="editor hidden">
-                    <h5 class="nav-group-title">Object editor</h5>
-                    <div class="editor-inner">
-                        ScaleX: <input type="range" class="slider slider-square blue"
-                                       min="0.01" max="10" step="any"
-                                       data-bind="value: VM.objectEditorValues.scaleX"/>
-                        ScaleX: <input type="range" class="slider slider-square blu"
-                                       min="0.01" max="10" step="any"
-                                       data-bind="value: VM.objectEditorValues.scaleY"/>
+            </div>
+            <div id="object-editor" class="editor hidden">
+                <h5 class="nav-group-title">Object editor</h5>
+                <div class="editor-inner">
+                    <div class="editor-input">
+                        <span class="label">ScaleX: </span>
+                        <input type="range" class="slider slider-square blue"
+                               min="0.01" max="10" step="any"
+                               data-bind="value: VM.objectEditorValues.scaleX"/>
+                    </div>
+                    <div class="editor-input">
+                        <span class="label">ScaleX: </span>
+                        <input type="range" class="slider slider-square blu"
+                               min="0.01" max="10" step="any"
+                               data-bind="value: VM.objectEditorValues.scaleY"/>
                     </div>
                 </div>
-                <div id="video-controls" class="editor hidden">
-                    <h5 class="nav-group-title">Video controls</h5>
-                    <div class="editor-inner">
-                        Progress: <input type="range" class="slider slider-round gray"
-                                         min="0.0" max="" step="any"
-                                         data-bind="attr: {value: VM.videoControlValues.videoTime, max: VM.videoControlValues.videoDuration}"/>
+            </div>
+            <div id="video-controls" class="editor hidden">
+                <h5 class="nav-group-title">Video controls</h5>
+                <div class="editor-inner">
+                    <div class="editor-input">
+                        <span class="label">Progress: </span>
+                        <input type="range" class="slider slider-round gray"
+                               min="0.0" max="" step="any"
+                               data-bind="attr: {value: VM.videoControlValues.videoTime, max: VM.videoControlValues.videoDuration}"/>
                     </div>
                 </div>
-                <div id="text-editor" class="editor hidden">
-                    <h5 class="nav-group-title">Text editor</h5>
-                    <div class="editor-inner">
-                        Font: <select
-                            data-bind="options: VM.availableFonts, value: VM.textEditorValues.fontFamily"></select>
-                        <br>
-                        Color:
+            </div>
+            <div id="text-editor" class="editor hidden">
+                <h5 class="nav-group-title">Text editor</h5>
+                <div class="editor-inner">
+                    <div class="editor-input">
+                        <span class="label">Font: </span>
+                        <select data-bind="options: VM.availableFonts, value: VM.textEditorValues.fontFamily"></select>
+                    </div>
+                    <div class="editor-input">
+                        <span class="label">Color: </span>
                         <div class="color-picker"
                              data-bind="click: VM.openTextEditorColorPicker, style: { background: VM.textEditorValues.color }"></div>
                     </div>
                 </div>
             </div>
         </div>
-        <ph-window class="hidden" id="color-picker">
-            <tool-bar type="header" id="color-picker-header">
-                <button class="btn btn-default" style="float: left" data-bind="click: VM.hideColorPicker">x</button>
-                <h1 class="title">Color picker</h1>
+        <float-window class="hidden" id="color-picker">
+            <tool-bar id="color-picker-header">
+                <button class="topcoat-button-bar__button" close-button data-bind="click: VM.hideColorPicker">x</button>
+                <h1>Color picker</h1>
             </tool-bar>
             <window-content></window-content>
-        </ph-window>
+        </float-window>
     </window-content>
-</ph-window>
+</app-window>
 
 <script>
     const CanvasDesignerViewModel = require('../viewmodel/canvas_designer_viewmodel.js');
