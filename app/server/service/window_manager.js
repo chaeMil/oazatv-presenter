@@ -83,7 +83,7 @@ class WindowManager {
     }
 
     createCanvasWindow() {
-        NativeMethods.execute('./node_modules/.bin/npm run canvas', (output) => {
+        NativeMethods.execute('electron ./app/canvas/main &', (output) => {
             console.log(output);
         });
     }
