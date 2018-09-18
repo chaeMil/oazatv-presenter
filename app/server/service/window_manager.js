@@ -41,7 +41,7 @@ class WindowManager {
         }));
         this.windows['mainWindow'].browserWindow.setMenu(null);
 
-        //this.windows['mainWindow'].webContents.openDevTools();
+        //this.windows['mainWindow'].browserWindow.webContents.openDevTools();
 
         this.windows['mainWindow'].browserWindow.on('closed', () => {
             this.windows['mainWindow'] = null;

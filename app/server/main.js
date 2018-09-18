@@ -16,6 +16,7 @@ app.on('ready', function () {
 });
 
 function init() {
+
     let onMainWindowClosed = () => {
         app.quit();
     };

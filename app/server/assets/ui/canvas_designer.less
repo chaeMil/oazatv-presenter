@@ -1,5 +1,5 @@
-$canvas-elements-width: 160px;
-$sidebar-width: 240px;
+@canvas-elements-width: 160px;
+@sidebar-width: 240px;
 
 #window-content {
   display: flex;
@@ -9,7 +9,7 @@ $sidebar-width: 240px;
   .sidebar {
     display: flex;
     flex-direction: column;
-    width: $sidebar-width;
+    width: @sidebar-width;
     padding: 8px;
     overflow: hidden;
 
@@ -55,13 +55,13 @@ $sidebar-width: 240px;
   }
 
   .canvas-elements {
-    width: $canvas-elements-width;
+    width: @canvas-elements-width;
   }
 
   #canvas-wrapper {
     background: #6f6f6f;
     padding: 25px;
-    width: calc(100% - #{$canvas-elements-width} - #{$sidebar-width});
+    width: calc(100% ~"-" @canvas-elements-width ~"-" @sidebar-width);
     display: flex;
     align-items: center;
     justify-content: center;

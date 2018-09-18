@@ -1,4 +1,4 @@
-@import "theme/dark.scss";
+@import "theme/dark.less";
 
 [window-drag] {
   -webkit-app-region: drag;
@@ -13,7 +13,7 @@ app-window {
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
-  background: $window-background;
+  background: @window-background;
   user-select: none;
   cursor: default;
 
@@ -22,7 +22,7 @@ app-window {
     flex-direction: row;
     justify-content: space-between;
     height: 30px;
-    background: $toolbar-background;
+    background: @toolbar-background;
 
     .darwin & {
       padding: 28px 8px 8px;
@@ -41,7 +41,7 @@ app-window {
       font-size: 12px;
       font-family: sans-serif;
       text-align: center;
-      color: $toolbar-title-text;
+      color: @toolbar-title-text;
 
       .win32, .linux & {
         display: none;
@@ -55,7 +55,7 @@ app-window {
 
   float-window {
     display: flex;
-    background: lighten($window-background, 12);
+    background: lighten(@window-background, 12);
     border: 1px solid #353535;
     flex-direction: column;
     overflow: hidden;
