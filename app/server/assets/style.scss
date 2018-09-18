@@ -23,7 +23,14 @@ app-window {
     justify-content: space-between;
     height: 30px;
     background: $toolbar-background;
-    padding: 28px 8px 8px;
+
+    .darwin & {
+      padding: 28px 8px 8px;
+    }
+
+    .win32, .linux & {
+      padding: 8px;
+    }
 
     h1 {
       position: absolute;
@@ -35,6 +42,10 @@ app-window {
       font-family: sans-serif;
       text-align: center;
       color: $toolbar-title-text;
+
+      .win32, .linux & {
+        display: none;
+      }
     }
   }
 
