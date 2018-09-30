@@ -21,7 +21,22 @@
         </div>
     </tool-bar>
     <window-content id="window-content">
+        <div class="sidebar slides">
+            <nav-group>
+                <div class="row slides-header">
+                    <h5 class="col-xs-9 nav-group-title">Slides</h5>
+                    <div class="col-xs-3 buttons-wrapper">
+                        <button class="topcoat-button--cta" data-bind="click: VM.showAddSlideMenu">+</button>
+                    </div>
+                </div>
+            </nav-group>
+        </div>
+        <div id="canvas-wrapper">
+            <canvas id="canvas" width="1280" height="720"></canvas>
+        </div>
+        <div id="add-slide-menu" class="hidden">
 
+        </div>
     </window-content>
 </app-window>
 
@@ -29,6 +44,7 @@
     const eless = require('electron-less');
     eless({source: 'app/server/assets/base.less', id: 'base', paths: ['./app/server/assets/']});
     eless({source: 'app/server/assets/style.less', id: 'style', paths: ['./app/server/assets/']});
+    eless({source: 'app/server/assets/ui/presentation.less', id: 'presentation', paths: ['./app/server/assets/']});
 
     const PresentationViewModel = require('../viewmodel/presentation_viewmodel.js');
 
