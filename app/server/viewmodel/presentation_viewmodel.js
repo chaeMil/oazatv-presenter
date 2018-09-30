@@ -60,6 +60,9 @@ class PresentationViewModel extends BaseViewModel {
                 this.broadcastToCanvas(this.canvas.toJSON());
             }
         });
+        hotkeys('backspace,delete', (event, handler) => {
+            this.deleteCurrentSlide();
+        });
     }
 
     _resizeCanvas() {
@@ -126,10 +129,22 @@ class PresentationViewModel extends BaseViewModel {
         });
     }
 
-    deleteSlide(data) {
-        /*this.slides().forEach((slide) => {
-            console.log(slide);
-        });*/
+    deleteCurrentSlide() {
+        if (this.currentSlide != null) {
+            let modifiedSlides = this.slides().filter((slide) => {
+                return slide !== this.currentSlide;
+            });
+            this.slides(modifiedSlides);
+            let newSelectedSlide = null;
+            if (this.slides()[this.selectedSlideIndex - 1] != null) {
+                newSelectedSlide = this.slides()[this.selectedSlideIndex - 1];
+            } else if (this.slides()[this.selectedSlideIndex ] != null) {
+                newSelectedSlide = this.slides()[this.selectedSlideIndex];
+            } else {
+                newSelectedSlide = null;
+            }
+            this.onSlideSelected(newSelectedSlide);
+        }
     }
 
     _onImportFromCanvasDesignerDone(data) {
@@ -142,17 +157,28 @@ class PresentationViewModel extends BaseViewModel {
         this.slides.push(slide);
     }
 
-    slidePreviewClick(data) {
+    onSlideSelected(data) {
+        if (data == null) {
+            this._initCanvas();
+        }
+        this.currentSlide = data;
+        this.selectedSlideIndex = this.slides().indexOf(data);
         let slidesElements = document.querySelectorAll('#slides-list tr');
         slidesElements.forEach((slideElement) => {
             slideElement.classList.remove('active');
         });
-        let element = document.querySelector('#slide_' + data.id);
-        element.classList.add('active');
-        if (this.liveBroadcast()) {
-            this.broadcastToCanvas(data.jsonData);
+        if (data != null) {
+            let element = document.querySelector('#slide_' + data.id);
+            element.classList.add('active');
+            if (this.liveBroadcast()) {
+                this.broadcastToCanvas(data.jsonData);
+            }
+            this.canvas.loadFromJSON(data.jsonData);
+        } else {
+            if (this.liveBroadcast()) {
+                this.broadcastToCanvas(this.canvas.toJSON());
+            }
         }
-        this.canvas.loadFromJSON(data.jsonData);
     }
 
     toggleLiveBroadcast() {

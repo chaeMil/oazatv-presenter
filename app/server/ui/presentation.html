@@ -46,7 +46,7 @@
                 <table id="slides-list">
                     <tbody data-bind="foreach: VM.slides">
                     <tr data-bind="attr: { id: 'slide_' + $data.id }">
-                        <td data-bind="text: $data.name, click: VM.slidePreviewClick($data)"></td>
+                        <td data-bind="text: $data.name, click: VM.onSlideSelected($data)"></td>
                     </tr>
                     </tbody>
                 </table>
