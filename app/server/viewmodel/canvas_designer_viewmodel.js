@@ -53,6 +53,14 @@ class CanvasDesignerViewModel extends BaseViewModel {
         this._getUiElements();
         this._initCanvas();
         this._initHotKeys();
+
+        this.ipcRenderer.on('window_interaction', (event, message) => {
+            switch (message.action) {
+                case 'import_from_canvas_designer':
+                    this._onImportFromCanvasDesigner(message.data);
+                    break;
+            }
+        });
     }
 
     saveCanvas() {
@@ -475,6 +483,17 @@ class CanvasDesignerViewModel extends BaseViewModel {
     hideColorPicker() {
         let colorPickerWindow = document.getElementById('color-picker');
         colorPickerWindow.classList.add('hidden');
+    }
+
+    _onImportFromCanvasDesigner(data) {
+        let jsonData = this.canvas.toJSON();
+        this.ipcRenderer.send('window_interaction', {
+            action: 'on_import_from_canvas_designer_done',
+            windowId: data.windowId,
+            data: {
+                canvasJsonData: jsonData
+            }
+        });
     }
 }
 

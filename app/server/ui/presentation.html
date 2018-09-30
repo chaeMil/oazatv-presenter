@@ -29,13 +29,29 @@
                         <button class="topcoat-button--cta" data-bind="click: VM.showAddSlideMenu">+</button>
                     </div>
                 </div>
+                <table>
+                    <tbody data-bind="foreach: VM.slides">
+                    <tr>
+                        <td data-bind="text: $data.name, click: VM.slidePreviewClick($data)"></td>
+                    </tr>
+                    </tbody>
+                </table>
             </nav-group>
         </div>
         <div id="canvas-wrapper">
             <canvas id="canvas" width="1280" height="720"></canvas>
         </div>
         <div id="add-slide-menu" class="hidden">
-
+            <div class="row slide-type">
+                <div class="col-xs">
+                    <button class="topcoat-button--large--quiet"
+                            data-bind="click: VM.addSlideFromCanvasDesigner">Import from Canvas Designer
+                    </button>
+                </div>
+                <div class="col-xs">
+                    <button class="topcoat-button--large--quiet">From template (TODO)</button>
+                </div>
+            </div>
         </div>
     </window-content>
 </app-window>
@@ -54,7 +70,8 @@
     webFrame.setVisualZoomLevelLimits(1, 1);
     webFrame.setLayoutZoomLevelLimits(0, 0);
 
-    let VM = new PresentationViewModel(ko, ipcRenderer);
+    let windowId = new URL(window.location.href).searchParams.get("windowId");
+    let VM = new PresentationViewModel(ko, ipcRenderer, windowId);
     document.addEventListener('DOMContentLoaded', () => {
         VM.init();
     });

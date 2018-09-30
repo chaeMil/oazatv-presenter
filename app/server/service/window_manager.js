@@ -4,6 +4,7 @@ const path = require('path');
 const url = require('url');
 const NativeMethods = require('./native_methods');
 const AppWindow = require('../model/app_window');
+const StringUtils = require('../../shared/util/string_utils');
 
 class WindowManager {
     constructor(ipcMain) {
@@ -24,7 +25,7 @@ class WindowManager {
                 this.createCanvasWindow();
                 break;
             case 'presentation':
-                this.openPresentationWindow();
+                this.createPresentationWindow();
                 break;
         }
     }
@@ -104,12 +105,9 @@ class WindowManager {
         });
     }
 
-    openPresentationWindow() {
-        let windowName = 'presentationWindow';
-        if (this.getWindow(windowName) != null) {
-            this.getWindow(windowName).browserWindow.show();
-            return;
-        }
+    createPresentationWindow() {
+        let id = StringUtils.makeId();
+        let windowName = 'presentationWindow_' + id;
 
         let browserWindow = new BrowserWindow({
             width: 1200,
@@ -124,11 +122,7 @@ class WindowManager {
 
         this.windows[windowName] = new AppWindow(this.ipcMain, browserWindow);
 
-        this.windows[windowName].browserWindow.loadURL(url.format({
-            pathname: path.join(__dirname, '../ui/presentation.html'),
-            protocol: 'file:',
-            slashes: true
-        }));
+        this.windows[windowName].browserWindow.loadURL(path.join("file:", __dirname, '../ui/presentation.html?windowId=' + windowName));
         this.windows[windowName].browserWindow.setMenu(null);
 
         //this.windows[windowName].browserWindow.webContents.openDevTools();

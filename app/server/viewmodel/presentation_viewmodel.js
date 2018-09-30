@@ -1,10 +1,13 @@
 const BaseViewModel = require('../../shared/viewmodel/base_viewmodel');
 const fabric = require('fabric').fabric;
+const StringUtils = require('../../shared/util/string_utils');
 
-class MainViewModel extends BaseViewModel {
+class PresentationViewModel extends BaseViewModel {
 
-    constructor(ko, ipcRenderer) {
+    constructor(ko, ipcRenderer, windowId) {
         super(ko, ipcRenderer);
+        this.windowId = windowId;
+        this.slides = ko.observableArray([]);
     }
 
     init() {
@@ -24,6 +27,14 @@ class MainViewModel extends BaseViewModel {
             this._resizeCanvas();
         }, false);
         this._resizeCanvas();
+
+        this.ipcRenderer.on('window_interaction', (event, message) => {
+            switch (message.action) {
+                case 'on_import_from_canvas_designer_done':
+                    this._onImportFromCanvasDesignerDone(message.data);
+                    break;
+            }
+        });
     }
 
     _resizeCanvas() {
@@ -46,6 +57,31 @@ class MainViewModel extends BaseViewModel {
     showAddSlideMenu() {
         document.querySelector("#add-slide-menu").classList.remove("hidden");
     }
+
+    addSlideFromCanvasDesigner() {
+        document.querySelector("#add-slide-menu").classList.add("hidden");
+        this.ipcRenderer.send('window_interaction', {
+            windowId: 'canvasDesignerWindow',
+            action: 'import_from_canvas_designer',
+            data: {
+                windowId: this.windowId
+            }
+        });
+    }
+
+    _onImportFromCanvasDesignerDone(data) {
+        let slideId = StringUtils.makeId();
+        let slide = {
+            id: slideId,
+            name: 'Unnamed Slide',
+            jsonData: data.canvasJsonData
+        };
+        this.slides.push(slide);
+    }
+
+    slidePreviewClick(data) {
+        this.canvas.loadFromJSON(data.jsonData);
+    }
 }
 
-module.exports = MainViewModel;
+module.exports = PresentationViewModel;
