@@ -285,15 +285,21 @@ class PresentationViewModel extends BaseViewModel {
                 message: 'Unsaved content, are you shure you want to close the window?'
             });
         if (choice === 0) {
-            this.savePresentation();
-        } else {
-            this.ipcRenderer.send('window_operation', {
-                action: 'destroy',
-                data: {
-                    windowId: this.windowId
-                }
+            this.savePresentation(() => {
+                this._destroyWindow();
             });
+        } else {
+            this._destroyWindow();
         }
+    }
+
+    _destroyWindow() {
+        this.ipcRenderer.send('window_operation', {
+            action: 'destroy',
+            data: {
+                windowId: this.windowId
+            }
+        });
     }
 
     haveUnsavedChanges() {
