@@ -40,14 +40,7 @@ ipcMain.on('broadcast', (event, arg) => {
 });
 
 ipcMain.on('open_window', (event, arg) => {
-    switch (arg.windowType) {
-        case 'canvas_designer':
-            windowManager.openCanvasDesignerWindow();
-            break;
-        case 'canvas':
-            windowManager.createCanvasWindow();
-            break;
-    }
+    windowManager.openWindow(arg);
 });
 
 function sendMessageToWindow(window, type, action, data) {

@@ -84,6 +84,12 @@ class MainViewModel extends BaseViewModel {
             windowType: 'canvas'
         });
     }
+
+    openPresentationWindow() {
+        this.ipcRenderer.send('open_window', {
+            windowType: 'presentation'
+        })
+    }
 }
 
 module.exports = MainViewModel;

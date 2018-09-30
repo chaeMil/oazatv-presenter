@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>oh! Presenter</title>
+    <link rel="stylesheet" href="../../../node_modules/reset-css/reset.css">
+    <link rel="stylesheet" href="../../../node_modules/flexboxgrid/dist/flexboxgrid.min.css">
+    <link rel="stylesheet" href="../../../node_modules/topcoat/css/topcoat-desktop-dark.min.css">
+</head>
+<body>
+<app-window id="app-window">
+    <tool-bar window-drag>
+        <h1>Presentation</h1>
+        <div class="topcoat-button-bar" disable-window-drag>
+            <div class="topcoat-button-bar__item">
+                <button class="topcoat-button-bar__button--large" data-bind="click: VM.savePresentation">Save</button>
+            </div>
+            <div class="topcoat-button-bar__item">
+                <button class="topcoat-button-bar__button--large" data-bind="click: VM.loadPresentation">Load</button>
+            </div>
+        </div>
+    </tool-bar>
+    <window-content id="window-content">
+
+    </window-content>
+</app-window>
+
+<script>
+    const eless = require('electron-less');
+    eless({source: 'app/server/assets/base.less', id: 'base', paths: ['./app/server/assets/']});
+    eless({source: 'app/server/assets/style.less', id: 'style', paths: ['./app/server/assets/']});
+
+    const PresentationViewModel = require('../viewmodel/presentation_viewmodel.js');
+
+    let ko = require('knockout');
+    let {ipcRenderer, webFrame} = require('electron');
+
+    webFrame.setVisualZoomLevelLimits(1, 1);
+    webFrame.setLayoutZoomLevelLimits(0, 0);
+
+    let VM = new PresentationViewModel(ko, ipcRenderer);
+    document.addEventListener('DOMContentLoaded', () => {
+        VM.init();
+    });
+</script>
+</body>
+</html>
