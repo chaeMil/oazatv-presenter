@@ -24,7 +24,12 @@ class PresentationViewModel extends BaseViewModel {
     _initCanvas() {
         this.canvasWrapper = document.querySelector('#canvas-wrapper');
         this.canvas = new fabric.Canvas('canvas', {
-            selection: true,
+            selection: false,
+            uniScaleTransform: true,
+            backgroundColor: '#FFFFFF'
+        });
+        this.canvasHeadless = new fabric.Canvas('canvas_headless', {
+            selection: false,
             uniScaleTransform: true,
             backgroundColor: '#FFFFFF'
         });
@@ -123,17 +128,29 @@ class PresentationViewModel extends BaseViewModel {
                         if (err != null) {
                             console.error("loadPresentation", err);
                         } else {
-                            let parsedData = JSON.parse(data);
-                            this.slides(parsedData);
-                            setTimeout(() => {
-                                let firstSlide = this.slides()[0];
-                                this.onSlideSelected(firstSlide);
-                            }, 50); //TODO ugly need to find different way to select the first slide
+                            this.onLoadPresentationSuccess(data);
                         }
                     });
                 }
             }
         );
+    }
+
+    onLoadPresentationSuccess(data) {
+        let parsedData = JSON.parse(data);
+        this.slides(parsedData);
+        this.slides().forEach((slide) => {
+            this.canvasHeadless.loadFromJSON(slide.jsonData, () => {
+                this.canvasHeadless.renderAll();
+                let preview = this.canvasHeadless.toDataURL('jpg');
+                let slideElementPreview = document.querySelector("#slide_" + slide.id + " img");
+                slideElementPreview.src = preview;
+            });
+        });
+        setTimeout(() => {
+            let firstSlide = this.slides()[0];
+            this.onSlideSelected(firstSlide);
+        }, 50); //TODO ugly need to find different way to select the first slide
     }
 
     showAddSlideMenu() {

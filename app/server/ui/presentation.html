@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="../../../node_modules/topcoat/css/topcoat-desktop-dark.min.css">
 </head>
 <body>
+<div id="canvas_headless-wrapper">
+    <canvas id="canvas_headless" width="1280" height="720"></canvas>
+</div>
 <app-window id="app-window">
     <tool-bar window-drag>
         <h1>Presentation</h1>
@@ -43,13 +46,18 @@
                         <button class="topcoat-button--cta" data-bind="click: VM.showAddSlideMenu">+</button>
                     </div>
                 </div>
-                <table id="slides-list">
-                    <tbody data-bind="foreach: VM.slides">
-                    <tr data-bind="attr: { id: 'slide_' + $data.id }">
-                        <td data-bind="text: $data.name, click: VM.onSlideSelected($data)"></td>
-                    </tr>
-                    </tbody>
-                </table>
+                <div class="slides-list-wrapper">
+                    <table id="slides-list">
+                        <tbody data-bind="foreach: VM.slides">
+                        <tr data-bind="attr: { id: 'slide_' + $data.id }">
+                            <td data-bind="click: VM.onSlideSelected($data)">
+                                <img src="" alt="">
+                                <span data-bind="text: $data.name"></span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </nav-group>
         </div>
         <div id="canvas-wrapper">
