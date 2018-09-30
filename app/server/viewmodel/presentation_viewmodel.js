@@ -4,6 +4,7 @@ const StringUtils = require('../../shared/util/string_utils');
 const {dialog} = require('electron').remote;
 const fs = require('fs-extra');
 const hotkeys = require('hotkeys-js');
+const $ = require('jquery');
 
 class PresentationViewModel extends BaseViewModel {
 
@@ -63,6 +64,27 @@ class PresentationViewModel extends BaseViewModel {
         hotkeys('backspace,delete', (event, handler) => {
             this.deleteCurrentSlide();
         });
+        //TODO find way to do key navigation without jquery
+        $(document).keydown((e) => {
+            switch (e.which) {
+                case 37: // left
+                    break;
+
+                case 38: // up
+                    this.previousSlide();
+                    break;
+
+                case 39: // right
+                    break;
+
+                case 40: // down
+                    this.nextSlide();
+                    break;
+
+                default:
+                    return; // exit this handler for other keys
+            }
+        });
     }
 
     _resizeCanvas() {
@@ -103,6 +125,10 @@ class PresentationViewModel extends BaseViewModel {
                         } else {
                             let parsedData = JSON.parse(data);
                             this.slides(parsedData);
+                            setTimeout(() => {
+                                let firstSlide = this.slides()[0];
+                                this.onSlideSelected(firstSlide);
+                            }, 50); //TODO ugly need to find different way to select the first slide
                         }
                     });
                 }
@@ -138,7 +164,7 @@ class PresentationViewModel extends BaseViewModel {
             let newSelectedSlide = null;
             if (this.slides()[this.selectedSlideIndex - 1] != null) {
                 newSelectedSlide = this.slides()[this.selectedSlideIndex - 1];
-            } else if (this.slides()[this.selectedSlideIndex ] != null) {
+            } else if (this.slides()[this.selectedSlideIndex] != null) {
                 newSelectedSlide = this.slides()[this.selectedSlideIndex];
             } else {
                 newSelectedSlide = null;
@@ -193,6 +219,20 @@ class PresentationViewModel extends BaseViewModel {
             action: 'canvas_json',
             value: JSON.stringify(data)
         });
+    }
+
+    _selectSlideAtIndex(index) {
+        if (this.slides()[index] != null) {
+            this.onSlideSelected(this.slides()[index]);
+        }
+    }
+
+    previousSlide() {
+        this._selectSlideAtIndex(this.selectedSlideIndex - 1);
+    }
+
+    nextSlide() {
+        this._selectSlideAtIndex(this.selectedSlideIndex + 1);
     }
 }
 
