@@ -32,6 +32,7 @@ function createWindow() {
         y: windowState.y,
         width: windowState.width,
         height: windowState.height,
+        fullScreen: windowState.isFullScreen,
         file: 'canvasWindow.state'
     });
     windowState.manage(canvasWindow);
