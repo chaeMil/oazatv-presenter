@@ -30,6 +30,28 @@ class WindowManager {
         }
     }
 
+    windowOperation(action, data) {
+        switch (action) {
+            case "close":
+                this._closeWindow(data);
+                break;
+            case "destroy":
+                this._destroyWindow(data);
+                break;
+            //TODO add more
+        }
+    }
+
+    _closeWindow(data) {
+        this.windows[data.windowId].browserWindow.close();
+        this.windows[data.windowId] = null;
+    }
+
+    _destroyWindow(data) {
+        this.windows[data.windowId].browserWindow.destroy();
+        this.windows[data.windowId] = null;
+    }
+
     createMainWindow(onWindowCloseCallback) {
         let windowName = 'mainWindow';
         if (this.getWindow(windowName) != null) {
@@ -127,8 +149,16 @@ class WindowManager {
 
         //this.windows[windowName].browserWindow.webContents.openDevTools();
 
-        this.windows[windowName].browserWindow.on('closed', () => {
-            this.windows[windowName] = null;
+        this.windows[windowName].browserWindow.on('close', (e) => {
+            e.preventDefault();
+            this.windows[windowName].browserWindow.webContents.executeJavaScript('VM.haveUnsavedChanges()', (result) => {
+                if (result == false) {
+                    this.windows[windowName].browserWindow.destroy();
+                    this.windows[windowName] = null;
+                } else {
+                    this.windows[windowName].browserWindow.webContents.executeJavaScript('VM.close();');
+                }
+            });
         });
     }
 }
