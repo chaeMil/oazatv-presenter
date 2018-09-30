@@ -43,9 +43,9 @@
                         <button class="topcoat-button--cta" data-bind="click: VM.showAddSlideMenu">+</button>
                     </div>
                 </div>
-                <table>
+                <table id="slides-list">
                     <tbody data-bind="foreach: VM.slides">
-                    <tr>
+                    <tr data-bind="attr: { id: 'slide_' + $data.id }">
                         <td data-bind="text: $data.name, click: VM.slidePreviewClick($data)"></td>
                     </tr>
                     </tbody>

@@ -127,7 +127,9 @@ class PresentationViewModel extends BaseViewModel {
     }
 
     deleteSlide(data) {
-
+        /*this.slides().forEach((slide) => {
+            console.log(slide);
+        });*/
     }
 
     _onImportFromCanvasDesignerDone(data) {
@@ -141,6 +143,12 @@ class PresentationViewModel extends BaseViewModel {
     }
 
     slidePreviewClick(data) {
+        let slidesElements = document.querySelectorAll('#slides-list tr');
+        slidesElements.forEach((slideElement) => {
+            slideElement.classList.remove('active');
+        });
+        let element = document.querySelector('#slide_' + data.id);
+        element.classList.add('active');
         if (this.liveBroadcast()) {
             this.broadcastToCanvas(data.jsonData);
         }

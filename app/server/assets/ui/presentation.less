@@ -14,9 +14,33 @@
 
     &.slides {
       .slides-header {
+        padding-bottom: 5px;
+        border-bottom: 1px solid #3b3b3b;
+
         .buttons-wrapper {
           display: flex;
           justify-content: flex-end;
+        }
+      }
+
+      #slides-list {
+        width: calc(100% + 16px);
+        margin-left: -8px;
+        margin-right: -8px;
+
+        tbody {
+
+          tr {
+
+            &.active {
+              background: #2e8bdf;
+            }
+
+            td {
+              padding: 8px;
+              display: block;
+            }
+          }
         }
       }
     }
