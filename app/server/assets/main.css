@@ -123,7 +123,6 @@ app-window float-window {
 }
 app-window float-window tool-bar {
   height: auto;
-  display: block;
 }
 app-window float-window tool-bar h1 {
   margin-top: 4px;
