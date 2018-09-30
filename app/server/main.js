@@ -44,8 +44,11 @@ ipcMain.on('open_window', (event, arg) => {
 });
 
 ipcMain.on('window_interaction', (event, arg) => {
-    console.log('window_interaction', arg);
     sendMessageToWindow(arg.windowId, 'window_interaction', arg.action, arg.data);
+});
+
+ipcMain.on('window_operation', (event, arg) => {
+    windowManager.windowOperation(arg.action, arg.data);
 });
 
 function sendMessageToWindow(window, type, action, data) {

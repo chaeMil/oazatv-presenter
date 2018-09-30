@@ -16,7 +16,9 @@
         <h1>Presentation</h1>
         <div class="topcoat-button-bar" disable-window-drag>
             <div class="topcoat-button-bar__item">
-                <button class="topcoat-button-bar__button--large" data-bind="click: VM.savePresentation">Save</button>
+                <button class="topcoat-button-bar__button--large" data-bind="click: VM.savePresentation">
+                    <span>Save</span><span data-bind="visible: VM.unsavedChanges">*</span>
+                </button>
             </div>
             <div class="topcoat-button-bar__item">
                 <button class="topcoat-button-bar__button--large" data-bind="click: VM.loadPresentation">Load</button>
@@ -63,7 +65,7 @@
         <div id="canvas-wrapper">
             <canvas id="canvas" width="1280" height="720"></canvas>
         </div>
-        <div id="add-slide-menu" class="hidden">
+        <div id="add-slide-menu" class="full-window-frosted-dialog hidden">
             <div class="row slide-type">
                 <div class="col-xs">
                     <button class="topcoat-button--large--quiet"

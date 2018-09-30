@@ -5,6 +5,7 @@ const {dialog} = require('electron').remote;
 const fs = require('fs-extra');
 const hotkeys = require('hotkeys-js');
 const $ = require('jquery');
+const {remote} = require('electron');
 
 class PresentationViewModel extends BaseViewModel {
 
@@ -13,6 +14,7 @@ class PresentationViewModel extends BaseViewModel {
         this.windowId = windowId;
         this.slides = ko.observableArray([]);
         this.liveBroadcast = ko.observable(false);
+        this.unsavedChanges = ko.observable(false);
     }
 
     init() {
@@ -103,7 +105,7 @@ class PresentationViewModel extends BaseViewModel {
         this.canvas.renderAll();
     }
 
-    savePresentation() {
+    savePresentation(callback) {
         dialog.showSaveDialog({
             filters: [
                 {name: 'text', extensions: ['ohpres']}
@@ -114,6 +116,10 @@ class PresentationViewModel extends BaseViewModel {
             fs.writeFile(fileName, fileContent, (error) => {
                 console.error("savePresentation", error);
             });
+            this.unsavedChanges(false);
+            if (callback != null) {
+                callback();
+            }
         });
     }
 
@@ -189,6 +195,7 @@ class PresentationViewModel extends BaseViewModel {
                 newSelectedSlide = null;
             }
             this.onSlideSelected(newSelectedSlide);
+            this.unsavedChanges(true);
         }
     }
 
@@ -200,6 +207,7 @@ class PresentationViewModel extends BaseViewModel {
             jsonData: data.canvasJsonData
         };
         this.slides.push(slide);
+        this.unsavedChanges(true);
     }
 
     onSlideSelected(data) {
@@ -268,6 +276,29 @@ class PresentationViewModel extends BaseViewModel {
         return true;
     }
 
+    close() {
+        let choice = dialog.showMessageBox(
+            remote.getCurrentWindow(), {
+                type: 'question',
+                buttons: ['Save and close...', 'Close'],
+                title: 'Confirm',
+                message: 'Unsaved content, are you shure you want to close the window?'
+            });
+        if (choice === 0) {
+            this.savePresentation();
+        } else {
+            this.ipcRenderer.send('window_operation', {
+                action: 'destroy',
+                data: {
+                    windowId: this.windowId
+                }
+            });
+        }
+    }
+
+    haveUnsavedChanges() {
+        return this.unsavedChanges();
+    }
 }
 
 module.exports = PresentationViewModel;
