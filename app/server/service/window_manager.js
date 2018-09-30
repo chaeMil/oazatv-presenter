@@ -67,16 +67,19 @@ class WindowManager {
             titleBarStyle: "hidden",
             webPreferences: {
                 experimentalFeatures: true
-            }
+            },
+            show: false
         });
 
         this.windows[windowName] = new AppWindow(this.ipcMain, browserWindow);
-
         this.windows[windowName].browserWindow.loadURL(url.format({
             pathname: path.join(__dirname, '../ui/main.html'),
             protocol: 'file:',
-            slashes: true
+            slashes: true,
         }));
+        this.windows[windowName].browserWindow.webContents.once('did-finish-load', () => {
+            this.windows[windowName].browserWindow.show();
+        });
         this.windows[windowName].browserWindow.setMenu(null);
 
         //this.windows[windowName].browserWindow.webContents.openDevTools();
@@ -102,7 +105,8 @@ class WindowManager {
             titleBarStyle: "hidden",
             webPreferences: {
                 experimentalFeatures: true
-            }
+            },
+            show: false
         });
 
         this.windows[windowName] = new AppWindow(this.ipcMain, browserWindow);
@@ -112,6 +116,9 @@ class WindowManager {
             protocol: 'file:',
             slashes: true
         }));
+        this.windows[windowName].browserWindow.webContents.once('did-finish-load', () => {
+            this.windows[windowName].browserWindow.show();
+        });
         this.windows[windowName].browserWindow.setMenu(null);
 
         //this.windows[windowName].browserWindow.webContents.openDevTools();
@@ -139,12 +146,17 @@ class WindowManager {
             titleBarStyle: "hidden",
             webPreferences: {
                 experimentalFeatures: true
-            }
+            },
+            show: false,
         });
 
         this.windows[windowName] = new AppWindow(this.ipcMain, browserWindow);
 
-        this.windows[windowName].browserWindow.loadURL(path.join("file:", __dirname, '../ui/presentation.html?windowId=' + windowName));
+        this.windows[windowName].browserWindow.loadURL(path.join("file:", __dirname,
+            '../ui/presentation.html?windowId=' + windowName));
+        this.windows[windowName].browserWindow.webContents.once('did-finish-load', () => {
+            this.windows[windowName].browserWindow.show();
+        });
         this.windows[windowName].browserWindow.setMenu(null);
 
         //this.windows[windowName].browserWindow.webContents.openDevTools();
