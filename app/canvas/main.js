@@ -7,14 +7,14 @@ const url = require('url');
 const config = require('../shared/config');
 const Client = require('./client');
 
-let mainWindow;
+let canvasWindow;
 
 let onDataReceivedCallback = function (data) {
-    mainWindow.webContents.send('data', data);
+    canvasWindow.webContents.send('data', data);
 };
 
 let onConnectionChangedCallback = function (value) {
-    mainWindow.webContents.send('connection', value);
+    canvasWindow.webContents.send('connection', value);
 };
 
 let client = new Client(config.clientPort, config.serverPort,
@@ -23,27 +23,28 @@ let client = new Client(config.clientPort, config.serverPort,
 client.create();
 
 function createWindow() {
-    let mainWindowState = windowStateKeeper({
+    let windowState = windowStateKeeper({
         defaultWidth: 800,
         defaultHeight: 600
     });
-    mainWindow = new BrowserWindow({
-        'x': mainWindowState.x,
-        'y': mainWindowState.y,
-        'width': mainWindowState.width,
-        'height': mainWindowState.height
+    canvasWindow = new BrowserWindow({
+        x: windowState.x,
+        y: windowState.y,
+        width: windowState.width,
+        height: windowState.height,
+        file: 'canvasWindow.state'
     });
-    mainWindowState.manage(mainWindow);
-    mainWindow.loadURL(url.format({
+    windowState.manage(canvasWindow);
+    canvasWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'ui/canvas.html'),
         protocol: 'file:',
         slashes: true
     }));
-    mainWindow.setMenu(null);
+    canvasWindow.setMenu(null);
 
-    //mainWindow.webContents.openDevTools();
+    //canvasWindow.webContents.openDevTools();
 
-    mainWindow.on('closed', function () {
+    canvasWindow.on('closed', function () {
         client.disconnect(() => {
             app.quit();
         });

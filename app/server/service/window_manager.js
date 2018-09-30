@@ -5,6 +5,7 @@ const url = require('url');
 const NativeMethods = require('./native_methods');
 const AppWindow = require('../model/app_window');
 const StringUtils = require('../../shared/util/string_utils');
+const windowStateKeeper = require('electron-window-state');
 
 class WindowManager {
     constructor(ipcMain) {
@@ -59,17 +60,23 @@ class WindowManager {
             return;
         }
 
+        let windowState = windowStateKeeper({
+            defaultWidth: 950,
+            defaultHeight: 600,
+            file: 'mainWindow.state'
+        });
         let browserWindow = new BrowserWindow({
-            width: 950,
-            height: 600,
-            minWidth: 800,
-            minHeight: 320,
+            x: windowState.x,
+            y: windowState.y,
+            width: windowState.width,
+            height: windowState.height,
             titleBarStyle: "hidden",
             webPreferences: {
                 experimentalFeatures: true
             },
             show: false
         });
+        windowState.manage(browserWindow);
 
         this.windows[windowName] = new AppWindow(this.ipcMain, browserWindow);
         this.windows[windowName].browserWindow.loadURL(url.format({
@@ -97,9 +104,16 @@ class WindowManager {
             return;
         }
 
+        let windowState = windowStateKeeper({
+            defaultWidth: 1200,
+            defaultHeight: 700,
+            file: 'canvasDesignerWindow.state'
+        });
         let browserWindow = new BrowserWindow({
-            width: 1200,
-            height: 700,
+            x: windowState.x,
+            y: windowState.y,
+            width: windowState.width,
+            height: windowState.height,
             minWidth: 700,
             minHeight: 500,
             titleBarStyle: "hidden",
@@ -108,6 +122,7 @@ class WindowManager {
             },
             show: false
         });
+        windowState.manage(browserWindow);
 
         this.windows[windowName] = new AppWindow(this.ipcMain, browserWindow);
 
@@ -138,17 +153,25 @@ class WindowManager {
         let id = StringUtils.makeId();
         let windowName = 'presentationWindow_' + id;
 
+        let windowState = windowStateKeeper({
+            defaultWidth: 1200,
+            defaultHeight: 700,
+            file: 'presentationWindow.state'
+        });
         let browserWindow = new BrowserWindow({
-            width: 1200,
-            height: 700,
+            x: windowState.x,
+            y: windowState.y,
+            width: windowState.width,
+            height: windowState.height,
             minWidth: 700,
             minHeight: 500,
             titleBarStyle: "hidden",
             webPreferences: {
                 experimentalFeatures: true
             },
-            show: false,
+            show: false
         });
+        windowState.manage(browserWindow);
 
         this.windows[windowName] = new AppWindow(this.ipcMain, browserWindow);
 
