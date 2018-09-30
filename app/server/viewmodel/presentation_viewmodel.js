@@ -148,17 +148,21 @@ class PresentationViewModel extends BaseViewModel {
         let parsedData = JSON.parse(data);
         this.slides(parsedData);
         this.slides().forEach((slide) => {
-            this.canvasHeadless.loadFromJSON(slide.jsonData, () => {
-                this.canvasHeadless.renderAll();
-                let preview = this.canvasHeadless.toDataURL('jpg');
-                let slideElementPreview = document.querySelector("#slide_" + slide.id + " img");
-                slideElementPreview.src = preview;
-            });
+            this._generateSlidePreview(slide);
         });
         setTimeout(() => {
             let firstSlide = this.slides()[0];
             this.onSlideSelected(firstSlide);
         }, 50); //TODO ugly need to find different way to select the first slide
+    }
+
+    _generateSlidePreview(slide) {
+        this.canvasHeadless.loadFromJSON(slide.jsonData, () => {
+            this.canvasHeadless.renderAll();
+            let preview = this.canvasHeadless.toDataURL('jpg');
+            let slideElementPreview = document.querySelector("#slide_" + slide.id + " img");
+            slideElementPreview.src = preview;
+        });
     }
 
     showAddSlideMenu() {
@@ -207,6 +211,7 @@ class PresentationViewModel extends BaseViewModel {
             jsonData: data.canvasJsonData
         };
         this.slides.push(slide);
+        this._generateSlidePreview(slide);
         this.unsavedChanges(true);
     }
 
