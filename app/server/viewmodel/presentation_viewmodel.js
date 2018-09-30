@@ -11,6 +11,7 @@ class PresentationViewModel extends BaseViewModel {
         super(ko, ipcRenderer);
         this.windowId = windowId;
         this.slides = ko.observableArray([]);
+        this.liveBroadcast = ko.observable(false);
     }
 
     init() {
@@ -50,6 +51,14 @@ class PresentationViewModel extends BaseViewModel {
         });
         hotkeys('ctrl+s,command+s', (event, handler) => {
             this.savePresentation();
+        });
+        hotkeys('l', (event, handler) => {
+            this.toggleLiveBroadcast();
+        });
+        hotkeys('space', (event, handler) => {
+            if (!this.liveBroadcast()) {
+                this.broadcastToCanvas(this.canvas.toJSON());
+            }
         });
     }
 
@@ -132,7 +141,24 @@ class PresentationViewModel extends BaseViewModel {
     }
 
     slidePreviewClick(data) {
+        if (this.liveBroadcast()) {
+            this.broadcastToCanvas(data.jsonData);
+        }
         this.canvas.loadFromJSON(data.jsonData);
+    }
+
+    toggleLiveBroadcast() {
+        this.liveBroadcast(!this.liveBroadcast());
+        if (this.liveBroadcast()) {
+            this.broadcastToCanvas(this.canvas.toJSON());
+        }
+    }
+
+    broadcastToCanvas(data) {
+        this.ipcRenderer.send('broadcast', {
+            action: 'canvas_json',
+            value: JSON.stringify(data)
+        });
     }
 }
 

@@ -19,6 +19,20 @@
                 <button class="topcoat-button-bar__button--large" data-bind="click: VM.loadPresentation">Load</button>
             </div>
         </div>
+        <div class="topcoat-button-bar" disable-window-drag>
+            <div class="topcoat-button-bar__item">
+                <label class="topcoat-checkbox live-broadcast-checkbox" data-bind="click: VM.toggleLiveBroadcast">
+                    <input type="checkbox" data-bind="attr: { checked: VM.liveBroadcast() }"
+                           style="pointer-events: none">
+                    <div class="topcoat-checkbox__checkmark"></div>
+                    <u>L</u>ive broadcast
+                </label>
+                <button class="topcoat-button-bar__button--large"
+                        data-bind="click: VM.broadcastToCanvas, attr: { disabled: VM.liveBroadcast() }">
+                    Broadcast to canvas [space]
+                </button>
+            </div>
+        </div>
     </tool-bar>
     <window-content id="window-content">
         <div class="sidebar slides">
