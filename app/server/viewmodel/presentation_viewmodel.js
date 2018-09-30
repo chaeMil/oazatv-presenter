@@ -76,6 +76,7 @@ class PresentationViewModel extends BaseViewModel {
                     break;
 
                 case 38: // up
+                    e.preventDefault();
                     this.previousSlide();
                     break;
 
@@ -83,6 +84,7 @@ class PresentationViewModel extends BaseViewModel {
                     break;
 
                 case 40: // down
+                    e.preventDefault();
                     this.nextSlide();
                     break;
 
@@ -213,6 +215,9 @@ class PresentationViewModel extends BaseViewModel {
         if (data != null) {
             let element = document.querySelector('#slide_' + data.id);
             element.classList.add('active');
+            if (!this._checkIfInView(element)) {
+                element.scrollIntoView();
+            }
             if (this.liveBroadcast()) {
                 this.broadcastToCanvas(data.jsonData);
             }
@@ -251,6 +256,18 @@ class PresentationViewModel extends BaseViewModel {
     nextSlide() {
         this._selectSlideAtIndex(this.selectedSlideIndex + 1);
     }
+
+    _checkIfInView(element) {
+        let offset = $(element).offset().top - $(window).scrollTop();
+
+        if (offset > window.innerHeight || offset < 0) {
+            // Not in view so scroll to it
+            $('html,body').animate({scrollTop: offset}, 1000);
+            return false;
+        }
+        return true;
+    }
+
 }
 
 module.exports = PresentationViewModel;
