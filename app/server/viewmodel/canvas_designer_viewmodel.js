@@ -478,6 +478,12 @@ class CanvasDesignerViewModel extends BaseViewModel {
         hotkeys('ctrl+a,command+a', (event, handler) => {
             this.selectAllObjects();
         });
+        hotkeys('ctrl+o,command+o', (event, handler) => {
+            this.loadCanvas();
+        });
+        hotkeys('ctrl+s,command+s', (event, handler) => {
+            this.saveCanvas();
+        });
     }
 
     hideColorPicker() {

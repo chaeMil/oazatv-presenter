@@ -3,6 +3,7 @@ const fabric = require('fabric').fabric;
 const StringUtils = require('../../shared/util/string_utils');
 const {dialog} = require('electron').remote;
 const fs = require('fs-extra');
+const hotkeys = require('hotkeys-js');
 
 class PresentationViewModel extends BaseViewModel {
 
@@ -15,6 +16,7 @@ class PresentationViewModel extends BaseViewModel {
     init() {
         super.init();
         this._initCanvas();
+        this._initHotKeys();
     }
 
     _initCanvas() {
@@ -36,6 +38,18 @@ class PresentationViewModel extends BaseViewModel {
                     this._onImportFromCanvasDesignerDone(message.data);
                     break;
             }
+        });
+    }
+
+    _initHotKeys() {
+        hotkeys('escape', (event, handler) => {
+            this.hideAddSlideMenu();
+        });
+        hotkeys('ctrl+o,command+o', (event, handler) => {
+            this.loadPresentation();
+        });
+        hotkeys('ctrl+s,command+s', (event, handler) => {
+            this.savePresentation();
         });
     }
 
@@ -88,8 +102,12 @@ class PresentationViewModel extends BaseViewModel {
         document.querySelector("#add-slide-menu").classList.remove("hidden");
     }
 
-    addSlideFromCanvasDesigner() {
+    hideAddSlideMenu() {
         document.querySelector("#add-slide-menu").classList.add("hidden");
+    }
+
+    addSlideFromCanvasDesigner() {
+        this.hideAddSlideMenu();
         this.ipcRenderer.send('window_interaction', {
             windowId: 'canvasDesignerWindow',
             action: 'import_from_canvas_designer',
@@ -97,6 +115,10 @@ class PresentationViewModel extends BaseViewModel {
                 windowId: this.windowId
             }
         });
+    }
+
+    deleteSlide(data) {
+
     }
 
     _onImportFromCanvasDesignerDone(data) {
