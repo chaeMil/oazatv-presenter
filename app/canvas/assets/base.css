@@ -1,0 +1,24 @@
+body {
+  background: black;
+}
+#canvas-wrapper {
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#connection-status {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 8px 20px;
+  font-size: 30px;
+  border-radius: 3px;
+  color: white;
+}
+#connection-status.connected {
+  display: none;
+}

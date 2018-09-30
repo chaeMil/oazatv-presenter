@@ -9,14 +9,21 @@
   "license": "ISC",
   "main": "./app/server/main.js",
   "scripts": {
+    "cross-os": {
+      "compile": {
+        "linux": "compile_less",
+        "darwin": "compile_less",
+        "win32": ""
+      }
+    },
     "compile_less": "npm run compile_canvas_less && npm run compile_server_less",
     "compile_canvas_less": "./node_modules/less/bin/lessc ./app/canvas/assets/base.less > ./app/canvas/assets/base.css",
     "compile_server_less": "./node_modules/less/bin/lessc ./app/server/assets/main.less > ./app/server/assets/main.css",
-    "prestart": "npm run compile_less",
+    "prestart": "cross-os compile",
     "start": "electron ./app/server/main",
     "canvas": "electron ./app/canvas/main",
     "pack": "build --dir",
-    "dist": "npm run compile_less && build"
+    "dist": "cross-os compile && build"
   },
   "build": {
     "appId": "cz.chaemil.oh-presenter",

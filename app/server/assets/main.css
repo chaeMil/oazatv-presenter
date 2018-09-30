@@ -1,0 +1,292 @@
+html,
+body {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  /* hover effect for both scrollbar area, and scrollbar 'thumb' */
+  /* The scrollbar 'thumb' ...that marque oval shape in a scrollbar */
+}
+html ::-webkit-scrollbar,
+body ::-webkit-scrollbar {
+  width: 10px;
+  /* 1px wider than Lion. */
+  /* This is more usable for users trying to click it. */
+  background-color: rgba(0, 0, 0, 0);
+  -webkit-border-radius: 100px;
+}
+html ::-webkit-scrollbar:hover,
+body ::-webkit-scrollbar:hover {
+  background-color: rgba(0, 0, 0, 0.09);
+}
+html ::-webkit-scrollbar-thumb:vertical,
+body ::-webkit-scrollbar-thumb:vertical {
+  /* This is the EXACT color of Mac OS scrollbars.
+       Yes, I pulled out digital color meter */
+  background: rgba(0, 0, 0, 0.5);
+  -webkit-border-radius: 100px;
+  background-clip: padding-box;
+  border: 2px solid rgba(0, 0, 0, 0);
+  min-height: 10px;
+  /*Prevent it from getting too small */
+}
+html ::-webkit-scrollbar-thumb:vertical:active,
+body ::-webkit-scrollbar-thumb:vertical:active {
+  background: rgba(0, 0, 0, 0.61);
+  /* Some darker color when you click it */
+  -webkit-border-radius: 100px;
+}
+.hidden {
+  display: none !important;
+}
+.full-window-frosted-dialog {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 0 0 3000px rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+}
+body {
+  color: #d1d1d1;
+}
+[window-drag] {
+  -webkit-app-region: drag;
+}
+[disable-window-drag] {
+  -webkit-app-region: no-drag;
+}
+app-window {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: #2e2e2e;
+  user-select: none;
+  cursor: default;
+}
+app-window tool-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 30px;
+  background: #424242;
+}
+.darwin app-window tool-bar {
+  padding: 28px 8px 8px;
+}
+app-window tool-bar .win32,
+.linux app-window tool-bar {
+  padding: 8px;
+}
+app-window tool-bar h1 {
+  position: absolute;
+  top: 6px;
+  left: 0;
+  width: 100%;
+  height: 14px;
+  font-size: 12px;
+  font-family: sans-serif;
+  text-align: center;
+  color: #FFFFFF;
+}
+app-window tool-bar h1 .win32,
+.linux app-window tool-bar h1 {
+  display: none;
+}
+app-window tool-bar .topcoat-button-bar .topcoat-checkbox {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  margin-left: 8px;
+  margin-right: 8px;
+}
+app-window > window-content {
+  overflow: hidden;
+}
+app-window float-window {
+  display: flex;
+  background: #4d4d4d;
+  border: 1px solid #353535;
+  flex-direction: column;
+  overflow: hidden;
+  width: auto !important;
+  height: auto !important;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 12px 25px 0 rgba(0, 0, 0, 0.1);
+}
+app-window float-window tool-bar {
+  height: auto;
+  display: block;
+}
+app-window float-window tool-bar h1 {
+  margin-top: 4px;
+}
+app-window float-window tool-bar [close-button] {
+  position: absolute;
+  z-index: 10;
+  top: 5px;
+  left: 4px;
+  width: 24px;
+  height: 24px;
+  border-radius: 100%;
+}
+app-window float-window window-content {
+  display: block;
+  height: auto;
+}
+.main window-content {
+  overflow: hidden;
+}
+.main window-content .pane-group .sidebar .editor .editor-inner {
+  padding: 0 10px 15px 25px;
+}
+.main window-content .pane-group .sidebar .editor .editor-inner .color-picker {
+  border: 1px solid black;
+  width: 25px;
+  height: 25px;
+  border-radius: 4px;
+}
+.main window-content #color-picker {
+  background: #dcdcdc;
+  width: 208px;
+  height: 340px;
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  border: 1px solid #a1a1a1;
+  border-radius: 4px;
+  box-shadow: 0 37.125px 70px -12.125px rgba(0, 0, 0, 0.3);
+}
+.main window-content #color-picker tool-bar {
+  cursor: move;
+}
+.presentation #canvas_headless-wrapper {
+  position: absolute;
+  top: -99999px;
+  left: -99999px;
+}
+.presentation #window-content {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+.presentation #window-content .sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  padding: 8px;
+  overflow: hidden;
+}
+.presentation #window-content .sidebar.slides .slides-header {
+  padding-bottom: 5px;
+  border-bottom: 1px solid #3b3b3b;
+}
+.presentation #window-content .sidebar.slides .slides-header .buttons-wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+.presentation #window-content .sidebar.slides .slides-list-wrapper {
+  margin-left: -8px;
+  margin-right: -8px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  width: calc(100% + 16px);
+  height: calc(100vh - 109px);
+}
+.presentation #window-content .sidebar.slides .slides-list-wrapper #slides-list tbody tr.active {
+  background: #2e8bdf;
+}
+.presentation #window-content .sidebar.slides .slides-list-wrapper #slides-list tbody tr td {
+  padding: 8px;
+  display: block;
+}
+.presentation #window-content .sidebar.slides .slides-list-wrapper #slides-list tbody tr td img {
+  width: 100%;
+}
+.presentation #window-content #canvas-wrapper {
+  background: #6f6f6f;
+  padding: 25px;
+  width: calc(100% - 240px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.presentation #window-content #canvas-wrapper .canvas-container {
+  box-shadow: 0 8px 10px 0 rgba(0, 0, 0, 0.5), 0 20px 40px 0 rgba(0, 0, 0, 0.2);
+}
+.presentation #window-content #add-slide-menu .slide-type {
+  backdrop-filter: blur(30px);
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background: rgba(29, 29, 29, 0.7);
+  border-radius: 6px;
+  border: 2px solid rgba(35, 35, 35, 0.6);
+}
+.canvas-designer #window-content {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+.canvas-designer #window-content .sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  padding: 8px;
+  overflow: hidden;
+}
+.canvas-designer #window-content .sidebar h5 {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+.canvas-designer #window-content .sidebar .editor {
+  margin-bottom: 12px;
+}
+.canvas-designer #window-content .sidebar .editor .label {
+  margin-right: 8px;
+}
+.canvas-designer #window-content .sidebar .editor .editor-inner {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+}
+.canvas-designer #window-content .sidebar .editor .editor-inner .editor-input {
+  display: flex;
+  flex-direction: row;
+}
+.canvas-designer #window-content .sidebar .editor .editor-inner .editor-input .color-picker {
+  display: inline-block;
+  margin-bottom: -4px;
+  width: 16px;
+  height: 16px;
+  border-radius: 100%;
+  border: 1px solid black;
+}
+.canvas-designer #window-content .sidebar .editor .editor-inner .editor-input select,
+.canvas-designer #window-content .sidebar .editor .editor-inner .editor-input input {
+  flex-shrink: 1;
+  width: 100%;
+  text-overflow: ellipsis;
+}
+.canvas-designer #window-content .canvas-elements {
+  width: 160px;
+}
+.canvas-designer #window-content #canvas-wrapper {
+  background: #6f6f6f;
+  padding: 25px;
+  width: calc(100% - 160px - 240px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.canvas-designer #window-content #canvas-wrapper .canvas-container {
+  box-shadow: 0 8px 10px 0 rgba(0, 0, 0, 0.5), 0 20px 40px 0 rgba(0, 0, 0, 0.2);
+}
