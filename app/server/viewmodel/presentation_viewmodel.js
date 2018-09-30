@@ -1,6 +1,8 @@
 const BaseViewModel = require('../../shared/viewmodel/base_viewmodel');
 const fabric = require('fabric').fabric;
 const StringUtils = require('../../shared/util/string_utils');
+const {dialog} = require('electron').remote;
+const fs = require('fs-extra');
 
 class PresentationViewModel extends BaseViewModel {
 
@@ -47,11 +49,39 @@ class PresentationViewModel extends BaseViewModel {
     }
 
     savePresentation() {
-        //TODO
+        dialog.showSaveDialog({
+            filters: [
+                {name: 'text', extensions: ['ohpres']}
+            ]
+        }, (fileName) => {
+            if (fileName === undefined) return;
+            let fileContent = JSON.stringify(this.slides()); //TODO add handling of multimedia contents
+            fs.writeFile(fileName, fileContent, (error) => {
+                console.error("savePresentation", error);
+            });
+        });
     }
 
     loadPresentation() {
-        //TODO
+        dialog.showOpenDialog({
+                properties: ['openFile'],
+                filters: [
+                    {name: 'Presentation File', extensions: ['ohpres']},
+                ]
+            }, (files) => {
+                if (files !== undefined && files[0] != null) {
+                    let file = files[0];
+                    fs.readFile(file, 'utf-8', (err, data) => {
+                        if (err != null) {
+                            console.error("loadPresentation", err);
+                        } else {
+                            let parsedData = JSON.parse(data);
+                            this.slides(parsedData);
+                        }
+                    });
+                }
+            }
+        );
     }
 
     showAddSlideMenu() {
