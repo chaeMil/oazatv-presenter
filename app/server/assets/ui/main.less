@@ -1,42 +1,44 @@
-window-content {
-  overflow: hidden;
+.main {
+  window-content {
+    overflow: hidden;
 
-  .pane-group {
-    .sidebar {
-      &.canvas-elements {
-        nav-item {
+    .pane-group {
+      .sidebar {
+        &.canvas-elements {
+          nav-item {
 
+          }
         }
-      }
 
-      .editor {
-        .editor-inner {
-          padding: 0 10px 15px 25px;
+        .editor {
+          .editor-inner {
+            padding: 0 10px 15px 25px;
 
-          .color-picker {
-            border: 1px solid black;
-            width: 25px;
-            height: 25px;
-            border-radius: 4px;
+            .color-picker {
+              border: 1px solid black;
+              width: 25px;
+              height: 25px;
+              border-radius: 4px;
+            }
           }
         }
       }
     }
-  }
 
-  #color-picker {
-    background: #dcdcdc;
-    width: 208px;
-    height: 340px;
-    position: absolute;
-    top: 50px;
-    left: 50px;
-    border: 1px solid #a1a1a1;
-    border-radius: 4px;
-    box-shadow: 0 37.125px 70px -12.125px rgba(0,0,0,0.3);
+    #color-picker {
+      background: #dcdcdc;
+      width: 208px;
+      height: 340px;
+      position: absolute;
+      top: 50px;
+      left: 50px;
+      border: 1px solid #a1a1a1;
+      border-radius: 4px;
+      box-shadow: 0 37.125px 70px -12.125px rgba(0,0,0,0.3);
 
-    tool-bar {
-      cursor: move;
+      tool-bar {
+        cursor: move;
+      }
     }
   }
 }

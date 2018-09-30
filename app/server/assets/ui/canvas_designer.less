@@ -1,73 +1,75 @@
-@canvas-elements-width: 160px;
-@sidebar-width: 240px;
+.canvas-designer {
+  @canvas-elements-width: 160px;
+  @sidebar-width: 240px;
 
-#window-content {
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-
-  .sidebar {
+  #window-content {
     display: flex;
-    flex-direction: column;
-    width: @sidebar-width;
-    padding: 8px;
-    overflow: hidden;
+    flex-direction: row;
+    height: 100%;
 
-    h5 {
-      font-weight: bold;
-      margin-bottom: 4px;
-    }
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      width: @sidebar-width;
+      padding: 8px;
+      overflow: hidden;
 
-    .editor {
-      margin-bottom: 12px;
-
-      .label {
-        margin-right: 8px;
+      h5 {
+        font-weight: bold;
+        margin-bottom: 4px;
       }
 
-      .editor-inner {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        overflow: hidden;
+      .editor {
+        margin-bottom: 12px;
 
-        .editor-input {
+        .label {
+          margin-right: 8px;
+        }
+
+        .editor-inner {
           display: flex;
-          flex-direction: row;
+          flex-direction: column;
+          width: 100%;
+          overflow: hidden;
 
-          .color-picker {
-            display: inline-block;
-            margin-bottom: -4px;
-            width: 16px;
-            height: 16px;
-            border-radius: 100%;
-            border: 1px solid black;
-          }
+          .editor-input {
+            display: flex;
+            flex-direction: row;
 
-          select, input {
-            flex-shrink: 1;
-            width: 100%;
-            text-overflow: ellipsis;
+            .color-picker {
+              display: inline-block;
+              margin-bottom: -4px;
+              width: 16px;
+              height: 16px;
+              border-radius: 100%;
+              border: 1px solid black;
+            }
+
+            select, input {
+              flex-shrink: 1;
+              width: 100%;
+              text-overflow: ellipsis;
+            }
           }
         }
       }
     }
-  }
 
-  .canvas-elements {
-    width: @canvas-elements-width;
-  }
+    .canvas-elements {
+      width: @canvas-elements-width;
+    }
 
-  #canvas-wrapper {
-    background: #6f6f6f;
-    padding: 25px;
-    width: calc(100% ~"-" @canvas-elements-width ~"-" @sidebar-width);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    #canvas-wrapper {
+      background: #6f6f6f;
+      padding: 25px;
+      width: calc(100% ~"-" @canvas-elements-width ~"-" @sidebar-width);
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-    .canvas-container {
-      box-shadow: 0 8px 10px 0 rgba(0, 0, 0, 0.5), 0 20px 40px 0 rgba(0, 0, 0, 0.2);
+      .canvas-container {
+        box-shadow: 0 8px 10px 0 rgba(0, 0, 0, 0.5), 0 20px 40px 0 rgba(0, 0, 0, 0.2);
+      }
     }
   }
 }

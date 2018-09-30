@@ -9,10 +9,14 @@
   "license": "ISC",
   "main": "./app/server/main.js",
   "scripts": {
+    "compile_less": "npm run compile_canvas_less && npm run compile_server_less",
+    "compile_canvas_less": "./node_modules/less/bin/lessc ./app/canvas/assets/base.less > ./app/canvas/assets/base.css",
+    "compile_server_less": "./node_modules/less/bin/lessc ./app/server/assets/main.less > ./app/server/assets/main.css",
+    "prestart": "npm run compile_less",
     "start": "electron ./app/server/main",
     "canvas": "electron ./app/canvas/main",
     "pack": "build --dir",
-    "dist": "build"
+    "dist": "npm run compile_less && build"
   },
   "build": {
     "appId": "cz.chaemil.oh-presenter",
@@ -45,7 +49,6 @@
     "a-color-picker": "^1.0.6",
     "ajv": "^6.5.3",
     "draggable": "^4.2.0",
-    "electron-less": "^1.1.0",
     "electron-window-state": "^4.1.1",
     "eventbusjs": "^0.2.0",
     "fabric": "^2.3.6",
@@ -58,6 +61,7 @@
     "jquery": "^3.3.1",
     "json-socket": "^0.3.0",
     "knockout": "^3.4.2",
+    "less": "^3.8.1",
     "mkdirp": "^0.5.1",
     "node-simple-router": "^0.10.1",
     "npm": "^6.4.0",

@@ -6,8 +6,9 @@
     <link rel="stylesheet" href="../../../node_modules/reset-css/reset.css">
     <link rel="stylesheet" href="../../../node_modules/flexboxgrid/dist/flexboxgrid.min.css">
     <link rel="stylesheet" href="../../../node_modules/topcoat/css/topcoat-desktop-dark.min.css">
+    <link rel="stylesheet" href="../assets/main.css">
 </head>
-<body>
+<body class="canvas-designer">
 <app-window id="app-window">
     <tool-bar window-drag>
         <h1>Canvas Designer</h1>
@@ -142,11 +143,6 @@
 </app-window>
 
 <script>
-    const eless = require('electron-less');
-    eless({source: 'app/server/assets/base.less', id: 'base', paths: ['./app/server/assets/']});
-    eless({source: 'app/server/assets/style.less', id: 'style', paths: ['./app/server/assets/']});
-    eless({source: 'app/server/assets/ui/canvas_designer.less', id: 'ui_canvas_designer', paths: ['./app/server/assets/']});
-
     const CanvasDesignerViewModel = require('../viewmodel/canvas_designer_viewmodel.js');
 
     let ko = require('knockout');

@@ -5,6 +5,7 @@
     <title>Canvas</title>
     <link rel="stylesheet" href="../../../node_modules/reset-css/reset.css">
     <link rel="stylesheet" href="../../../node_modules/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../assets/base.css">
 </head>
 <body>
 <div id="canvas-wrapper">
@@ -14,9 +15,6 @@
     </div>
 </div>
 <script>
-    const eless = require('electron-less');
-    eless({source: 'app/canvas/assets/base.less', id: 'base', paths: ['./app/canvas/assets/']});
-
     const CanvasViewModel = require('../viewmodel/canvas_viewmodel.js');
 
     let ko = require('knockout');

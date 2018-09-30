@@ -6,8 +6,9 @@
     <link rel="stylesheet" href="../../../node_modules/reset-css/reset.css">
     <link rel="stylesheet" href="../../../node_modules/flexboxgrid/dist/flexboxgrid.min.css">
     <link rel="stylesheet" href="../../../node_modules/topcoat/css/topcoat-desktop-dark.min.css">
+    <link rel="stylesheet" href="../assets/main.css">
 </head>
-<body>
+<body class="main">
 <app-window>
     <tool-bar window-drag>
         <h1>oh! Presenter</h1>
@@ -104,10 +105,6 @@
 </app-window>
 
 <script>
-    const eless = require('electron-less');
-    eless({source: 'app/server/assets/base.less', id: 'base', paths: ['./app/server/assets/']});
-    eless({source: 'app/server/assets/style.less', id: 'style', paths: ['./app/server/assets/']});
-    eless({source: 'app/server/assets/ui/main.less', id: 'ui_main', paths: ['./app/server/assets/']});
 
     const MainViewModel = require('../viewmodel/main_viewmodel.js');
 
