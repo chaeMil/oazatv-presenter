@@ -166,14 +166,11 @@ class WindowManager {
                 NativeMethods.execute(command);
                 break;
             case 'win32':
-
+                NativeMethods.execute('electron ./app/canvas/main &');
                 break;
             default:
 
         }
-        /*NativeMethods.execute('electron ./app/canvas/main &', (output) => {
-            console.log(output);
-        });*/
     }
 
     createPresentationWindow() {
