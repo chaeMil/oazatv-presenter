@@ -2,7 +2,6 @@ const fs = require('fs-extra');
 const FileUtils = require('../util/file_utils');
 const ip = require('ip');
 const os = require('os');
-const {app} = require('electron');
 const Config = require('../config.js');
 const mkdirp = require('mkdirp');
 
@@ -62,7 +61,7 @@ class CacheService {
     }
 
     static _getUserHome() {
-        switch (os.platform()) {
+        /*switch (os.platform()) {
             case 'linux':
             case 'darwin':
                 return process.env.HOME;
@@ -70,7 +69,8 @@ class CacheService {
                 return app.getPath('appData');
             default:
                 return process.env.HOME;
-        }
+        }*/
+        return process.env.HOME;
     }
 
     _generateSafeFileName(input) {
