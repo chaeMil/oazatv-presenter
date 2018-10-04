@@ -9,21 +9,24 @@
   "license": "ISC",
   "main": "./app/server/main.js",
   "cross-os": {
-    "compile": {
-      "linux": "npm run compile_less",
-      "darwin": "npm run compile_less",
-      "win32": "&&"
+    "compile_canvas_less": {
+      "linux": "./node_modules/less/bin/lessc ./app/canvas/assets/base.less > ./app/canvas/assets/base.css",
+      "darwin": "./node_modules/less/bin/lessc ./app/canvas/assets/base.less > ./app/canvas/assets/base.css",
+      "win32": "lessc ./app/canvas/assets/base.less > ./app/canvas/assets/base.css"
+    },
+    "compile_server_less": {
+      "linux": "./node_modules/less/bin/lessc ./app/server/assets/main.less > ./app/server/assets/main.css",
+      "darwin": "./node_modules/less/bin/lessc ./app/server/assets/main.less > ./app/server/assets/main.css",
+      "win32": "lessc ./app/server/assets/main.less > ./app/server/assets/main.css"
     }
   },
   "scripts": {
-    "compile_less": "npm run compile_canvas_less && npm run compile_server_less",
-    "compile_canvas_less": "./node_modules/less/bin/lessc ./app/canvas/assets/base.less > ./app/canvas/assets/base.css",
-    "compile_server_less": "./node_modules/less/bin/lessc ./app/server/assets/main.less > ./app/server/assets/main.css",
-    "prestart": "cross-os compile",
+    "compile_assets": "cross-os compile_canvas_less && cross-os compile_server_less",
+    "prestart": "npm run compile_assets",
     "start": "electron ./app/server/main",
     "canvas": "electron ./app/canvas/main",
     "pack": "build --dir",
-    "dist": "cross-os compile && build"
+    "dist": "npm run compile_assets && build"
   },
   "build": {
     "appId": "cz.chaemil.oh-presenter",
