@@ -1,9 +1,11 @@
-const exec = require('child_process').exec;
+const cp = require('child_process');
 
 class NativeMethods {
-    static execute(command, callback) {
-        exec(command, (error, stdout, stderr) => {
-            callback(stdout);
+    static execute(command) {
+        cp.exec(command, (error, stdout, stderr) => {
+            console.error(error);
+            console.log(stdout);
+            console.error(stderr);
         });
     }
 }

@@ -3,6 +3,7 @@ const {app, BrowserWindow} = electron;
 const windowStateKeeper = require('electron-window-state');
 const path = require('path');
 const url = require('url');
+const fs = require('fs-extra');
 
 const config = require('../shared/config');
 const Client = require('./client');
@@ -46,12 +47,17 @@ function createWindow() {
     //canvasWindow.webContents.openDevTools();
 
     canvasWindow.on('closed', function () {
-        client.disconnect(() => {
+        if (client.connected) {
+            client.disconnect(() => {
+                app.quit();
+            });
+        } else {
             app.quit();
-        });
+        }
     })
 }
 
 app.on('ready', function () {
+    fs.removeSync(process.env.HOME + '/.oh-presenter/SHOULD_OPEN_CANVAS');
     createWindow();
 });

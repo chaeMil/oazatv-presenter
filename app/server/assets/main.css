@@ -82,7 +82,7 @@ app-window tool-bar {
 .darwin app-window tool-bar {
   padding: 28px 8px 8px;
 }
-app-window tool-bar .win32,
+.win32 app-window tool-bar,
 .linux app-window tool-bar {
   padding: 8px;
 }
@@ -97,7 +97,7 @@ app-window tool-bar h1 {
   text-align: center;
   color: #FFFFFF;
 }
-app-window tool-bar h1 .win32,
+.win32 app-window tool-bar h1,
 .linux app-window tool-bar h1 {
   display: none;
 }
@@ -126,6 +126,7 @@ app-window float-window tool-bar {
 }
 app-window float-window tool-bar h1 {
   margin-top: 4px;
+  display: block !important;
 }
 app-window float-window tool-bar [close-button] {
   position: absolute;

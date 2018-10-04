@@ -1,11 +1,14 @@
 const electron = require('electron');
+const {app, dialog} = electron;
 const BrowserWindow = electron.BrowserWindow;
 const path = require('path');
 const url = require('url');
+const os = require('os');
 const NativeMethods = require('./native_methods');
 const AppWindow = require('../model/app_window');
 const StringUtils = require('../../shared/util/string_utils');
 const windowStateKeeper = require('electron-window-state');
+const {is} = require('electron-util');
 
 class WindowManager {
     constructor(ipcMain) {
@@ -144,9 +147,33 @@ class WindowManager {
     }
 
     createCanvasWindow() {
-        NativeMethods.execute('electron ./app/canvas/main &', (output) => {
+        let basepath = app.getAppPath();
+        switch (os.platform()) {
+            case 'linux':
+
+                break;
+            case 'darwin':
+                let command;
+                let pathToElectron;
+                if (is.development) {
+                    pathToElectron = basepath.replace("/Contents/Resources/default_app.asar", "");
+                    pathToElectron += ' --args ' + pathToElectron.replace("/node_modules/electron/dist/Electron.app", "") + '/app/canvas/main.js';
+                } else {
+                    pathToElectron = basepath.replace("/Contents/Resources/app.asar", "");
+                }
+                command = "open -n " + pathToElectron;
+                NativeMethods.execute('touch ' + process.env.HOME + '/.oh-presenter/SHOULD_OPEN_CANVAS');
+                NativeMethods.execute(command);
+                break;
+            case 'win32':
+
+                break;
+            default:
+
+        }
+        /*NativeMethods.execute('electron ./app/canvas/main &', (output) => {
             console.log(output);
-        });
+        });*/
     }
 
     createPresentationWindow() {

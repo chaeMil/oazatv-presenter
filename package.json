@@ -7,7 +7,7 @@
     "email": "chaemil72@gmail.com"
   },
   "license": "ISC",
-  "main": "./app/server/main.js",
+  "main": "./app/main.js",
   "cross-os": {
     "compile_canvas_less": {
       "linux": "./node_modules/less/bin/lessc ./app/canvas/assets/base.less > ./app/canvas/assets/base.css",
@@ -23,8 +23,7 @@
   "scripts": {
     "compile_assets": "cross-os compile_canvas_less && cross-os compile_server_less",
     "prestart": "npm run compile_assets",
-    "start": "electron ./app/server/main",
-    "canvas": "electron ./app/canvas/main",
+    "start": "electron ./app/main",
     "pack": "build --dir",
     "dist": "npm run compile_assets && build"
   },
@@ -59,6 +58,7 @@
     "a-color-picker": "^1.0.6",
     "ajv": "^6.5.3",
     "draggable": "^4.2.0",
+    "electron-util": "^0.9.1",
     "electron-window-state": "^4.1.1",
     "eventbusjs": "^0.2.0",
     "fabric": "^2.3.6",

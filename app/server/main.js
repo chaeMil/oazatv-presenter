@@ -1,6 +1,5 @@
 const electron = require('electron');
 const {app, ipcMain} = electron;
-
 const config = require('../shared/config');
 const Server = require('./service/server.js');
 const CacheService = require('../shared/service/cache_service.js');
