@@ -150,7 +150,14 @@ class WindowManager {
         let basepath = app.getAppPath();
         switch (os.platform()) {
             case 'linux':
-
+                if (is.development) {
+                    NativeMethods.execute('electron ./app/canvas/main &');
+                } else {
+                    NativeMethods.execute('touch ' + process.env.HOME + '/.oh-presenter/SHOULD_OPEN_CANVAS');
+                    let execPath = path.dirname (process.execPath);
+                    let command = execPath + '/oh-presenter &';
+                    NativeMethods.execute(command);
+                }
                 break;
             case 'darwin':
                 let command;
@@ -166,7 +173,15 @@ class WindowManager {
                 NativeMethods.execute(command);
                 break;
             case 'win32':
-                NativeMethods.execute('electron ./app/canvas/main &');
+                if (is.development) {
+                    NativeMethods.execute('electron ./app/canvas/main &');
+                } else {
+                    NativeMethods.execute('touch ' + process.env.HOME + '/.oh-presenter/SHOULD_OPEN_CANVAS');
+                    let execPath = path.dirname (process.execPath);
+                    let command = execPath + '/oh-presenter &';
+                    //NativeMethods.execute(command);
+                    dialog.showMessageBox(null, {message: command});
+                }
                 break;
             default:
 
