@@ -176,11 +176,11 @@ class WindowManager {
                 if (is.development) {
                     NativeMethods.execute('electron ./app/canvas/main &');
                 } else {
-                    NativeMethods.execute('touch ' + process.env.HOME + '/.oh-presenter/SHOULD_OPEN_CANVAS');
+                    fs.closeSync(fs.openSync(process.env.HOME + '/.oh-presenter/SHOULD_OPEN_CANVAS', 'w'));
                     let execPath = path.dirname (process.execPath);
-                    let command = execPath + '/oh-presenter &';
-                    //NativeMethods.execute(command);
-                    dialog.showMessageBox(null, {message: command});
+                    let command = execPath + '\\oh-presenter.exe';
+                    NativeMethods.execute(command);
+                    //dialog.showMessageBox(null, {message: command});
                 }
                 break;
             default:
