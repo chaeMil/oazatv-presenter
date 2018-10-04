@@ -12,7 +12,7 @@
     "compile": {
       "linux": "npm run compile_less",
       "darwin": "npm run compile_less",
-      "win32": ""
+      "win32": "&&"
     }
   },
   "scripts": {
