@@ -242,10 +242,10 @@ class CanvasDesignerViewModel extends BaseViewModel {
                         video.set('selectable', true);
 
                         self.canvas.add(video);
-                        fabric.util.requestAnimFrame(function render() {
+                        /*fabric.util.requestAnimFrame(function render() {
                             self.canvas.renderAll();
                             fabric.util.requestAnimFrame(render);
-                        });
+                        });*/
                     });
                 }
             }

@@ -95,10 +95,10 @@ class CanvasViewModel extends BaseViewModel {
             this._addVideo(video);
         });
         let self = this;
-        fabric.util.requestAnimFrame(function render() {
+        /*fabric.util.requestAnimFrame(function render() {
             self.canvas.renderAll();
             fabric.util.requestAnimFrame(render);
-        });
+        });*/
     }
 
     _addVideo(object) {
