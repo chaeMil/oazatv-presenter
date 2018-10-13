@@ -304,6 +304,10 @@ class PresentationViewModel extends BaseViewModel {
     }
 
     broadcastToCanvas(data) {
+        if (data === undefined) {
+            //set current slide
+            data = this.slides()[this.selectedSlideIndex].jsonData;
+        }
         this.ipcRenderer.send('broadcast', {
             action: 'canvas_json',
             value: JSON.stringify(data)

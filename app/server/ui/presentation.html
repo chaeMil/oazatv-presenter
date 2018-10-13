@@ -34,7 +34,8 @@
                     <u>L</u>ive broadcast
                 </label>
                 <button class="topcoat-button-bar__button--large"
-                        data-bind="click: VM.broadcastToCanvas, attr: { disabled: VM.liveBroadcast() }">
+                        id="broadcastButton"
+                        data-bind="attr: { disabled: VM.liveBroadcast() }">
                     Broadcast to canvas [space]
                 </button>
             </div>
@@ -81,7 +82,9 @@
     </window-content>
 </app-window>
 
+
 <script>
+    const $ = require('jquery');
     const PresentationViewModel = require('../viewmodel/presentation_viewmodel.js');
 
     let ko = require('knockout');
@@ -94,6 +97,8 @@
     let VM = new PresentationViewModel(ko, ipcRenderer, windowId);
     document.addEventListener('DOMContentLoaded', () => {
         VM.init();
+
+        $('#broadcastButton').click(() => VM.broadcastToCanvas());
     });
 </script>
 </body>
