@@ -7,7 +7,6 @@ const hotkeys = require('hotkeys-js');
 const $ = require('jquery');
 const {remote} = require('electron');
 const CacheService = require('../../shared/service/cache_service');
-const downloadFileSync = require('download-file-sync');
 const async = require('async');
 const tar = require('tar');
 
@@ -63,7 +62,9 @@ class PresentationViewModel extends BaseViewModel {
             this.loadPresentation();
         });
         hotkeys('ctrl+s,command+s', (event, handler) => {
-            this.savePresentation();
+            this.savePresentation(() => {
+                //TODO saved
+            });
         });
         hotkeys('l', (event, handler) => {
             this.toggleLiveBroadcast();
@@ -136,7 +137,7 @@ class PresentationViewModel extends BaseViewModel {
                     slide.jsonData.objects = objectsCopy;
                     return slide;
                 });
-                let fileContent = JSON.stringify(slidesCopy); //TODO add handling of multimedia contents
+                let fileContent = JSON.stringify(slidesCopy);
                 fs.writeFileSync(this.tempDir + "slides.json", fileContent);
                 let filesToTar = ["slides.json"];
                 multimediaFiles.forEach((file) => {
@@ -149,13 +150,9 @@ class PresentationViewModel extends BaseViewModel {
                         noDirRecurse: true,
                         file: fileName,
                     },
-                    filesToTar)
-                    .then(() => {
-                        this.unsavedChanges(false);
-                        if (callback != null) {
-                            callback();
-                        }
-                    });
+                    filesToTar);
+                this.unsavedChanges(false);
+                callback();
             }]);
         });
     }
@@ -168,14 +165,23 @@ class PresentationViewModel extends BaseViewModel {
                 ]
             }, (files) => {
                 if (files !== undefined && files[0] != null) {
-                    let file = files[0];
-                    fs.readFile(file, 'utf-8', (err, data) => {
-                        if (err != null) {
-                            console.error("loadPresentation", err);
-                        } else {
-                            this.onLoadPresentationSuccess(data);
-                        }
-                    });
+                    async.series([() => {
+                        let file = files[0];
+                        let tempExtractDir = CacheService.getTempLocation() + "/open_presentation/" + StringUtils.makeId() + "/";
+                        fs.mkdirpSync(tempExtractDir);
+                        tar.x({
+                            file: file,
+                            cwd: tempExtractDir,
+                            sync: true,
+                        });
+                        fs.readFile(tempExtractDir + "slides.json", 'utf-8', (err, data) => {
+                            if (err != null) {
+                                console.error("loadPresentation", err);
+                            } else {
+                                this.onLoadPresentationSuccess(data);
+                            }
+                        });
+                    }]);
                 }
             }
         );
