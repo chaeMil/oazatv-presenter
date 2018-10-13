@@ -178,7 +178,18 @@ class PresentationViewModel extends BaseViewModel {
                             if (err != null) {
                                 console.error("loadPresentation", err);
                             } else {
-                                this.onLoadPresentationSuccess(data);
+                                let slidesJson = JSON.parse(data);
+                                console.log(slidesJson);
+                                slidesJson.map((slide) => {
+                                    slide.jsonData.objects.map((object) => {
+                                        if (object.type === "image") {
+                                            object.src = object.src.replace("presentation://", tempExtractDir);
+                                        }
+                                        return object;
+                                    });
+                                    return slide;
+                                });
+                                this.onLoadPresentationSuccess(JSON.stringify(slidesJson));
                             }
                         });
                     }]);
