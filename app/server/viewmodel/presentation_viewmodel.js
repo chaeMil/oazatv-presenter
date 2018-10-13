@@ -6,6 +6,10 @@ const fs = require('fs-extra');
 const hotkeys = require('hotkeys-js');
 const $ = require('jquery');
 const {remote} = require('electron');
+const CacheService = require('../../shared/service/cache_service');
+const downloadFileSync = require('download-file-sync');
+const async = require('async');
+const tar = require('tar');
 
 class PresentationViewModel extends BaseViewModel {
 
@@ -21,6 +25,7 @@ class PresentationViewModel extends BaseViewModel {
         super.init();
         this._initCanvas();
         this._initHotKeys();
+        this.tempDir = CacheService.getTempLocation() + "/" + StringUtils.makeId() + "/";
     }
 
     _initCanvas() {
@@ -111,15 +116,47 @@ class PresentationViewModel extends BaseViewModel {
                 {name: 'text', extensions: ['ohpres']}
             ]
         }, (fileName) => {
-            if (fileName === undefined) return;
-            let fileContent = JSON.stringify(this.slides()); //TODO add handling of multimedia contents
-            fs.writeFile(fileName, fileContent, (error) => {
-                console.error("savePresentation", error);
-            });
-            this.unsavedChanges(false);
-            if (callback != null) {
-                callback();
-            }
+            async.series([() => {
+                if (fileName === undefined) return;
+                let slidesCopy = this.slides();
+                let multimediaFiles = [];
+                slidesCopy = slidesCopy.map((slide) => {
+                    let objectsCopy = slide.jsonData.objects;
+                    objectsCopy = objectsCopy.map((object) => {
+                        if (object.type === "image") {
+                            let localPath = CacheService.getLocalFilePath(object.src);
+                            console.log(localPath);
+                            let fileName = StringUtils.makeId();
+                            fs.copySync(localPath, this.tempDir + fileName);
+                            object.src = "presentation://" + fileName;
+                            multimediaFiles.push(fileName);
+                        }
+                        return object;
+                    });
+                    slide.jsonData.objects = objectsCopy;
+                    return slide;
+                });
+                let fileContent = JSON.stringify(slidesCopy); //TODO add handling of multimedia contents
+                fs.writeFileSync(this.tempDir + "slides.json", fileContent);
+                let filesToTar = ["slides.json"];
+                multimediaFiles.forEach((file) => {
+                    filesToTar.push(file);
+                });
+                tar.c({
+                        cwd: this.tempDir,
+                        gzip: false,
+                        sync: true,
+                        noDirRecurse: true,
+                        file: fileName,
+                    },
+                    filesToTar)
+                    .then(() => {
+                        this.unsavedChanges(false);
+                        if (callback != null) {
+                            callback();
+                        }
+                    });
+            }]);
         });
     }
 

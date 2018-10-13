@@ -16,8 +16,13 @@ class CacheService {
             mkdirp(CacheService.getCacheLocation(), (err) => {
                 if (err) console.error(err);
             });
-            //FileUtils.mkDirByPathSync(CacheService.getCacheLocation());
         }
+        if (!fs.existsSync(CacheService.getTempLocation())) {
+            mkdirp(CacheService.getTempLocation(), (err) => {
+                if (err) console.error(err);
+            });
+        }
+        fs.emptyDirSync(CacheService.getTempLocation());
     }
 
     addFileToCache(sourceFile, callback) {
@@ -56,6 +61,10 @@ class CacheService {
         return this._getUserHome() + "/.oh-presenter/cache/files/";
     }
 
+    static getTempLocation() {
+        return this._getUserHome() + "/.oh-presenter/temp/";
+    }
+
     static getWebServerCacheLocation() {
         return "http://" + ip.address() + ":" + Config.cacheServerPort + "/files/";
     }
@@ -75,6 +84,10 @@ class CacheService {
 
     _generateSafeFileName(input) {
         return input.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+    }
+
+    static getLocalFilePath(remotePath) {
+        return remotePath.replace("http://" + ip.address() + ":" + Config.cacheServerPort + "/files/", this.getCacheLocation());
     }
 
 }

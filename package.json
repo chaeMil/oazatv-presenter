@@ -57,6 +57,8 @@
   "dependencies": {
     "a-color-picker": "^1.0.6",
     "ajv": "^6.5.3",
+    "async": "^2.6.1",
+    "download-file-sync": "^1.0.4",
     "draggable": "^4.2.0",
     "electron-util": "^0.9.1",
     "electron-window-state": "^4.1.1",
@@ -78,6 +80,7 @@
     "open-iconic": "^1.1.1",
     "reset-css": "^4.0.1",
     "system-font-families": "^0.4.1",
+    "tar": "^4.4.6",
     "topcoat": "^0.7.5"
   },
   "devDependencies": {
