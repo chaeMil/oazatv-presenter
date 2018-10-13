@@ -24,6 +24,7 @@ class PresentationViewModel extends BaseViewModel {
         super.init();
         this._initCanvas();
         this._initHotKeys();
+        this.cacheService = new CacheService();
         this.tempDir = CacheService.getTempLocation() + "/" + StringUtils.makeId() + "/";
     }
 
@@ -183,7 +184,11 @@ class PresentationViewModel extends BaseViewModel {
                                 slidesJson.map((slide) => {
                                     slide.jsonData.objects.map((object) => {
                                         if (object.type === "image") {
-                                            object.src = object.src.replace("presentation://", tempExtractDir);
+                                            let externalFilePath = object.src.replace("presentation://", tempExtractDir);
+                                            this.cacheService.addFileToCache(externalFilePath, (cachedFile) => {
+                                                console.log(cachedFile);
+                                                object.src = cachedFile;
+                                            });
                                         }
                                         return object;
                                     });

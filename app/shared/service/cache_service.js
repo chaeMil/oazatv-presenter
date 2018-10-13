@@ -28,16 +28,9 @@ class CacheService {
     addFileToCache(sourceFile, callback) {
         let safeFileName = this._generateSafeFileName(sourceFile);
         if (this._shouldCacheFile(sourceFile)) {
-            fs.copy(sourceFile, CacheService.getCacheLocation() + safeFileName, (err) => {
-                if (err) {
-                    return console.error(err);
-                } else {
-                    callback(CacheService.getWebServerCacheLocation() + safeFileName);
-                }
-            });
-        } else {
-            callback(CacheService.getWebServerCacheLocation() + safeFileName);
+            fs.copySync(sourceFile, CacheService.getCacheLocation() + safeFileName);
         }
+        callback(CacheService.getWebServerCacheLocation() + safeFileName);
     }
 
     _shouldCacheFile(sourceFile) {
