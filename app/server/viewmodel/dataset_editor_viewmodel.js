@@ -3,6 +3,8 @@ const DataSet = require('../../shared/model/dataset/dataset');
 const DataItem = require('../../shared/model/dataset/dataitem');
 const hotkeys = require('hotkeys-js');
 const DomUtils = require('../../shared/util/dom_utils');
+const {dialog} = require('electron').remote;
+const fs = require('fs-extra');
 
 class DataSetEditorViewModel extends BaseViewModel {
 
@@ -84,10 +86,18 @@ class DataSetEditorViewModel extends BaseViewModel {
 
     _appendStringEditorToSelectedSetUI(item) {
         let ui = DomUtils.htmlToElement(`
-            <input type="text" class="topcoat-text-input--large" value="" placeholder="name">
-            <input type="text" class="topcoat-text-input--large" value="" placeholder="value">
+            name: <input id="${item.id}_name" type="text" class="topcoat-text-input--large" value="${item.name}">
+            value: <input id="${item.id}_value" type="text" class="topcoat-text-input--large" value="${item.value}">
         `);
         this.selectedSetUI.appendChild(ui);
+        let nameInput = document.getElementById(`${item.id}_name`);
+        let valueInput = document.getElementById(`${item.id}_value`);
+        nameInput.onchange = (event) => {
+            item.name = event.target.value
+        };
+        valueInput.onchange = (event) => {
+            item.value = event.target.value
+        }
     }
 
     addItemToSelectedSet() {
@@ -96,14 +106,45 @@ class DataSetEditorViewModel extends BaseViewModel {
             this.selectedSet.data.push(item);
             this._generateSelectedSetUI();
         }
+        console.log(this.dataSets());
     }
 
     loadDataSet() {
-
+        dialog.showOpenDialog({
+                properties: ['openFile'],
+                filters: [
+                    {name: 'DataSet File', extensions: ['ohdata']},
+                ]
+            }, (files) => {
+                if (files !== undefined && files[0] != null) {
+                    let file = files[0];
+                    fs.readFile(file, 'utf-8', (err, data) => {
+                        if (err != null) {
+                            console.error("loadDataSet", err);
+                            dialog.showErrorBox("Error", "An error occurred when trying to load the file: \n\n" + err);
+                        } else {
+                            this.dataSets(data);
+                        }
+                    });
+                }
+            }
+        );
     }
 
     saveDataSet() {
-
+        dialog.showSaveDialog({
+            filters: [
+                {name: 'text', extensions: ['ohdata']}
+            ]
+        }, (fileName) => {
+            if (fileName === undefined) return;
+            fs.writeFile(fileName, JSON.stringify(this.dataSets()), (error) => {
+                if (error != null) {
+                    console.error("saveDataSet", error);
+                    dialog.showErrorBox("Error", "An error occurred when trying to save the file: \n\n" + error);
+                }
+            });
+        });
     }
 }
 
