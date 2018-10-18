@@ -60,6 +60,7 @@
     "async": "^2.6.1",
     "download-file-sync": "^1.0.4",
     "draggable": "^4.2.0",
+    "electron-unhandled": "^1.1.0",
     "electron-util": "^0.9.1",
     "electron-window-state": "^4.1.1",
     "eventbusjs": "^0.2.0",

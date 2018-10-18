@@ -30,6 +30,10 @@ function serverStatusCallback(type, action, data) {
     sendMessageToWindow(type, action, data);
 }
 
+ipcMain.on('force_quit', (event, arg) => {
+    app.quit();
+});
+
 ipcMain.on('broadcast', (event, arg) => {
     if (arg.hasOwnProperty('clientHashIdFilter')) {
         server.broadcast(arg, arg.clientHashIdFilter)
