@@ -148,7 +148,11 @@
     </window-content>
 </app-window>
 
+<script src="https://browser.sentry-cdn.com/4.1.1/bundle.min.js" crossorigin="anonymous"></script>
+
 <script>
+    Sentry.init({ dsn: 'https://6326acfcd52d4429aa496ceee2e2656e@sentry.io/1304016' });
+
     const CanvasDesignerViewModel = require('../viewmodel/canvas_designer_viewmodel.js');
 
     let ko = require('knockout');
