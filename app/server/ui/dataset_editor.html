@@ -14,12 +14,12 @@
         <h1>Dataset Editor</h1>
         <div class="topcoat-button-bar" disable-window-drag>
             <div class="topcoat-button-bar__item">
-                <button class="topcoat-button-bar__button--large" data-bind="click: VM.savePresentation">
+                <button class="topcoat-button-bar__button--large" data-bind="click: VM.saveDataSet">
                     <span>Save</span><span data-bind="visible: VM.unsavedChanges">*</span>
                 </button>
             </div>
             <div class="topcoat-button-bar__item">
-                <button class="topcoat-button-bar__button--large" data-bind="click: VM.loadPresentation">Load</button>
+                <button class="topcoat-button-bar__button--large" data-bind="click: VM.loadDataSet">Load</button>
             </div>
         </div>
     </tool-bar>
@@ -34,7 +34,7 @@
                 </div>
                 <div class="sets-list-wrapper">
                     <table id="sets-list">
-                        <tbody data-bind="foreach: VM.dataSet">
+                        <tbody data-bind="foreach: VM.dataSets">
                         <tr data-bind="attr: { id: 'set_' + $data.id }">
                             <td data-bind="click: VM.onSetSelected($data)">
                                 <span data-bind="text: $data.name"></span>
@@ -45,8 +45,11 @@
                 </div>
             </nav-group>
         </div>
-        <div>
-
+        <div class="selected-set-wrapper">
+            <div>
+                <button class="topcoat-button--cta" data-bind="click: VM.addItemToSelectedSet">+</button>
+            </div>
+            <div id="selected-set-ui"></div>
         </div>
         <div id="add-set-menu" class="full-window-frosted-dialog hidden">
             <div class="row set-type">
@@ -76,5 +79,6 @@
         VM.init();
     }, false);
 </script>
+
 </body>
 </html>

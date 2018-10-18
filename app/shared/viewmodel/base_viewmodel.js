@@ -10,8 +10,13 @@ class BaseViewModel {
     }
 
     init() {
-        this.ko.applyBindings(this);
+        this.applyBindings(this);
+    }
+
+    applyBindings(viewModel, htmlNode) {
+        this.ko.applyBindings(viewModel, htmlNode);
     }
 }
+
 
 module.exports = BaseViewModel;
