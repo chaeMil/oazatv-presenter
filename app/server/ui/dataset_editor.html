@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Dataset Editor</title>
+    <link rel="stylesheet" href="../../../node_modules/reset-css/reset.css">
+    <link rel="stylesheet" href="../../../node_modules/flexboxgrid/dist/flexboxgrid.min.css">
+    <link rel="stylesheet" href="../../../node_modules/topcoat/css/topcoat-desktop-dark.min.css">
+    <link rel="stylesheet" href="../assets/main.css">
+</head>
+<body class="main">
+<app-window>
+    <tool-bar window-drag>
+        <h1>Dataset Editor</h1>
+        <div class="topcoat-button-bar" disable-window-drag>
+
+        </div>
+    </tool-bar>
+    <window-content>
+        <div class="row">
+
+        </div>
+    </window-content>
+</app-window>
+
+<script>
+
+    const DataSetEditorViewModel = require('../viewmodel/dataset_editor_viewmodel.js');
+
+    let ko = require('knockout');
+    let {ipcRenderer, webFrame} = require('electron');
+
+    webFrame.setVisualZoomLevelLimits(1, 1);
+    webFrame.setLayoutZoomLevelLimits(0, 0);
+
+    let VM = new DataSetEditorViewModel(ko, ipcRenderer);
+    document.addEventListener('DOMContentLoaded', () => {
+        VM.init();
+    }, false);
+</script>
+</body>
+</html>

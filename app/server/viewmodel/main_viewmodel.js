@@ -90,6 +90,12 @@ class MainViewModel extends BaseViewModel {
             windowType: 'presentation'
         })
     }
+
+    openDataSetEditorWindow() {
+        this.ipcRenderer.send('open_window', {
+            windowType: 'dataset_editor'
+        })
+    }
 }
 
 module.exports = MainViewModel;

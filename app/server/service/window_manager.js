@@ -31,6 +31,9 @@ class WindowManager {
             case 'presentation':
                 this.createPresentationWindow();
                 break;
+            case 'dataset_editor':
+                this.openDataSetEditorWindow();
+                break;
         }
     }
 
@@ -233,6 +236,52 @@ class WindowManager {
                     this.windows[windowName].browserWindow.webContents.executeJavaScript('VM.close();');
                 }
             });
+        });
+    }
+
+    openDataSetEditorWindow() {
+        let windowName = 'datasetEditorWindow';
+        if (this.getWindow(windowName) != null) {
+            this.getWindow(windowName).browserWindow.show();
+            return;
+        }
+
+        let windowState = windowStateKeeper({
+            defaultWidth: 900,
+            defaultHeight: 700,
+            file: 'datasetEditorWindow.state'
+        });
+        let browserWindow = new BrowserWindow({
+            x: windowState.x,
+            y: windowState.y,
+            width: windowState.width,
+            height: windowState.height,
+            minWidth: 700,
+            minHeight: 500,
+            titleBarStyle: "hidden",
+            webPreferences: {
+                experimentalFeatures: true
+            },
+            show: false
+        });
+        windowState.manage(browserWindow);
+
+        this.windows[windowName] = new AppWindow(this.ipcMain, browserWindow);
+
+        this.windows[windowName].browserWindow.loadURL(url.format({
+            pathname: path.join(__dirname, '../ui/dataset_editor.html'),
+            protocol: 'file:',
+            slashes: true
+        }));
+        this.windows[windowName].browserWindow.webContents.once('did-finish-load', () => {
+            this.windows[windowName].browserWindow.show();
+        });
+        this.windows[windowName].browserWindow.setMenu(null);
+
+        //this.windows[windowName].browserWindow.webContents.openDevTools();
+
+        this.windows[windowName].browserWindow.on('closed', () => {
+            this.windows[windowName] = null;
         });
     }
 }
