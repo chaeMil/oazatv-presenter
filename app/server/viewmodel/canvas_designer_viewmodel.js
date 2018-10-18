@@ -21,6 +21,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
             color: ko.observable("")
         };
         this.objectEditorValues = {
+            id: ko.observable(""),
             scaleX: ko.observable(""),
             scaleY: ko.observable("")
         };
@@ -64,7 +65,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
     }
 
     saveCanvas() {
-        let jsonCanvasData = this.canvas.toJSON();
+        let jsonCanvasData = this.canvas.toJSON(['id']);
         if (this.canvasFile != null) {
 
         } else {
@@ -75,7 +76,10 @@ class CanvasDesignerViewModel extends BaseViewModel {
             }, (fileName) => {
                 if (fileName === undefined) return;
                 fs.writeFile(fileName, JSON.stringify(jsonCanvasData), (error) => {
-                    console.error("saveCanvas", error);
+                    if (error != null) {
+                        console.error("saveCanvas", error);
+                        dialog.showErrorBox("Error", "An error occurred when trying to save the file: \n\n" + error);
+                    }
                 });
             });
         }
@@ -93,6 +97,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
                     fs.readFile(file, 'utf-8', (err, data) => {
                         if (err != null) {
                             console.error("loadCanvas", err);
+                            dialog.showErrorBox("Error", "An error occurred when trying to load the file: \n\n" + err);
                         } else {
                             this.canvas.loadFromJSON(data, () => {
                                 this.canvas.renderAll();
@@ -131,6 +136,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
 
     addRectangle() {
         let rectangle = new fabric.Rect({
+            id: StringUtils.makeId(),
             left: 15,
             top: 15,
             fill: '',
@@ -146,6 +152,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
 
     addCircle() {
         let circle = new fabric.Circle({
+            id: StringUtils.makeId(),
             radius: 50,
             left: 100,
             top: 100,
@@ -160,6 +167,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
 
     addText() {
         let text = new fabric.IText('text', {
+            id: StringUtils.makeId(),
             fontFamily: 'helvetica',
             left: 100,
             top: 100,
@@ -173,6 +181,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
 
     addTextbox() {
         let text = new fabric.Textbox('textbox', {
+            id: StringUtils.makeId(),
             fontFamily: 'helvetica',
             left: 100,
             top: 100,
@@ -227,6 +236,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
                         document.body.appendChild(videoElement);
 
                         let video = new fabric.Video(videoElement, {
+                            id: StringUtils.makeId(),
                             left: 200,
                             top: 300,
                             width: 1920,
@@ -268,6 +278,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
                                 this.canvas.add(img).renderAll().setActiveObject(img);
                             },
                             {
+                                id: StringUtils.makeId(),
                                 lockUniScaling: true
                             });
                     });
@@ -277,7 +288,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
     }
 
     broadcastToCanvas() {
-        let jsonData = this.canvas.toJSON();
+        let jsonData = this.canvas.toJSON(['id']);
         this._processVideoElements(jsonData);
         console.log("broadcastToCanvas", jsonData);
         this.ipcRenderer.send('broadcast', {
@@ -310,9 +321,16 @@ class CanvasDesignerViewModel extends BaseViewModel {
 
     _onObjectSelected() {
         this.objectEditor.classList.remove("hidden");
+        this.objectEditorValues.id(this.selectedObject.id);
         this.objectEditorValues.scaleX(this.selectedObject.scaleX);
         this.objectEditorValues.scaleY(this.selectedObject.scaleY);
 
+        this.objectEditorValues.id.subscribe((newValue) => {
+            if (newValue == null || newValue.length === 0)
+                this._changeSelectedObjectAttribute('id', StringUtils.makeId());
+            else
+                this._changeSelectedObjectAttribute('id', newValue);
+        });
         this.objectEditorValues.scaleX.subscribe((newValue) => {
             this._changeSelectedObjectAttribute('scaleX', newValue);
         });
@@ -492,7 +510,7 @@ class CanvasDesignerViewModel extends BaseViewModel {
     }
 
     _onImportFromCanvasDesigner(data) {
-        let jsonData = this.canvas.toJSON();
+        let jsonData = this.canvas.toJSON(['id']);
         this.ipcRenderer.send('window_interaction', {
             action: 'on_import_from_canvas_designer_done',
             windowId: data.windowId,
