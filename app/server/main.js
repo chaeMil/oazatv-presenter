@@ -9,6 +9,8 @@ let server = new Server(config.serverPort, serverStatusCallback);
 let cacheWebServer = new CacheWebServer();
 let cacheService = new CacheService();
 let windowManager = new WindowManager(ipcMain);
+const {is} = require('electron-util');
+const unhandled = require('electron-unhandled');
 
 app.on('ready', function () {
     init();
@@ -19,6 +21,14 @@ function init() {
     let onMainWindowClosed = () => {
         app.quit();
     };
+
+    unhandled({
+        showDialog: is.development,
+        logger: error => {
+            console.error(error);
+            if (!is.development) app.quit();
+        }
+    });
 
     server.run();
     cacheService.init();
