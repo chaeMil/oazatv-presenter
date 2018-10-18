@@ -1,11 +1,5 @@
-.presentation {
+.dataset_editor {
   @sidebar-width: 240px;
-
-  #canvas_headless-wrapper {
-    position: absolute;
-    top: -99999px;
-    left: -99999px;
-  }
 
   #window-content {
     display: flex;
@@ -19,8 +13,8 @@
       padding: 8px;
       overflow: hidden;
 
-      &.slides {
-        .slides-header {
+      &.sets {
+        .sets-header {
           padding-bottom: 5px;
           border-bottom: 1px solid #3b3b3b;
 
@@ -30,7 +24,7 @@
           }
         }
 
-        .slides-list-wrapper {
+        .sets-list-wrapper {
           margin-left: -8px;
           margin-right: -8px;
           overflow-y: scroll;
@@ -38,7 +32,7 @@
           width: calc(100% ~"+" 16px);
           height: calc(100vh ~"-" 109px);
 
-          #slides-list {
+          #sets-list {
 
             tbody {
 
@@ -67,25 +61,10 @@
       }
     }
 
-    #canvas-wrapper {
-      background: #6f6f6f;
-      padding: 25px;
-      width: calc(100% ~"-" @sidebar-width);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
-
-      .canvas-container {
-        box-shadow: 0 8px 10px 0 rgba(0, 0, 0, 0.5), 0 20px 40px 0 rgba(0, 0, 0, 0.2);
-      }
-    }
-
-    #add-slide-menu {
-      .slide-type {
+    #add-set-menu {
+      .set-type {
         backdrop-filter: blur(30px);
-        padding-top: 8px;
-        padding-bottom: 8px;
+        padding: 8px;
         background: rgba(29, 29, 29, 0.7);
         border-radius: 6px;
         border: 2px solid rgba(35, 35, 35, 0.6);

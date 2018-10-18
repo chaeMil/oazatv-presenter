@@ -290,3 +290,48 @@ app-window float-window window-content {
 .canvas-designer #window-content #canvas-wrapper .canvas-container {
   box-shadow: 0 8px 10px 0 rgba(0, 0, 0, 0.5), 0 20px 40px 0 rgba(0, 0, 0, 0.2);
 }
+.dataset_editor #window-content {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+.dataset_editor #window-content .sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  padding: 8px;
+  overflow: hidden;
+}
+.dataset_editor #window-content .sidebar.sets .sets-header {
+  padding-bottom: 5px;
+  border-bottom: 1px solid #3b3b3b;
+}
+.dataset_editor #window-content .sidebar.sets .sets-header .buttons-wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+.dataset_editor #window-content .sidebar.sets .sets-list-wrapper {
+  margin-left: -8px;
+  margin-right: -8px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  width: calc(100% + 16px);
+  height: calc(100vh - 109px);
+}
+.dataset_editor #window-content .sidebar.sets .sets-list-wrapper #sets-list tbody tr.active {
+  background: #2e8bdf;
+}
+.dataset_editor #window-content .sidebar.sets .sets-list-wrapper #sets-list tbody tr td {
+  padding: 8px;
+  display: block;
+}
+.dataset_editor #window-content .sidebar.sets .sets-list-wrapper #sets-list tbody tr td img {
+  width: 100%;
+}
+.dataset_editor #window-content #add-set-menu .set-type {
+  backdrop-filter: blur(30px);
+  padding: 8px;
+  background: rgba(29, 29, 29, 0.7);
+  border-radius: 6px;
+  border: 2px solid rgba(35, 35, 35, 0.6);
+}

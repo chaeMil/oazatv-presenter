@@ -8,17 +8,55 @@
     <link rel="stylesheet" href="../../../node_modules/topcoat/css/topcoat-desktop-dark.min.css">
     <link rel="stylesheet" href="../assets/main.css">
 </head>
-<body class="main">
+<body class="dataset_editor">
 <app-window>
     <tool-bar window-drag>
         <h1>Dataset Editor</h1>
         <div class="topcoat-button-bar" disable-window-drag>
-
+            <div class="topcoat-button-bar__item">
+                <button class="topcoat-button-bar__button--large" data-bind="click: VM.savePresentation">
+                    <span>Save</span><span data-bind="visible: VM.unsavedChanges">*</span>
+                </button>
+            </div>
+            <div class="topcoat-button-bar__item">
+                <button class="topcoat-button-bar__button--large" data-bind="click: VM.loadPresentation">Load</button>
+            </div>
         </div>
     </tool-bar>
-    <window-content>
-        <div class="row">
+    <window-content id="window-content">
+        <div class="sidebar sets">
+            <nav-group>
+                <div class="row sets-header">
+                    <h5 class="col-xs-9 nav-group-title">Sets</h5>
+                    <div class="col-xs-3 buttons-wrapper">
+                        <button class="topcoat-button--cta" data-bind="click: VM.showAddSetMenu">+</button>
+                    </div>
+                </div>
+                <div class="sets-list-wrapper">
+                    <table id="sets-list">
+                        <tbody data-bind="foreach: VM.dataSet">
+                        <tr data-bind="attr: { id: 'set_' + $data.id }">
+                            <td data-bind="click: VM.onSetSelected($data)">
+                                <span data-bind="text: $data.name"></span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </nav-group>
+        </div>
+        <div>
 
+        </div>
+        <div id="add-set-menu" class="full-window-frosted-dialog hidden">
+            <div class="row set-type">
+                <input type="text" class="topcoat-text-input--large" placeholder="Set name"
+                       data-bind="value: VM.newSetName, valueUpdate: 'keyup'">
+                <button class="topcoat-button--large--quiet" id="add-set-button"
+                        disabled data-bind="click: VM.addSet">
+                    Add
+                </button>
+            </div>
         </div>
     </window-content>
 </app-window>
