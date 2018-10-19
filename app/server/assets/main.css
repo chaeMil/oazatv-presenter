@@ -318,14 +318,14 @@ app-window float-window window-content {
   width: calc(100% + 16px);
   height: calc(100vh - 109px);
 }
-.dataset_editor #window-content .sidebar.sets .sets-list-wrapper #sets-list tbody tr.active {
+.dataset_editor #window-content .sidebar.sets .sets-list-wrapper #sets-list table tbody tr.active {
   background: #2e8bdf;
 }
-.dataset_editor #window-content .sidebar.sets .sets-list-wrapper #sets-list tbody tr td {
+.dataset_editor #window-content .sidebar.sets .sets-list-wrapper #sets-list table tbody tr td {
   padding: 8px;
   display: block;
 }
-.dataset_editor #window-content .sidebar.sets .sets-list-wrapper #sets-list tbody tr td img {
+.dataset_editor #window-content .sidebar.sets .sets-list-wrapper #sets-list table tbody tr td img {
   width: 100%;
 }
 .dataset_editor #window-content #add-set-menu .set-type {

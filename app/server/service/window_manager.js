@@ -74,6 +74,8 @@ class WindowManager {
         let browserWindow = new BrowserWindow({
             x: windowState.x,
             y: windowState.y,
+            minWidth: 500,
+            minHeight: 300,
             width: windowState.width,
             height: windowState.height,
             titleBarStyle: "hidden",
