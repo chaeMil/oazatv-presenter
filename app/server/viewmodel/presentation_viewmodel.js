@@ -19,6 +19,7 @@ class PresentationViewModel extends BaseViewModel {
         this.slides = ko.observableArray([]);
         this.liveBroadcast = ko.observable(false);
         this.unsavedChanges = ko.observable(false);
+        this.savedFile = ko.observable(null);
     }
 
     init() {
@@ -75,9 +76,7 @@ class PresentationViewModel extends BaseViewModel {
             this.loadPresentation();
         });
         hotkeys('ctrl+s,command+s', (event, handler) => {
-            this.savePresentation(() => {
-                //TODO
-            });
+            this.savePresentation(null);
         });
         hotkeys('l', (event, handler) => {
             this.toggleLiveBroadcast();
@@ -125,54 +124,70 @@ class PresentationViewModel extends BaseViewModel {
     }
 
     savePresentation(callback) {
-        dialog.showSaveDialog({
-            filters: [
-                {name: 'text', extensions: ['ohpres']}
-            ]
-        }, (fileName) => {
-            this._showProgress();
-            async.series([() => {
-                mkdirp(this.tempDir, (err) => {
-                    if (err) console.error(err);
+        if (this.savedFile() == null) {
+            dialog.showSaveDialog({
+                filters: [
+                    {name: 'text', extensions: ['ohpres']}
+                ]
+            }, (fileName) => {
+                this._savePresentationLogic(fileName, callback);
+            });
+        } else {
+            this._savePresentationLogic(this.savedFile(), () => {
+                this._loadPresentationLogic(this.savedFile());
+            });
+        }
+    }
+
+    _savePresentationLogic(fileName, callback) {
+        if (!this.unsavedChanges()) return;
+
+        this._showProgress();
+
+        async.series([() => {
+            mkdirp(this.tempDir, (err) => {
+                if (err) console.error(err);
+            });
+            if (fileName === undefined) return;
+            let slidesCopy = this.slides();
+            let multimediaFiles = [];
+            slidesCopy = slidesCopy.map((slide) => {
+                let objectsCopy = slide.jsonData.objects;
+                objectsCopy = objectsCopy.map((object) => {
+                    if (object.type === "image") {
+                        let localPath = CacheService.getLocalFilePath(object.src);
+                        console.log(localPath);
+                        let fileName = StringUtils.makeId();
+                        fs.copySync(localPath, this.tempDir + fileName);
+                        object.src = "presentation://" + fileName;
+                        multimediaFiles.push(fileName);
+                    }
+                    return object;
                 });
-                if (fileName === undefined) return;
-                let slidesCopy = this.slides();
-                let multimediaFiles = [];
-                slidesCopy = slidesCopy.map((slide) => {
-                    let objectsCopy = slide.jsonData.objects;
-                    objectsCopy = objectsCopy.map((object) => {
-                        if (object.type === "image") {
-                            let localPath = CacheService.getLocalFilePath(object.src);
-                            console.log(localPath);
-                            let fileName = StringUtils.makeId();
-                            fs.copySync(localPath, this.tempDir + fileName);
-                            object.src = "presentation://" + fileName;
-                            multimediaFiles.push(fileName);
-                        }
-                        return object;
-                    });
-                    slide.jsonData.objects = objectsCopy;
-                    return slide;
-                });
-                let fileContent = JSON.stringify(slidesCopy);
-                fs.writeFileSync(this.tempDir + "slides.json", fileContent);
-                let filesToTar = ["slides.json"];
-                multimediaFiles.forEach((file) => {
-                    filesToTar.push(file);
-                });
-                tar.c({
-                        cwd: this.tempDir,
-                        gzip: false,
-                        sync: true,
-                        noDirRecurse: true,
-                        file: fileName,
-                    },
-                    filesToTar);
-                this.unsavedChanges(false);
-                this._hideProgress();
-                if (callback != null) callback();
-            }]);
-        });
+                slide.jsonData.objects = objectsCopy;
+                return slide;
+            });
+            let fileContent = JSON.stringify(slidesCopy);
+            fs.writeFileSync(this.tempDir + "slides.json", fileContent);
+            let filesToTar = ["slides.json"];
+            multimediaFiles.forEach((file) => {
+                filesToTar.push(file);
+            });
+            tar.c({
+                    cwd: this.tempDir,
+                    gzip: false,
+                    sync: true,
+                    noDirRecurse: true,
+                    file: fileName,
+                },
+                filesToTar);
+
+            this.unsavedChanges(false);
+            this.savedFile(fileName);
+            this._hideProgress();
+
+            if (callback != null) callback();
+        }]);
     }
 
     loadPresentation() {
@@ -182,47 +197,53 @@ class PresentationViewModel extends BaseViewModel {
                     {name: 'Presentation File', extensions: ['ohpres']},
                 ]
             }, (files) => {
-                this._showProgress();
                 if (files !== undefined && files[0] != null) {
-                    async.series([() => {
-                        let file = files[0];
-                        let tempExtractDir = CacheService.getTempLocation() + "/open_presentation/" + StringUtils.makeId() + "/";
-                        fs.mkdirpSync(tempExtractDir);
-                        tar.x({
-                            file: file,
-                            cwd: tempExtractDir,
-                            sync: true,
-                        });
-                        fs.readFile(tempExtractDir + "slides.json", 'utf-8', (err, data) => {
-                            if (err != null) {
-                                console.error("loadPresentation", err);
-                            } else {
-                                let slidesJson = JSON.parse(data);
-                                console.log(slidesJson);
-                                slidesJson.map((slide) => {
-                                    slide.jsonData.objects.map((object) => {
-                                        if (object.type === "image") {
-                                            let externalFilePath = object.src.replace("presentation://", tempExtractDir);
-                                            this.cacheService.addFileToCache(externalFilePath, (cachedFile) => {
-                                                console.log(cachedFile);
-                                                object.src = cachedFile;
-                                            });
-                                        }
-                                        return object;
-                                    });
-                                    return slide;
-                                });
-                                this.onLoadPresentationSuccess(JSON.stringify(slidesJson));
-                                this._hideProgress();
-                            }
-                        });
-                    }]);
+                    let file = files[0];
+                    this._loadPresentationLogic(file);
                 }
             }
         );
     }
 
-    onLoadPresentationSuccess(data) {
+    _loadPresentationLogic(file) {
+        this._showProgress();
+
+        async.series([() => {
+            let tempExtractDir = CacheService.getTempLocation() + "/open_presentation/" + StringUtils.makeId() + "/";
+            fs.mkdirpSync(tempExtractDir);
+            tar.x({
+                file: file,
+                cwd: tempExtractDir,
+                sync: true,
+            });
+            fs.readFile(tempExtractDir + "slides.json", 'utf-8', (err, data) => {
+                if (err != null) {
+                    console.error("loadPresentation", err);
+                } else {
+                    let slidesJson = JSON.parse(data);
+                    console.log(slidesJson);
+                    slidesJson.map((slide) => {
+                        slide.jsonData.objects.map((object) => {
+                            if (object.type === "image") {
+                                let externalFilePath = object.src.replace("presentation://", tempExtractDir);
+                                this.cacheService.addFileToCache(externalFilePath, (cachedFile) => {
+                                    console.log(cachedFile);
+                                    object.src = cachedFile;
+                                });
+                            }
+                            return object;
+                        });
+                        return slide;
+                    });
+                    this.onLoadPresentationSuccess(file, JSON.stringify(slidesJson));
+                    this._hideProgress();
+                }
+            });
+        }]);
+    }
+
+    onLoadPresentationSuccess(file, data) {
+        this.savedFile(file);
         let parsedData = JSON.parse(data);
         this.slides(parsedData);
         this.slides().forEach((slide) => {
