@@ -123,7 +123,7 @@ class DataSetEditorViewModel extends BaseViewModel {
                             console.error("loadDataSet", err);
                             dialog.showErrorBox("Error", "An error occurred when trying to load the file: \n\n" + err);
                         } else {
-                            this.dataSets(data);
+                            this.dataSets(JSON.parse(data));
                         }
                     });
                 }

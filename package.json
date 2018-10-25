@@ -80,6 +80,7 @@
     "npm": "^6.4.0",
     "open-iconic": "^1.1.1",
     "reset-css": "^4.0.1",
+    "resize-img": "^1.1.2",
     "system-font-families": "^0.4.1",
     "tar": "^4.4.6",
     "topcoat": "^0.7.5"
