@@ -1,7 +1,6 @@
 const BaseViewModel = require('../../shared/viewmodel/base_viewmodel');
 require('../../shared/model/canvas/video');
 let {webFrame} = require('electron');
-let $ = require('jquery');
 const hotkeys = require('hotkeys-js');
 
 webFrame.setVisualZoomLevelLimits(1, 1);
@@ -34,10 +33,19 @@ class CanvasViewModel extends BaseViewModel {
         this._resizeCanvas();
     }
 
+
+    //TODO fix scaling
     _resizeCanvas() {
-        this.canvas.setWidth(this.canvasWrapper.offsetWidth);
-        this.canvas.setHeight(this.canvasWrapper.offsetWidth / (16 / 9));
-        let scale = this.canvasWrapper.offsetWidth / 1280;
+        let width = this.canvasWrapper.offsetHeight / (9 / 16);
+        let height = this.canvasWrapper.offsetWidth / (16 / 9);
+        this.canvas.setWidth(width);
+        this.canvas.setHeight(height);
+        let scale = 1;
+        if (width > height) {
+            scale = this.canvasWrapper.offsetWidth / 1280;
+        } else {
+            scale = this.canvasWrapper.offsetHeight / 720;
+        }
         this.canvas.setZoom(scale);
         this.canvas.renderAll();
     }
@@ -76,9 +84,9 @@ class CanvasViewModel extends BaseViewModel {
 
         this.ipcRenderer.on('connection', (event, value) => {
             if (value) {
-                $('#connection-status').addClass('connected');
+                document.querySelector('#connection-status').classList.add('connected');
             } else {
-                $('#connection-status').removeClass('connected');
+                document.querySelector('#connection-status').classList.remove('connected');
             }
         });
     }
