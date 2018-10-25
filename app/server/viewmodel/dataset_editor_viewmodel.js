@@ -14,6 +14,7 @@ class DataSetEditorViewModel extends BaseViewModel {
         this.dataSets = ko.observableArray([]);
         this.newSetName = ko.observable("");
         this.selectedSet = null;
+        this.shouldShowAddItemToSelectedSet = ko.observable(false);
     }
 
     init() {
@@ -71,6 +72,7 @@ class DataSetEditorViewModel extends BaseViewModel {
         let element = document.querySelector('#set_' + data.id);
         element.classList.add('active');
         this._generateSelectedSetUI();
+        this.shouldShowAddItemToSelectedSet(true);
     }
 
     _generateSelectedSetUI() {
@@ -86,8 +88,8 @@ class DataSetEditorViewModel extends BaseViewModel {
 
     _appendStringEditorToSelectedSetUI(item) {
         let ui = DomUtils.htmlToElement(`
-            name: <input id="${item.id}_name" type="text" class="topcoat-text-input--large" value="${item.name}">
-            value: <input id="${item.id}_value" type="text" class="topcoat-text-input--large" value="${item.value}">
+            <span class="label">name: </span><input id="${item.id}_name" type="text" class="topcoat-text-input--large" value="${item.name}">
+            <span class="label">value: </span><input id="${item.id}_value" type="text" class="topcoat-text-input--large" value="${item.value}">
         `);
         this.selectedSetUI.appendChild(ui);
         let nameInput = document.getElementById(`${item.id}_name`);

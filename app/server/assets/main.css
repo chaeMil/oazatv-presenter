@@ -302,6 +302,9 @@ app-window float-window window-content {
   padding: 8px;
   overflow: hidden;
 }
+.dataset_editor #window-content .sidebar.sets {
+  border-right: 1px solid #3a3a3a;
+}
 .dataset_editor #window-content .sidebar.sets .sets-header {
   padding-bottom: 5px;
   border-bottom: 1px solid #3b3b3b;
@@ -318,15 +321,41 @@ app-window float-window window-content {
   width: calc(100% + 16px);
   height: calc(100vh - 109px);
 }
-.dataset_editor #window-content .sidebar.sets .sets-list-wrapper #sets-list table tbody tr.active {
+.dataset_editor #window-content .sidebar.sets .sets-list-wrapper #sets-list {
+  width: 100%;
+}
+.dataset_editor #window-content .sidebar.sets .sets-list-wrapper #sets-list tbody tr.active {
   background: #2e8bdf;
 }
-.dataset_editor #window-content .sidebar.sets .sets-list-wrapper #sets-list table tbody tr td {
+.dataset_editor #window-content .sidebar.sets .sets-list-wrapper #sets-list tbody tr td {
   padding: 8px;
   display: block;
 }
-.dataset_editor #window-content .sidebar.sets .sets-list-wrapper #sets-list table tbody tr td img {
+.dataset_editor #window-content .sidebar.sets .sets-list-wrapper #sets-list tbody tr td img {
   width: 100%;
+}
+.dataset_editor #window-content .selected-set-wrapper {
+  width: calc(100% - 240px);
+}
+.dataset_editor #window-content .selected-set-wrapper .toolbar {
+  padding: 4px;
+  background: #4f5151;
+  width: calc(100% - 8px);
+  display: flex;
+  justify-content: flex-end;
+}
+.dataset_editor #window-content .selected-set-wrapper #selected-set-ui div {
+  padding: 4px;
+  display: flex;
+}
+.dataset_editor #window-content .selected-set-wrapper #selected-set-ui div span {
+  line-height: 28px;
+}
+.dataset_editor #window-content .selected-set-wrapper #selected-set-ui div span:nth-child(3) {
+  margin-left: 8px;
+}
+.dataset_editor #window-content .selected-set-wrapper #selected-set-ui div input:nth-child(4) {
+  flex-grow: 1;
 }
 .dataset_editor #window-content #add-set-menu .set-type {
   backdrop-filter: blur(30px);

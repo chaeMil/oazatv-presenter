@@ -14,6 +14,8 @@
       overflow: hidden;
 
       &.sets {
+        border-right: 1px solid #3a3a3a;
+
         .sets-header {
           padding-bottom: 5px;
           border-bottom: 1px solid #3b3b3b;
@@ -33,30 +35,61 @@
           height: calc(100vh ~"-" 109px);
 
           #sets-list {
-            table {
-              tbody {
+            width: 100%;
 
-                tr {
+            tbody {
 
-                  &.active {
-                    background: #2e8bdf;
+              tr {
+
+                &.active {
+                  background: #2e8bdf;
+                }
+
+                td {
+                  padding: 8px;
+                  display: block;
+
+                  span {
+
                   }
 
-                  td {
-                    padding: 8px;
-                    display: block;
-
-                    span {
-
-                    }
-
-                    img {
-                      width: 100%;
-                    }
+                  img {
+                    width: 100%;
                   }
                 }
               }
             }
+          }
+        }
+      }
+    }
+
+    .selected-set-wrapper {
+      width: calc(100% ~"-" 240px);
+
+      .toolbar {
+        padding: 4px;
+        background: #4f5151;
+        width: calc(100% ~"-" 8px);
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      #selected-set-ui {
+        div {
+          padding: 4px;
+          display: flex;
+
+          span {
+            line-height: 28px;
+
+            &:nth-child(3) {
+              margin-left: 8px;
+            }
+          }
+
+          input:nth-child(4) {
+            flex-grow: 1;
           }
         }
       }

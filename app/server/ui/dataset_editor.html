@@ -46,8 +46,9 @@
             </nav-group>
         </div>
         <div class="selected-set-wrapper">
-            <div>
-                <button class="topcoat-button--cta" data-bind="click: VM.addItemToSelectedSet">+</button>
+            <div class="toolbar" data-bind="visible: VM.shouldShowAddItemToSelectedSet">
+                <button class="topcoat-button--cta" data-bind="click: VM.addItemToSelectedSet">+
+                </button>
             </div>
             <div id="selected-set-ui"></div>
         </div>
@@ -67,7 +68,7 @@
 <script src="https://browser.sentry-cdn.com/4.1.1/bundle.min.js" crossorigin="anonymous"></script>
 
 <script>
-    Sentry.init({ dsn: 'https://6326acfcd52d4429aa496ceee2e2656e@sentry.io/1304016' });
+    Sentry.init({dsn: 'https://6326acfcd52d4429aa496ceee2e2656e@sentry.io/1304016'});
 
     const DataSetEditorViewModel = require('../viewmodel/dataset_editor_viewmodel.js');
 
