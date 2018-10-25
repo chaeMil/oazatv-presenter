@@ -4,6 +4,7 @@ const windowStateKeeper = require('electron-window-state');
 const path = require('path');
 const url = require('url');
 const fs = require('fs-extra');
+const {is} = require('electron-util');
 
 const config = require('../shared/config');
 const Client = require('./client');
@@ -46,7 +47,7 @@ function createWindow() {
 
     //canvasWindow.webContents.openDevTools();
 
-    canvasWindow.on('closed', function () {
+    canvasWindow.on('closed', () => {
         if (client.connected) {
             client.disconnect(() => {
                 app.quit();
@@ -54,7 +55,13 @@ function createWindow() {
         } else {
             app.quit();
         }
-    })
+    });
+
+    canvasWindow.on('maximize', () => {
+        if (is.windows || is.linux) {
+            canvasWindow.setFullScreen(true);
+        }
+    });
 }
 
 app.on('ready', function () {
