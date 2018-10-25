@@ -33,7 +33,6 @@ class CanvasViewModel extends BaseViewModel {
         this._resizeCanvas();
     }
 
-
     //TODO fix scaling
     _resizeCanvas() {
         let width = this.canvasWrapper.offsetHeight / (9 / 16);

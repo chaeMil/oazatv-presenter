@@ -10,6 +10,7 @@ const CacheService = require('../../shared/service/cache_service');
 const async = require('async');
 const tar = require('tar');
 const mkdirp = require('mkdirp');
+const Slide = require('../../shared/model/presentation/slide');
 
 class PresentationViewModel extends BaseViewModel {
 
@@ -304,11 +305,7 @@ class PresentationViewModel extends BaseViewModel {
 
     _onImportFromCanvasDesignerDone(data) {
         let slideId = StringUtils.makeId();
-        let slide = {
-            id: slideId,
-            name: 'Unnamed Slide',
-            jsonData: data.canvasJsonData
-        };
+        let slide = new Slide(slideId, "canvas", name, data.canvasJsonData);
         this.slides.push(slide);
         this._generateSlidePreview(slide);
         this.unsavedChanges(true);
