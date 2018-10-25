@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="../../../node_modules/reset-css/reset.css">
     <link rel="stylesheet" href="../../../node_modules/flexboxgrid/dist/flexboxgrid.min.css">
     <link rel="stylesheet" href="../../../node_modules/topcoat/css/topcoat-desktop-dark.min.css">
+    <link rel="stylesheet" href="../../../node_modules/spinkit/css/spinkit.css">
     <link rel="stylesheet" href="../assets/main.css">
 </head>
 <body class="presentation">
@@ -17,7 +18,7 @@
         <h1>Presentation</h1>
         <div class="topcoat-button-bar" disable-window-drag>
             <div class="topcoat-button-bar__item">
-                <button class="topcoat-button-bar__button--large" data-bind="click: VM.savePresentation">
+                <button class="topcoat-button-bar__button--large" id="saveButton">
                     <span>Save</span><span data-bind="visible: VM.unsavedChanges">*</span>
                 </button>
             </div>
@@ -79,13 +80,29 @@
                 </div>
             </div>
         </div>
+        <div id="progress" class="full-window-frosted-dialog hidden">
+            <div class="sk-fading-circle">
+                <div class="sk-circle1 sk-circle"></div>
+                <div class="sk-circle2 sk-circle"></div>
+                <div class="sk-circle3 sk-circle"></div>
+                <div class="sk-circle4 sk-circle"></div>
+                <div class="sk-circle5 sk-circle"></div>
+                <div class="sk-circle6 sk-circle"></div>
+                <div class="sk-circle7 sk-circle"></div>
+                <div class="sk-circle8 sk-circle"></div>
+                <div class="sk-circle9 sk-circle"></div>
+                <div class="sk-circle10 sk-circle"></div>
+                <div class="sk-circle11 sk-circle"></div>
+                <div class="sk-circle12 sk-circle"></div>
+            </div>
+        </div>
     </window-content>
 </app-window>
 
 <script src="https://browser.sentry-cdn.com/4.1.1/bundle.min.js" crossorigin="anonymous"></script>
 
 <script>
-    Sentry.init({ dsn: 'https://6326acfcd52d4429aa496ceee2e2656e@sentry.io/1304016' });
+    Sentry.init({dsn: 'https://6326acfcd52d4429aa496ceee2e2656e@sentry.io/1304016'});
 
     const $ = require('jquery');
     const PresentationViewModel = require('../viewmodel/presentation_viewmodel.js');

@@ -9,6 +9,7 @@ const {remote} = require('electron');
 const CacheService = require('../../shared/service/cache_service');
 const async = require('async');
 const tar = require('tar');
+const mkdirp = require('mkdirp');
 
 class PresentationViewModel extends BaseViewModel {
 
@@ -26,6 +27,9 @@ class PresentationViewModel extends BaseViewModel {
         this._initHotKeys();
         this.cacheService = new CacheService();
         this.tempDir = CacheService.getTempLocation() + "/" + StringUtils.makeId() + "/";
+        document.querySelector("#saveButton").onclick = () => {
+            this.savePresentation(null);
+        };
     }
 
     _initCanvas() {
@@ -55,6 +59,14 @@ class PresentationViewModel extends BaseViewModel {
         });
     }
 
+    _showProgress() {
+        document.querySelector('#progress').classList.remove('hidden');
+    }
+
+    _hideProgress() {
+        document.querySelector('#progress').classList.add('hidden');
+    }
+
     _initHotKeys() {
         hotkeys('escape', (event, handler) => {
             this.hideAddSlideMenu();
@@ -64,7 +76,7 @@ class PresentationViewModel extends BaseViewModel {
         });
         hotkeys('ctrl+s,command+s', (event, handler) => {
             this.savePresentation(() => {
-                //TODO saved
+                //TODO
             });
         });
         hotkeys('l', (event, handler) => {
@@ -118,7 +130,11 @@ class PresentationViewModel extends BaseViewModel {
                 {name: 'text', extensions: ['ohpres']}
             ]
         }, (fileName) => {
+            this._showProgress();
             async.series([() => {
+                mkdirp(this.tempDir, (err) => {
+                    if (err) console.error(err);
+                });
                 if (fileName === undefined) return;
                 let slidesCopy = this.slides();
                 let multimediaFiles = [];
@@ -153,7 +169,8 @@ class PresentationViewModel extends BaseViewModel {
                     },
                     filesToTar);
                 this.unsavedChanges(false);
-                callback();
+                this._hideProgress();
+                if (callback != null) callback();
             }]);
         });
     }
@@ -165,6 +182,7 @@ class PresentationViewModel extends BaseViewModel {
                     {name: 'Presentation File', extensions: ['ohpres']},
                 ]
             }, (files) => {
+                this._showProgress();
                 if (files !== undefined && files[0] != null) {
                     async.series([() => {
                         let file = files[0];
@@ -195,6 +213,7 @@ class PresentationViewModel extends BaseViewModel {
                                     return slide;
                                 });
                                 this.onLoadPresentationSuccess(JSON.stringify(slidesJson));
+                                this._hideProgress();
                             }
                         });
                     }]);
