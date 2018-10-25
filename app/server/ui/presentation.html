@@ -7,9 +7,12 @@
     <link rel="stylesheet" href="../../../node_modules/flexboxgrid/dist/flexboxgrid.min.css">
     <link rel="stylesheet" href="../../../node_modules/topcoat/css/topcoat-desktop-dark.min.css">
     <link rel="stylesheet" href="../../../node_modules/spinkit/css/spinkit.css">
+    <link rel="stylesheet" href="../../../node_modules/ionicons/dist/css/ionicons-core.min.css">
+    <link rel="stylesheet" href="../../../node_modules/ionicons/dist/css/ionicons.min.css">
     <link rel="stylesheet" href="../assets/main.css">
 </head>
 <body class="presentation">
+<script src="../../shared/model/presentation/slide.js"></script>
 <div id="canvas_headless-wrapper">
     <canvas id="canvas_headless" width="1280" height="720"></canvas>
 </div>
@@ -57,7 +60,11 @@
                         <tr data-bind="attr: { id: 'slide_' + $data.id }">
                             <td data-bind="click: VM.onSlideSelected($data)">
                                 <img src="" alt="">
-                                <span data-bind="text: $data.name"></span>
+                                <div>
+                                    <i class="icon ion-ios-easel"
+                                       data-bind="visible: Slide.isImportedFromCanvas($data)"></i>
+                                    <span data-bind="text: $data.name"></span>
+                                </div>
                             </td>
                         </tr>
                         </tbody>
@@ -65,8 +72,11 @@
                 </div>
             </nav-group>
         </div>
+        <div class="sidebar hidden" id="lyricsEditor">
+
+        </div>
         <div id="canvas-wrapper">
-            <canvas id="canvas" width="1280" height="720"></canvas>
+            <canvas id="canvas" width="640" height="360"></canvas>
         </div>
         <div id="add-slide-menu" class="full-window-frosted-dialog hidden">
             <div class="row slide-type">
@@ -76,7 +86,9 @@
                     </button>
                 </div>
                 <div class="col-xs">
-                    <button class="topcoat-button--large--quiet">From template (TODO)</button>
+                    <button class="topcoat-button--large--quiet"
+                            data-bind="click: VM.addLyricsSlide">Lyrics
+                    </button>
                 </div>
             </div>
         </div>

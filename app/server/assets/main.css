@@ -206,21 +206,20 @@ app-window float-window window-content {
 .presentation #window-content .sidebar.slides .slides-list-wrapper #slides-list tbody tr td {
   padding: 8px;
   display: block;
+  position: relative;
 }
 .presentation #window-content .sidebar.slides .slides-list-wrapper #slides-list tbody tr td img {
   width: 100%;
 }
+.presentation #window-content .sidebar.slides .slides-list-wrapper #slides-list tbody tr td .icon {
+  color: white;
+}
+.presentation #window-content #lyricsEditor {
+  width: 450px;
+}
 .presentation #window-content #canvas-wrapper {
   background: #6f6f6f;
   padding: 25px;
-  width: calc(100% - 240px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-}
-.presentation #window-content #canvas-wrapper .canvas-container {
-  box-shadow: 0 8px 10px 0 rgba(0, 0, 0, 0.5), 0 20px 40px 0 rgba(0, 0, 0, 0.2);
 }
 .presentation #window-content #add-slide-menu .slide-type {
   backdrop-filter: blur(30px);

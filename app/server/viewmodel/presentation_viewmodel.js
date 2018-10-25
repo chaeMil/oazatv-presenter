@@ -25,6 +25,7 @@ class PresentationViewModel extends BaseViewModel {
 
     init() {
         super.init();
+        this._getUI();
         this._initCanvas();
         this._initHotKeys();
         this.cacheService = new CacheService();
@@ -47,10 +48,10 @@ class PresentationViewModel extends BaseViewModel {
             backgroundColor: '#FFFFFF'
         });
 
-        window.addEventListener('resize', () => {
+        /*window.addEventListener('resize', () => {
             this._resizeCanvas();
         }, false);
-        this._resizeCanvas();
+        this._resizeCanvas();*/
 
         this.ipcRenderer.on('window_interaction', (event, message) => {
             switch (message.action) {
@@ -153,7 +154,7 @@ class PresentationViewModel extends BaseViewModel {
             let slidesCopy = this.slides();
             let multimediaFiles = [];
             slidesCopy = slidesCopy.map((slide) => {
-                let objectsCopy = slide.jsonData.objects;
+                let objectsCopy = slide.jsonCanvasData.objects;
                 objectsCopy = objectsCopy.map((object) => {
                     if (object.type === "image") {
                         let localPath = CacheService.getLocalFilePath(object.src);
@@ -165,7 +166,7 @@ class PresentationViewModel extends BaseViewModel {
                     }
                     return object;
                 });
-                slide.jsonData.objects = objectsCopy;
+                slide.jsonCanvasData.objects = objectsCopy;
                 return slide;
             });
             let fileContent = JSON.stringify(slidesCopy);
@@ -224,7 +225,7 @@ class PresentationViewModel extends BaseViewModel {
                     let slidesJson = JSON.parse(data);
                     console.log(slidesJson);
                     slidesJson.map((slide) => {
-                        slide.jsonData.objects.map((object) => {
+                        slide.jsonCanvasData.objects.map((object) => {
                             if (object.type === "image") {
                                 let externalFilePath = object.src.replace("presentation://", tempExtractDir);
                                 this.cacheService.addFileToCache(externalFilePath, (cachedFile) => {
@@ -257,7 +258,7 @@ class PresentationViewModel extends BaseViewModel {
     }
 
     _generateSlidePreview(slide) {
-        this.canvasHeadless.loadFromJSON(slide.jsonData, () => {
+        this.canvasHeadless.loadFromJSON(slide.jsonCanvasData, () => {
             this.canvasHeadless.renderAll();
             let preview = this.canvasHeadless.toDataURL('jpg');
             let slideElementPreview = document.querySelector("#slide_" + slide.id + " img");
@@ -284,6 +285,15 @@ class PresentationViewModel extends BaseViewModel {
         });
     }
 
+    addLyricsSlide() {
+        this.hideAddSlideMenu();
+        let slideId = StringUtils.makeId();
+        let slide = new Slide(slideId, "Lyrics slide", "lyrics", null, {});
+        this.slides.push(slide);
+        this._generateSlidePreview(slide);
+        this.unsavedChanges(true);
+    }
+
     deleteCurrentSlide() {
         if (this.currentSlide != null) {
             let modifiedSlides = this.slides().filter((slide) => {
@@ -305,7 +315,7 @@ class PresentationViewModel extends BaseViewModel {
 
     _onImportFromCanvasDesignerDone(data) {
         let slideId = StringUtils.makeId();
-        let slide = new Slide(slideId, "canvas", name, data.canvasJsonData);
+        let slide = new Slide(slideId, "Imported from canvas", "canvas", data.canvasJsonData, null);
         this.slides.push(slide);
         this._generateSlidePreview(slide);
         this.unsavedChanges(true);
@@ -316,6 +326,7 @@ class PresentationViewModel extends BaseViewModel {
             this._initCanvas();
         }
         this.currentSlide = data;
+        this._refreshSlidesUI();
         this.selectedSlideIndex = this.slides().indexOf(data);
         let slidesElements = document.querySelectorAll('#slides-list tr');
         slidesElements.forEach((slideElement) => {
@@ -328,13 +339,21 @@ class PresentationViewModel extends BaseViewModel {
                 element.scrollIntoView();
             }
             if (this.liveBroadcast()) {
-                this.broadcastToCanvas(data.jsonData);
+                this.broadcastToCanvas(data.jsonCanvasData);
             }
-            this.canvas.loadFromJSON(data.jsonData);
+            this.canvas.loadFromJSON(data.jsonCanvasData);
         } else {
             if (this.liveBroadcast()) {
                 this.broadcastToCanvas(this.canvas.toJSON());
             }
+        }
+    }
+
+    _refreshSlidesUI() {
+        this.view_lyricsEditor.classList.add('hidden');
+
+        if (this.currentSlide.type === "lyrics") {
+            this.view_lyricsEditor.classList.remove('hidden');
         }
     }
 
@@ -348,7 +367,7 @@ class PresentationViewModel extends BaseViewModel {
     broadcastToCanvas(data) {
         if (data === undefined) {
             //set current slide
-            data = this.slides()[this.selectedSlideIndex].jsonData;
+            data = this.slides()[this.selectedSlideIndex].jsonCanvasData;
         }
         this.ipcRenderer.send('broadcast', {
             action: 'canvas_json',
@@ -409,6 +428,10 @@ class PresentationViewModel extends BaseViewModel {
 
     haveUnsavedChanges() {
         return this.unsavedChanges();
+    }
+
+    _getUI() {
+        this.view_lyricsEditor = document.querySelector("#lyricsEditor");
     }
 }
 

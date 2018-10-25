@@ -1,5 +1,6 @@
 .presentation {
   @sidebar-width: 240px;
+  @lyrics-editor-width: 450px;
 
   #canvas_headless-wrapper {
     position: absolute;
@@ -51,6 +52,7 @@
                 td {
                   padding: 8px;
                   display: block;
+                  position: relative;
 
                   span {
 
@@ -58,6 +60,10 @@
 
                   img {
                     width: 100%;
+                  }
+
+                  .icon {
+                    color: white;
                   }
                 }
               }
@@ -67,14 +73,18 @@
       }
     }
 
+    #lyricsEditor {
+      width: @lyrics-editor-width;
+    }
+
     #canvas-wrapper {
       background: #6f6f6f;
       padding: 25px;
-      width: calc(100% ~"-" @sidebar-width);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
+      //width: calc(100% ~"-" @sidebar-width);
+      //display: flex;
+      //align-items: center;
+      //justify-content: center;
+      //pointer-events: none;
 
       .canvas-container {
         box-shadow: 0 8px 10px 0 rgba(0, 0, 0, 0.5), 0 20px 40px 0 rgba(0, 0, 0, 0.2);
