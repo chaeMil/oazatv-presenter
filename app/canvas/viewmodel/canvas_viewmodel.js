@@ -2,6 +2,7 @@ const BaseViewModel = require('../../shared/viewmodel/base_viewmodel');
 require('../../shared/model/canvas/video');
 let {webFrame} = require('electron');
 let $ = require('jquery');
+const hotkeys = require('hotkeys-js');
 
 webFrame.setVisualZoomLevelLimits(1, 1);
 webFrame.setLayoutZoomLevelLimits(0, 0);
@@ -16,6 +17,7 @@ class CanvasViewModel extends BaseViewModel {
         super.init();
         this._initCanvas();
         this._initMessaging();
+        this._initHotkeys();
     }
 
     _initCanvas() {
@@ -136,6 +138,12 @@ class CanvasViewModel extends BaseViewModel {
         });
         [].forEach.call(document.querySelectorAll('video'), (e) => {
             e.parentNode.removeChild(e);
+        });
+    }
+
+    _initHotkeys() {
+        hotkeys('escape', (event, handler) => {
+            this.ipcRenderer.send('exit_fullscreen');
         });
     }
 }

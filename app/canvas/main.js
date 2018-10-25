@@ -1,5 +1,5 @@
 const electron = require('electron');
-const {app, BrowserWindow} = electron;
+const {app, BrowserWindow, ipcMain} = electron;
 const windowStateKeeper = require('electron-window-state');
 const path = require('path');
 const url = require('url');
@@ -67,4 +67,8 @@ function createWindow() {
 app.on('ready', function () {
     fs.removeSync(process.env.HOME + '/.oh-presenter/SHOULD_OPEN_CANVAS');
     createWindow();
+
+    ipcMain.on('exit_fullscreen', (event, arg) => {
+        canvasWindow.setFullScreen(false);
+    });
 });
