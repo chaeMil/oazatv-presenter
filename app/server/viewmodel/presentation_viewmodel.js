@@ -430,8 +430,37 @@ class PresentationViewModel extends BaseViewModel {
         return this.unsavedChanges();
     }
 
+    getCurrentSlideData() {
+        if (this.currentSlide != null && this.currentSlide.data != null)
+            return this.currentSlide.data;
+        else {
+            return [];
+        }
+    }
+
+    loadDataSetToCurrentLyricsSlide() {
+        dialog.showOpenDialog({
+                properties: ['openFile'],
+                filters: [
+                    {name: 'DataSet File', extensions: ['ohdata']},
+                ]
+            }, (files) => {
+                if (files !== undefined && files[0] != null) {
+                    let file = files[0];
+                    fs.readFile(file, 'utf-8', (err, data) => {
+                        if (err != null) {
+                            console.error("loadDataSetToCurrentLyricsSlide", err);
+                        } else {
+                            this.currentSlide.data = JSON.parse(data);
+                        }
+                    });
+                }
+            }
+        );
+    }
+
     _getUI() {
-        this.view_lyricsEditor = document.querySelector("#lyricsEditor");
+        this.view_lyricsEditor = document.querySelector("#lyrics-editor");
     }
 }
 

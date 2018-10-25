@@ -72,8 +72,21 @@
                 </div>
             </nav-group>
         </div>
-        <div class="sidebar hidden" id="lyricsEditor">
-
+        <div class="sidebar hidden" id="lyrics-editor">
+            <div class="toolbar">
+                <button class="topcoat-button--cta" data-bind="click: VM.loadDataSetToCurrentLyricsSlide">
+                    <i class="icon ion-ios-folder-open"></i>
+                </button>
+            </div>
+            <table id="lyrics-list">
+                <tbody data-bind="foreach: VM.currentSlide.data">
+                <tr>
+                    <td>
+                        <span data-bind="text: $data.value"></span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
         <div id="canvas-wrapper">
             <canvas id="canvas" width="640" height="360"></canvas>
